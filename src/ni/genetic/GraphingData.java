@@ -75,8 +75,15 @@ public class GraphingData extends JPanel {
         double prevX;
         double prevY;
 
+        int dotSize = 4;
+        g2.setPaint(Color.blue);
+        for (int i = 0; i < data.length; i++) {
+            double y = (height - PADDING - scale * data[i][1]);
+            double x = xs[i];
+            g2.fill(new Ellipse2D.Double(x - 2, y - 2, dotSize, dotSize));
+        }
 
-        g2.setStroke(new BasicStroke(1));
+        g2.setStroke(new BasicStroke(3));
         prevX = PADDING;
         prevY = height - PADDING;
         g2.setPaint(Color.green);
@@ -129,15 +136,7 @@ public class GraphingData extends JPanel {
             prevY = y;
         }
 
-        int dotSize = 4;
-        g2.setPaint(Color.blue);
-        for (int i = 0; i < data.length; i++) {
-            double y = (height - PADDING - scale * data[i][1]);
-            double x = xs[i];
-            g2.fill(new Ellipse2D.Double(x - 2, y - 2, dotSize, dotSize));
-        }
-
-        g2.setStroke(new BasicStroke(3));
+        g2.setStroke(new BasicStroke(2));
         g2.setPaint(Color.BLACK);
         ArrayDeque<Double> lastPoints = new ArrayDeque<>();
         double meanPoint = 0;

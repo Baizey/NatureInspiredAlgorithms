@@ -4,6 +4,7 @@ package ni.genetic;
 public class Gene {
     private static final long MASK = -1L;
     private final long[] words;
+    private final int bits;
     private final int length;
 
     private static final int ADDRESS_BITS_PER_WORD = 6;
@@ -12,6 +13,7 @@ public class Gene {
     }
 
     public Gene(int size) {
+        bits = size;
         length = wordIndex(size - 1) + 1;
         words = new long[length];
     }
@@ -106,5 +108,23 @@ public class Gene {
 
     private long combine(long a, long b, long mask) {
         return (a & mask) | (b & ~mask);
+    }
+
+    @Override
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0; i < length - 1; i++)
+            sb.append(longToString(words[i], 64));
+        int lastLength = bits % 64;
+        if(lastLength == 0) lastLength = 64;
+        return sb.append(longToString(words[length - 1], lastLength)).toString();
+    }
+
+    private String longToString(long value, int minLength){
+        StringBuilder sb = new StringBuilder(Long.toBinaryString(value));
+        sb.reverse();
+        if(sb.length() > minLength) sb = new StringBuilder(sb.substring(0, minLength));
+        while(sb.length() < minLength) sb.append("0");
+        return sb.toString();
     }
 }
