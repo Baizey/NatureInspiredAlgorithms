@@ -6,11 +6,8 @@ import ni.genetic.mutations.MutationInterface;
 import ni.genetic.preCalc.PreCalcInterface;
 import ni.genetic.select.SelectionInterface;
 
-import java.util.Arrays;
-
 @SuppressWarnings("WeakerAccess")
 public class Population {
-
     private int generation = 0;
     private final double mutationRate;
     private final int popSize, geneSize, elitism;
@@ -58,12 +55,15 @@ public class Population {
         generation++;
         int[] preCalc = preCalculations.calc(currGen);
         for(int i = 0; i < elitism; i++) {
-            nextGen[i].fitness = (currGen[i].fitness);
-            System.arraycopy(currGen[i].genes, 0, nextGen[i].genes, 0, geneSize);
+            nextGen[i].fitness = currGen[i].fitness;
+            nextGen[i].genes.copyFrom(currGen[i].genes);
         }
 
-        for (int i = Math.max(0, elitism); i < popSize; i++) {
-            breeder.breed(preCalc, selection.select(preCalc, currGen), selection.select(preCalc, currGen), nextGen[i]);
+        for (int i = elitism; i < popSize; i++) {
+            breeder.breed(preCalc,
+                    selection.select(preCalc, currGen),
+                    selection.select(preCalc, currGen),
+                    nextGen[i]);
             mutator.mutate(preCalc, nextGen[i], mutationRate);
             nextGen[i].fitness = Integer.MIN_VALUE;
         }
@@ -89,7 +89,15 @@ public class Population {
         for (Individual individual : currGen)
             if(individual.fitness == Integer.MIN_VALUE)
                 individual.fitness = fitness.calc(preCalc, individual);
-        Arrays.sort(currGen, (a, b) -> b.fitness - a.fitness);
+
+        // TODO: optimize this
+        if(currGen[1].fitness > currGen[0].fitness) {
+            Individual temp = currGen[0];
+            currGen[0] = currGen[1];
+            currGen[1] = temp;
+        }
+
+        //Arrays.sort(currGen, (a, b) -> b.fitness - a.fitness);
     }
 
     public Individual[] getPopulation() {
@@ -98,5 +106,9 @@ public class Population {
 
     public Individual getBest() {
         return currGen[0];
+    }
+
+    public int getGeneration() {
+        return generation;
     }
 }

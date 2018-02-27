@@ -1,11 +1,12 @@
 package ni.genetic;
 
-import ni.AbstractIndividual;
-
-import java.util.Arrays;
-
 @SuppressWarnings("WeakerAccess")
-public class Individual extends AbstractIndividual<Boolean> {
+public class Individual{
+
+    public final int lastIndex;
+    public final int geneSize;
+    public int fitness = -1;
+    public Gene genes;
 
     /**
      * Default Individual has all genes set at 0
@@ -14,15 +15,14 @@ public class Individual extends AbstractIndividual<Boolean> {
      * @param generate if we use default individual or random
      */
     Individual(int geneSize, boolean generate) {
-        super(geneSize);
+        this.geneSize = geneSize;
+        this.lastIndex = geneSize - 1;
+        genes = new Gene(geneSize);
         if (generate)
             for (int i = 0; i < geneSize; i++)
-                if (Math.random() >= 0.5) genes[i] = true;
-        else Arrays.fill(genes, false);
+                if (Math.random() >= 0.5) genes.set(i, true);
     }
 
-
-    @Override
     public void reset() {
         this.fitness = Integer.MIN_VALUE;
     }
@@ -31,7 +31,7 @@ public class Individual extends AbstractIndividual<Boolean> {
     public String toString(){
         StringBuilder sb = new StringBuilder();
         for(int i = 0; i < geneSize; i++)
-            sb.append(genes[i] ? "1" : "0");
+            sb.append(genes.get(i) ? '1' : '0');
         return sb.toString();
     }
 }

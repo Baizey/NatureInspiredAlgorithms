@@ -22,24 +22,8 @@ public class Mutation {
     public static MutationInterface flipOne() {
         return (preCalc, individual, mutationRate) -> {
             if (Math.random() < mutationRate) {
-                Boolean[] genes = individual.genes;
                 int i = new Random().nextInt(individual.geneSize);
-                genes[i] = !genes[i];
-                individual.reset();
-            }
-        };
-    }
-
-    /**
-     * If mutating flip ALL genes
-     *
-     * @return individual mutated
-     */
-    public static MutationInterface flipAll() {
-        return (preCalc, individual, mutationRate) -> {
-            if (Math.random() < mutationRate) {
-                Boolean[] genes = individual.genes;
-                for(int i = 0; i < genes.length; i++) genes[i] = !genes[i];
+                individual.genes.flip(i);
                 individual.reset();
             }
         };
@@ -52,9 +36,9 @@ public class Mutation {
      */
     public static MutationInterface flipRandom() {
         return (preCalc, individual, mutationRate) -> {
-            Boolean[] genes = individual.genes;
             for (int i = 0; i < individual.geneSize; i++)
-                if (Math.random() < mutationRate) genes[i] = !genes[i];
+                if (Math.random() < mutationRate)
+                    individual.genes.flip(i);
             individual.reset();
         };
     }
