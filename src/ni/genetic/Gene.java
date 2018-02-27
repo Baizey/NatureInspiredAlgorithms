@@ -1,20 +1,19 @@
 package ni.genetic;
 
-@SuppressWarnings({"WeakerAccess", "unused"})
+@SuppressWarnings({"WeakerAccess"})
 public class Gene {
-    private static final long WORD_MASK = -1L;
+    private static final long MASK = -1L;
     private final long[] words;
     private final int length;
 
     private static final int ADDRESS_BITS_PER_WORD = 6;
-
     private static int wordIndex(int index) {
         return index >> ADDRESS_BITS_PER_WORD;
     }
 
-    Gene(int size) {
-        words = new long[wordIndex(size - 1) + 1];
-        length = words.length;
+    public Gene(int size) {
+        length = wordIndex(size - 1) + 1;
+        words = new long[length];
     }
 
     public void setFalse(int index) {
@@ -31,8 +30,7 @@ public class Gene {
     }
 
     public void flip(int index) {
-        int wordIndex = wordIndex(index);
-        words[wordIndex] ^= (1L << index);
+        words[wordIndex(index)] ^= (1L << index);
     }
 
     public boolean get(int index) {
@@ -88,15 +86,21 @@ public class Gene {
     public void copyFrom(Gene other, int startIndex, int endIndex) {
         int start = wordIndex(startIndex);
         int end = wordIndex(endIndex - 1);
-        long maskA = WORD_MASK << startIndex;
-        long maskB = WORD_MASK >>> -endIndex;
+        long firstWord = MASK << startIndex;
+        long lastWord = MASK >>> -endIndex;
         if (start == end) {
-            words[start] = combine(other.words[start], words[start], maskA & maskB);
+            words[start] = combine(other.words[start], words[start], firstWord & lastWord);
         } else {
-            words[start] = combine(other.words[start], words[start], maskA);
-            int length = end - start - 2;
-            if (length > 0) System.arraycopy(other.words, start + 1, words, start + 1, length);
-            words[end] = combine(other.words[end], words[end], maskB);
+            if(firstWord != MASK) {
+                words[start] = combine(other.words[start], words[start], firstWord);
+                start++;
+            }
+            if(lastWord != MASK) {
+                words[end] = combine(other.words[end], words[end], lastWord);
+                end--;
+            }
+            int length = end - start;
+            if (length > 0) System.arraycopy(other.words, start, words, start, length);
         }
     }
 

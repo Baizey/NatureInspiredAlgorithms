@@ -27,10 +27,6 @@
       <change beforePath="" afterPath="$PROJECT_DIR$/../Helpers/src/lsm/helpers/interfaces/GetNext.java" />
       <change beforePath="" afterPath="$PROJECT_DIR$/../Helpers/src/lsm/helpers/interfaces/IsElement.java" />
       <change beforePath="" afterPath="$PROJECT_DIR$/../Helpers/src/lsm/helpers/search/Search.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/ni/antcolony/AbstractGraphBlock.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/ni/antcolony/Node.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/ni/genetic/Gene.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/ni/genetic/GraphingData.java" />
       <change beforePath="$PROJECT_DIR$/../Helpers/.idea/inspectionProfiles/Project_Default.xml" afterPath="$PROJECT_DIR$/../Helpers/.idea/inspectionProfiles/Project_Default.xml" />
       <change beforePath="$PROJECT_DIR$/../Helpers/Helpers.iml" afterPath="$PROJECT_DIR$/../Helpers/Helpers.iml" />
       <change beforePath="$PROJECT_DIR$/../Helpers/src/lsm/algorithms/Astar/AstarTest.java" afterPath="$PROJECT_DIR$/../Helpers/src/lsm/algorithms/Astar/AstarTest.java" />
@@ -70,17 +66,8 @@
       <change beforePath="$PROJECT_DIR$/../Helpers/src/lsm/helpers/Time.java" afterPath="$PROJECT_DIR$/../Helpers/src/lsm/helpers/Time.java" />
       <change beforePath="$PROJECT_DIR$/../Helpers/src/lsm/helpers/crypto/Utils.java" afterPath="$PROJECT_DIR$/../Helpers/src/lsm/helpers/crypto/Utils.java" />
       <change beforePath="$PROJECT_DIR$/../Helpers/src/module-info.java" afterPath="$PROJECT_DIR$/../Helpers/src/module-info.java" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Helpers.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/ni/genetic/Driver.java" afterPath="$PROJECT_DIR$/src/ni/genetic/Driver.java" />
-      <change beforePath="$PROJECT_DIR$/src/ni/genetic/Individual.java" afterPath="$PROJECT_DIR$/src/ni/genetic/Individual.java" />
-      <change beforePath="$PROJECT_DIR$/src/ni/genetic/Population.java" afterPath="$PROJECT_DIR$/src/ni/genetic/Population.java" />
-      <change beforePath="$PROJECT_DIR$/src/ni/genetic/breed/Breeding.java" afterPath="$PROJECT_DIR$/src/ni/genetic/breed/Breeding.java" />
-      <change beforePath="$PROJECT_DIR$/src/ni/genetic/fitness/Fitness.java" afterPath="$PROJECT_DIR$/src/ni/genetic/fitness/Fitness.java" />
-      <change beforePath="$PROJECT_DIR$/src/ni/genetic/mutations/Mutation.java" afterPath="$PROJECT_DIR$/src/ni/genetic/mutations/Mutation.java" />
+      <change beforePath="$PROJECT_DIR$/output.txt" afterPath="$PROJECT_DIR$/output.txt" />
+      <change beforePath="$PROJECT_DIR$/src/ni/genetic/Gene.java" afterPath="$PROJECT_DIR$/src/ni/genetic/Gene.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -104,7 +91,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="GraphingData.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="GraphingData.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/ni/genetic/GraphingData.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="1479">
@@ -114,25 +101,27 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Gene.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Gene.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/ni/genetic/Gene.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1479">
-              <caret line="87" column="68" lean-forward="true" selection-start-line="87" selection-start-column="68" selection-end-line="87" selection-end-column="68" />
+            <state relative-caret-position="204">
+              <caret line="12" column="0" lean-forward="true" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
               <folding>
-                <element signature="e#21#66#0" expanded="true" />
-                <element signature="e#298#299#0" expanded="true" />
-                <element signature="e#351#352#0" expanded="true" />
-                <element signature="e#500#501#0" expanded="true" />
-                <element signature="e#557#558#0" expanded="true" />
-                <element signature="e#595#596#0" expanded="true" />
-                <element signature="e#651#652#0" expanded="true" />
-                <element signature="e#934#935#0" expanded="true" />
-                <element signature="e#1004#1005#0" expanded="true" />
-                <element signature="e#2039#2040#0" expanded="true" />
-                <element signature="e#2105#2106#0" expanded="true" />
-                <element signature="e#2840#2841#0" expanded="true" />
-                <element signature="e#2887#2888#0" expanded="true" />
+                <element signature="e#21#56#0" expanded="true" />
+                <element signature="e#282#283#0" expanded="true" />
+                <element signature="e#335#336#0" expanded="true" />
+                <element signature="e#485#486#0" expanded="true" />
+                <element signature="e#542#543#0" expanded="true" />
+                <element signature="e#580#581#0" expanded="true" />
+                <element signature="e#636#637#0" expanded="true" />
+                <element signature="e#791#792#0" expanded="true" />
+                <element signature="e#847#848#0" expanded="true" />
+                <element signature="e#884#885#0" expanded="true" />
+                <element signature="e#954#955#0" expanded="true" />
+                <element signature="e#1989#1990#0" expanded="true" />
+                <element signature="e#2055#2056#0" expanded="true" />
+                <element signature="e#2944#2945#0" expanded="true" />
+                <element signature="e#2991#2992#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -225,10 +214,14 @@
       <find>compareTo</find>
       <find>intValue</find>
       <find>public void set</find>
+      <find>1L</find>
+      <find>0L</find>
     </findStrings>
     <replaceStrings>
       <replace>boolean</replace>
       <replace>dotSize, dotSize)</replace>
+      <replace>ONE</replace>
+      <replace>ZERO</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -280,9 +273,9 @@
         <option value="$PROJECT_DIR$/src/ni/genetic/Individual.java" />
         <option value="$PROJECT_DIR$/src/ni/genetic/breed/Breeding.java" />
         <option value="$PROJECT_DIR$/src/ni/genetic/Population.java" />
-        <option value="$PROJECT_DIR$/src/ni/genetic/Gene.java" />
         <option value="$PROJECT_DIR$/src/ni/genetic/GraphingData.java" />
         <option value="$PROJECT_DIR$/src/ni/genetic/Driver.java" />
+        <option value="$PROJECT_DIR$/src/ni/genetic/Gene.java" />
       </list>
     </option>
   </component>
@@ -555,15 +548,16 @@
       <workItem from="1519743502331" duration="264000" />
       <workItem from="1519743800041" duration="399000" />
       <workItem from="1519749056043" duration="74000" />
-      <workItem from="1519749187613" duration="10638000" />
+      <workItem from="1519749187613" duration="14166000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="74060000" />
+    <option name="totallyTimeSpent" value="77588000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -574,7 +568,7 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2674187" sideWeight="0.50208336" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32995737" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26086956" sideWeight="0.49791667" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26086956" sideWeight="0.49791667" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -934,28 +928,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/ni/genetic/Gene.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1479">
-          <caret line="87" column="68" lean-forward="true" selection-start-line="87" selection-start-column="68" selection-end-line="87" selection-end-column="68" />
-          <folding>
-            <element signature="e#21#66#0" expanded="true" />
-            <element signature="e#298#299#0" expanded="true" />
-            <element signature="e#351#352#0" expanded="true" />
-            <element signature="e#500#501#0" expanded="true" />
-            <element signature="e#557#558#0" expanded="true" />
-            <element signature="e#595#596#0" expanded="true" />
-            <element signature="e#651#652#0" expanded="true" />
-            <element signature="e#934#935#0" expanded="true" />
-            <element signature="e#1004#1005#0" expanded="true" />
-            <element signature="e#2039#2040#0" expanded="true" />
-            <element signature="e#2105#2106#0" expanded="true" />
-            <element signature="e#2840#2841#0" expanded="true" />
-            <element signature="e#2887#2888#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/ni/genetic/Driver.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="241">
@@ -971,6 +943,30 @@
         <state relative-caret-position="1479">
           <caret line="98" column="9" lean-forward="true" selection-start-line="98" selection-start-column="9" selection-end-line="98" selection-end-column="9" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ni/genetic/Gene.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="12" column="0" lean-forward="true" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
+          <folding>
+            <element signature="e#21#56#0" expanded="true" />
+            <element signature="e#282#283#0" expanded="true" />
+            <element signature="e#335#336#0" expanded="true" />
+            <element signature="e#485#486#0" expanded="true" />
+            <element signature="e#542#543#0" expanded="true" />
+            <element signature="e#580#581#0" expanded="true" />
+            <element signature="e#636#637#0" expanded="true" />
+            <element signature="e#791#792#0" expanded="true" />
+            <element signature="e#847#848#0" expanded="true" />
+            <element signature="e#884#885#0" expanded="true" />
+            <element signature="e#954#955#0" expanded="true" />
+            <element signature="e#1989#1990#0" expanded="true" />
+            <element signature="e#2055#2056#0" expanded="true" />
+            <element signature="e#2944#2945#0" expanded="true" />
+            <element signature="e#2991#2992#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
