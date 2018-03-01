@@ -38,6 +38,28 @@ public class Gene {
     public boolean get(int index) {
         return (words[wordIndex(index)] & (1L << index)) != 0L;
     }
+    public int get(int startBit, int endBit) {
+        int startWord = wordIndex(startBit);
+        int endWord = wordIndex(endBit - 1);
+        long firstWord = MASK << startBit;
+        long lastWord = MASK >>> -endBit;
+        if(startWord == endWord) {
+            return (int) ((words[startWord] & firstWord & lastWord) >>> startBit);
+        } else {
+            return (int) (((firstWord & words[startWord]) >>> startBit) + ((words[endWord] & lastWord) << startBit));
+        }
+    }
+
+    /**
+     * Optimized version of get(startBit, endBit)
+     * Requires start and end bit to be inside the same word for correct result (otherwise unexpected results will be returned)
+     * @param startBit
+     * @param endBit
+     * @return
+     */
+    public int getUnsafe(int startBit, int endBit){
+        return (int) ((words[wordIndex(startBit)] & (MASK << startBit) & (MASK >>> -endBit)) >>> startBit);
+    }
 
     public void clear() {
         for (int i = 0; i < length; i++)

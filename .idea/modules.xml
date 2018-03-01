@@ -4,14 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/../Helpers/Helpers.iml" filepath="$PROJECT_DIR$/../Helpers/Helpers.iml" />
       <module fileurl="file://$PROJECT_DIR$/NatureInspiredAlgorithms.iml" filepath="$PROJECT_DIR$/NatureInspiredAlgorithms.iml" />
-      <module fileurl="file://$USER_HOME$/Documents/GitHub/jgrapht/jgrapht-io/src/main/main.iml" filepath="$USER_HOME$/Documents/GitHub/jgrapht/jgrapht-io/src/main/main.iml" />
-      <module fileurl="file://$USER_HOME$/Documents/GitHub/jgrapht/jgrapht-core/src/main/main1.iml" filepath="$USER_HOME$/Documents/GitHub/jgrapht/jgrapht-core/src/main/main1.iml" />
-      <module fileurl="file://$USER_HOME$/Documents/GitHub/jgrapht/jgrapht-demo/src/main/main2.iml" filepath="$USER_HOME$/Documents/GitHub/jgrapht/jgrapht-demo/src/main/main2.iml" />
-      <module fileurl="file://$USER_HOME$/Documents/GitHub/jgrapht/jgrapht-touchgraph/src/main/main3.iml" filepath="$USER_HOME$/Documents/GitHub/jgrapht/jgrapht-touchgraph/src/main/main3.iml" />
-      <module fileurl="file://$USER_HOME$/Documents/GitHub/jgrapht/jgrapht-ext/src/main/main4.iml" filepath="$USER_HOME$/Documents/GitHub/jgrapht/jgrapht-ext/src/main/main4.iml" />
-      <module fileurl="file://$USER_HOME$/Documents/GitHub/jgrapht/jgrapht-ext/src/test/test.iml" filepath="$USER_HOME$/Documents/GitHub/jgrapht/jgrapht-ext/src/test/test.iml" />
-      <module fileurl="file://$USER_HOME$/Documents/GitHub/jgrapht/jgrapht-core/src/test/test1.iml" filepath="$USER_HOME$/Documents/GitHub/jgrapht/jgrapht-core/src/test/test1.iml" />
-      <module fileurl="file://$USER_HOME$/Documents/GitHub/jgrapht/jgrapht-io/src/test/test2.iml" filepath="$USER_HOME$/Documents/GitHub/jgrapht/jgrapht-io/src/test/test2.iml" />
     </modules>
   </component>
 </project>

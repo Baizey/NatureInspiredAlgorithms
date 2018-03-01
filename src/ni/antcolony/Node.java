@@ -1,41 +1,58 @@
 package ni.antcolony;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 
 @SuppressWarnings({"unused", "WeakerAccess"})
-public class Node<T> {
-    private final ArrayList<Node> nodes = new ArrayList<>();
-    private final ArrayList<T> edgeValue = new ArrayList<>();
-    private double[] chances;
+public class Node {
+    private static int nextId = 0;
+    private int nextEdge = 0;
+    private Node[] nodes;
+    private double[] costs, chances;
+    private String[] names;
+    public final String name;
 
-    public void addEdge(Node node, T value) {
-        nodes.add(node);
-        edgeValue.add(value);
+    public Node(int edges, String name) {
+        this.nodes = new Node[edges];
+        this.chances = new double[edges];
+        this.costs = new double[edges];
+        this.names = new String[edges];
+        this.name = name;
     }
 
-    public Node getNode(int index) {
-        return nodes.get(index);
+    public Node(int edges){
+        this.nodes = new Node[edges];
+        this.chances = new double[edges];
+        this.costs = new double[edges];
+        this.names = new String[edges];
+        this.name = Integer.toString(nextId++);
     }
 
-    public T getValue(int index) {
-        return edgeValue.get(index);
+    public void addEdge(Node edge, double cost) {
+        addEdge(edge, cost, edge.name);
+    }
+
+    public void addEdge(Node edge, String name) {
+        addEdge(edge, 0D, name);
+    }
+
+    public void addEdge(Node node, double cost, String name) {
+        costs[nextEdge] = cost;
+        names[nextEdge] = name;
+        nodes[nextEdge++] = node;
     }
 
     public void initChances() {
-        double[] bias = new double[nodes.size()];
+        double[] bias = new double[nodes.length];
         Arrays.fill(bias, 1D);
         initChances(bias);
     }
 
     public void initChances(double[] bias) {
-        double sum = Arrays.stream(bias).sum();
-        chances = Arrays.stream(bias).map(value -> value / sum).toArray();
-    }
-
-    public void movePercentageTo(int index) {
-        movePercentageTo(0.05D, index);
+        double sum = 0;
+        for (double bia : bias) sum += bia;
+        for(int i = 0; i < bias.length; i++)
+            chances[i] = bias[i] / sum;
     }
 
     public void movePercentageTo(double percentage, int index) {
@@ -59,7 +76,7 @@ public class Node<T> {
         boolean[] available = new boolean[chances.length];
         double totalAvail = 0D;
         for (int i = 0; i < available.length; i++) {
-            available[i] = !unavailable.contains(nodes.get(i));
+            available[i] = !unavailable.contains(nodes[i]);
             if (available[i]) totalAvail += chances[i];
         }
         double pick = Math.random() * totalAvail;
@@ -73,5 +90,23 @@ public class Node<T> {
 
     public void killChance(int index) {
         chances[index] = 0D;
+    }
+
+    public Node getNode(int index) {
+        return nodes[index];
+    }
+    public double getCost(int index) {
+        return costs[index];
+    }
+    public String getName(int index) {
+        return names[index];
+    }
+
+    public Node[] getNodes() {
+        return nodes;
+    }
+
+    public String toString(){
+        return name + ": " + Arrays.toString(names);
     }
 }

@@ -1,37 +1,32 @@
 package ni.genetic;
 
+import ni.AbstractIndividual;
+
 @SuppressWarnings("WeakerAccess")
-public class Individual{
-
-    public final int lastIndex;
-    public final int geneSize;
-    public int fitness = -1;
-    public Gene genes;
-
+public class Individual extends AbstractIndividual<Gene> {
     /**
-     * Default Individual has all genes set at 0
+     * Default Individual has all dna set at 0
      * Generated has each gene 50/50 as 1 or 0
-     * @param geneSize number of genes in an individual
+     * @param length number of dna in an individual
      * @param generate if we use default individual or random
      */
-    Individual(int geneSize, boolean generate) {
-        this.geneSize = geneSize;
-        this.lastIndex = geneSize - 1;
-        genes = new Gene(geneSize);
+    Individual(int length, boolean generate) {
+        super(length);
+        dna = new Gene(length);
         if (generate)
-            for (int i = 0; i < geneSize; i++)
-                if (Math.random() >= 0.5) genes.set(i, true);
-    }
-
-    public void reset() {
-        this.fitness = Integer.MIN_VALUE;
+            for (int i = 0; i < length; i++)
+                if (Math.random() >= 0.5) dna.set(i, true);
     }
 
     @Override
     public String toString(){
         StringBuilder sb = new StringBuilder();
-        for(int i = 0; i < geneSize; i++)
-            sb.append(genes.get(i) ? '1' : '0');
+        for(int i = 0; i < length; i++)
+            sb.append(dna.get(i) ? '1' : '0');
         return sb.toString();
+    }
+
+    public void copyDnaFrom(Individual individual) {
+        dna.copyFrom(individual.dna);
     }
 }

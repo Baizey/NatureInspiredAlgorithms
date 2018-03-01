@@ -16,7 +16,7 @@ public class Selection {
             int sum = preCalc[1] + 1;
             int pick = new Random().nextInt(sum);
             for (Individual individual : individuals) {
-                pick -= individual.fitness + min;
+                pick -= individual.getFitness() + min;
                 if (pick <= 0) return individual;
             }
             return null; // If this happens an error occurred

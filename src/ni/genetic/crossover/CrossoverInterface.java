@@ -1,9 +1,9 @@
-package ni.genetic.breed;
+package ni.genetic.crossover;
 
 import ni.genetic.Individual;
 
 @SuppressWarnings("unused")
-public interface BreedInterface {
+public interface CrossoverInterface {
     void breed(int[] preCalc, Individual male, Individual female, Individual baby);
 }
 

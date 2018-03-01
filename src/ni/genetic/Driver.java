@@ -2,7 +2,7 @@ package ni.genetic;
 
 import lsm.helpers.IO.write.text.TextWriter;
 import lsm.helpers.Time;
-import ni.genetic.breed.Breeding;
+import ni.genetic.crossover.Crossover;
 import ni.genetic.fitness.Fitness;
 import ni.genetic.mutations.Mutation;
 import ni.genetic.preCalc.PreCalcs;
@@ -27,7 +27,7 @@ public class Driver {
         boolean generation = false;
         int geneSize = 50000;
 
-        BufferedWriter writer = TextWriter.getWriter("output", "txt", true);
+        BufferedWriter writer = TextWriter.getWriter("output2", "txt", true);
 
         for (geneSize = 10; geneSize <= 1000000; geneSize += 10) {
 
@@ -39,7 +39,7 @@ public class Driver {
                         popSize, geneSize, elitism, generation, mutationRate,
                         Mutation.flipOne(),
                         Fitness.oneMax(),
-                        Breeding.none(),
+                        Crossover.none(),
                         Selection.best(),
                         PreCalcs.none()
                 );

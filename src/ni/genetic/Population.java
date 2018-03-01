@@ -1,20 +1,20 @@
 package ni.genetic;
 
-import ni.genetic.breed.BreedInterface;
+import ni.AbstractPopulation;
+import ni.genetic.crossover.CrossoverInterface;
 import ni.genetic.fitness.FitnessInterface;
 import ni.genetic.mutations.MutationInterface;
 import ni.genetic.preCalc.PreCalcInterface;
 import ni.genetic.select.SelectionInterface;
 
 @SuppressWarnings("WeakerAccess")
-public class Population {
-    private int generation = 0;
+public class Population extends AbstractPopulation {
     private final double mutationRate;
     private final int popSize, geneSize, elitism;
     private Individual[] nextGen, currGen;
     private final SelectionInterface selection;
     private final FitnessInterface fitness;
-    private final BreedInterface breeder;
+    private final CrossoverInterface breeder;
     private final MutationInterface mutator;
     private final PreCalcInterface preCalculations;
 
@@ -26,11 +26,10 @@ public class Population {
             double mutationRate,
             MutationInterface mutationInterface,
             FitnessInterface fitnessInterface,
-            BreedInterface breedInterface,
+            CrossoverInterface crossoverInterface,
             SelectionInterface selectionInterface,
             PreCalcInterface preCalculations
-            )
-    {
+            ) {
         this.preCalculations = preCalculations;
         this.currGen = new Individual[popSize];
         this.nextGen = new Individual[popSize];
@@ -45,18 +44,19 @@ public class Population {
         this.mutationRate = mutationRate;
         this.mutator = mutationInterface;
         this.fitness = fitnessInterface;
-        this.breeder = breedInterface;
+        this.breeder = crossoverInterface;
         this.selection = selectionInterface;
 
         calculateFitness(preCalculations.calc(currGen));
     }
 
+    @Override
     public void evolve() {
         generation++;
         int[] preCalc = preCalculations.calc(currGen);
         for(int i = 0; i < elitism; i++) {
-            nextGen[i].fitness = currGen[i].fitness;
-            nextGen[i].genes.copyFrom(currGen[i].genes);
+            nextGen[i].setFitness(currGen[i]);
+            nextGen[i].copyDnaFrom(currGen[i]);
         }
 
         for (int i = elitism; i < popSize; i++) {
@@ -65,7 +65,7 @@ public class Population {
                     selection.select(preCalc, currGen),
                     nextGen[i]);
             mutator.mutate(preCalc, nextGen[i], mutationRate);
-            nextGen[i].fitness = Integer.MIN_VALUE;
+            nextGen[i].resetFitness();
         }
 
         Individual[] temp = currGen;
@@ -75,23 +75,18 @@ public class Population {
         calculateFitness(preCalc);
     }
 
-    public int evolve(int goal) {
-        return evolve(goal, Integer.MAX_VALUE);
-    }
-
-    public int evolve(int goal, int max) {
-        while(currGen[0].fitness < goal && generation < max)
-            evolve();
-        return generation;
+    @Override
+    public int getBestFitness() {
+        return currGen[0].getFitness();
     }
 
     void calculateFitness(int[] preCalc) {
         for (Individual individual : currGen)
-            if(individual.fitness == Integer.MIN_VALUE)
-                individual.fitness = fitness.calc(preCalc, individual);
+            if(individual.needsFitnessCalculation())
+                individual.setFitness(fitness.calc(preCalc, individual));
 
         // TODO: optimize this
-        if(currGen[1].fitness > currGen[0].fitness) {
+        if(currGen[1].getFitness() > currGen[0].getFitness()) {
             Individual temp = currGen[0];
             currGen[0] = currGen[1];
             currGen[1] = temp;
