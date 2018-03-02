@@ -2,9 +2,14 @@ package ni.antcolony;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class Node {
+    private static final Random random = ThreadLocalRandom.current();
+    static final int lastUsageStartingPoint = 1;
+    public int lastUsage = 0;
     private static int nextId = 0;
     private int nextEdge = 0;
     private Node[] nodes;
@@ -68,20 +73,14 @@ public class Node {
 
     private static final HashSet<Node> EMPTY = new HashSet<>();
 
-    public int getRandom() {
-        return getRandom(EMPTY);
-    }
-
-    public int getRandom(HashSet<Node> unavailable) {
-        boolean[] available = new boolean[chances.length];
-        double totalAvail = 0D;
-        for (int i = 0; i < available.length; i++) {
-            available[i] = !unavailable.contains(nodes[i]);
-            if (available[i]) totalAvail += chances[i];
-        }
-        double pick = Math.random() * totalAvail;
+    public int getRandom(int currUsage) {
+        double pick = 0D;
+        for(int i = 0; i < chances.length; i++)
+            if(nodes[i].lastUsage != currUsage)
+                pick += chances[i];
+        pick *= random.nextDouble();
         for (int i = 0; i < chances.length; i++) {
-            if (!available[i]) continue;
+            if(nodes[i].lastUsage == currUsage) continue;
             pick -= chances[i];
             if (pick <= 0) return i;
         }
@@ -108,5 +107,13 @@ public class Node {
 
     public String toString(){
         return name + ": " + Arrays.toString(names);
+    }
+
+    public double[] getChances() {
+        return chances;
+    }
+
+    public String[] getNames() {
+        return names;
     }
 }

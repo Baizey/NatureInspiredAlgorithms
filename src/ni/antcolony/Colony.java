@@ -4,10 +4,8 @@ import ni.AbstractPopulation;
 import ni.antcolony.fitness.FitnessInterface;
 import ni.antcolony.visitation.VisitationInterface;
 
-import java.util.HashSet;
-
 public class Colony extends AbstractPopulation {
-
+    private int lastUsage = Node.lastUsageStartingPoint;
     private final VisitationInterface visitation;
     private final FitnessInterface fitness;
     private final Ant best, bestFromGeneration, curr;
@@ -15,14 +13,14 @@ public class Colony extends AbstractPopulation {
     private final Node start;
     private final double weightAltering;
 
-    public Colony(int estimatedSolutionLength, int generationSize, double weightAltering, Node start, VisitationInterface visitation, FitnessInterface fitness) {
+    public Colony(int generationSize, double weightAltering, Node start, VisitationInterface visitation, FitnessInterface fitness) {
         this.weightAltering = weightAltering;
         this.visitation = visitation;
         this.fitness = fitness;
         this.generationSize = generationSize;
-        best = new Ant(estimatedSolutionLength);
-        bestFromGeneration = new Ant(estimatedSolutionLength);
-        curr = new Ant(estimatedSolutionLength);
+        best = new Ant(8);
+        bestFromGeneration = new Ant(8);
+        curr = new Ant(8);
         this.start = start;
     }
 
@@ -33,17 +31,16 @@ public class Colony extends AbstractPopulation {
         Node at;
         for (int i = 0; i < generationSize; i++) {
             curr.resetInsertion();
-            HashSet<Node> visited = new HashSet<>();
             at = start;
             int pick;
-            while ((pick = at.getRandom(visited)) != -1) {
+            while ((pick = at.getRandom(lastUsage)) != -1) {
                 curr.add(pick);
-                visitation.handleVisitation(visited, curr, at, pick);
+                visitation.handleVisitation(lastUsage, curr, at, pick);
                 at = at.getNode(pick);
             }
+            lastUsage++;
             fitness.calc(curr, start);
-
-            if (curr.getFitness() > best.getFitness())
+            if (curr.getFitness() > bestFromGeneration.getFitness())
                 bestFromGeneration.copyFrom(curr);
         }
 

@@ -1,28 +1,28 @@
 package ni.antcolony.visitation;
 
-import java.util.Arrays;
+import ni.antcolony.Node;
 
 public class Visitations {
 
     public static VisitationInterface none(){
-        return (visited, ant, node, pick) -> {};
+        return (id, ant, node, pick) -> {};
     }
 
     public static VisitationInterface addCurrentNode(){
-        return (visited, ant, node, pick) -> visited.add(node);
+        return (id, ant, node, pick) -> node.lastUsage = id;
     }
 
     public static VisitationInterface addCurrentAndEdgeNodes(){
-        return (visited, ant, node, pick) -> {
-            visited.add(node);
-            visited.addAll(Arrays.asList(node.getNodes()));
+        return (id, ant, node, pick) -> {
+            node.lastUsage = id;
+            for(Node n : node.getNodes()) n.lastUsage = id;
         };
     }
 
-    public static VisitationInterface addCurrentAndEdgeNodesAfterX(final int x){
-        return (visited, ant, node, pick) -> {
+    public static VisitationInterface addCurrentNodesAfterX(final int x){
+        return (id, ant, node, pick) -> {
             if(ant.getInsertionCount() > x)
-                visited.add(node);
+                node.lastUsage = id;
         };
     }
 

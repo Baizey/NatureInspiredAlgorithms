@@ -25,7 +25,7 @@ public abstract class AbstractPopulation {
 
     public abstract int getBestFitness();
 
-    public int getGeneration(){
+    public int getGeneration() {
         return generation;
     }
 }
