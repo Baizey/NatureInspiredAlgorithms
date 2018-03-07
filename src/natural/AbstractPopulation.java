@@ -4,33 +4,30 @@ package natural;
 public abstract class AbstractPopulation {
     protected int generation = 0;
 
-    public int evolveUntilGeneration(int maxGeneration) {
+    public void evolveUntilGeneration(int maxGeneration) {
         while (generation < maxGeneration)
             evolve();
-        return generation;
     }
 
-    public int evolveUntilGoal(int fitnessGoal) {
-        while (getBestFitness() < fitnessGoal)
+    public void evolveUntilGoal(double fitnessGoal) {
+        while (getBestFitness() < fitnessGoal) {
             evolve();
-        return generation;
+        }
     }
 
-    public int evolveUntilNoProgress(int maxStaleGenerations) {
+    public void evolveUntilNoProgress(int maxStaleGenerations) {
         double prev = 0;
         for (int i = 0; i < maxStaleGenerations; i++) {
             evolve();
             double curr = getBestFitness();
-            if (curr > prev)
-                i = -1;
+            if (curr > prev) i = -1;
             prev = curr;
         }
-        return generation;
     }
 
     public abstract void evolve();
 
-    public abstract double getBestFitness();
+    public abstract int getBestFitness();
 
     public int getGeneration() {
         return generation;
