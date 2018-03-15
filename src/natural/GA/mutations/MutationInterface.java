@@ -4,5 +4,5 @@ package natural.GA.mutations;
 
 @SuppressWarnings("unused")
 public interface MutationInterface {
-    void mutate(int[] preCalc, double mutationRate, Individual individual);
+    void mutate(long[] preCalc, double mutationRate, Individual individual);
 }

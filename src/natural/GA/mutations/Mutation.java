@@ -15,6 +15,13 @@ public class Mutation {
         };
     }
 
+    public static MutationInterface alwaysFlipOne() {
+        return (preCalc, mutationRate, individual) -> {
+            individual.getDna().flip(random.nextInt(individual.getLength()));
+            individual.resetFitness();
+        };
+    }
+
     /**
      * If mutating flip 1 random gene
      *

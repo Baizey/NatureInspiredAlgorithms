@@ -4,6 +4,6 @@ import natural.GA.Individual;
 
 public interface SelectionInterface {
 
-    Individual select(int[] preCalc, Individual[] individuals);
+    Individual select(long[] preCalc, Individual[] individuals);
 
 }

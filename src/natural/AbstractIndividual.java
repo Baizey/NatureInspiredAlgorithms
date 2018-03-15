@@ -2,9 +2,9 @@ package natural;
 
 @SuppressWarnings("ALL")
 public abstract class AbstractIndividual <T> {
-    private static final int UNSET_FITNESS = Integer.MIN_VALUE;
+    private static final long UNSET_FITNESS = Long.MIN_VALUE;
     protected T dna;
-    protected int fitness = UNSET_FITNESS;
+    protected long fitness = UNSET_FITNESS;
     protected int length;
 
     public AbstractIndividual(int length) {
@@ -15,7 +15,7 @@ public abstract class AbstractIndividual <T> {
         fitness = other.fitness;
     }
 
-    public void setFitness(int fitness) {
+    public void setFitness(long fitness) {
         this.fitness = fitness;
     }
 
@@ -27,7 +27,7 @@ public abstract class AbstractIndividual <T> {
         return fitness == UNSET_FITNESS;
     }
 
-    public int getFitness() {
+    public long getFitness() {
         return fitness;
     }
 

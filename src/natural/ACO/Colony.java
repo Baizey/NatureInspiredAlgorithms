@@ -80,7 +80,7 @@ public class Colony extends AbstractPopulation {
     }
 
     @Override
-    public int getBestFitness() {
+    public long getBestFitness() {
         return best.getFitness();
     }
 }

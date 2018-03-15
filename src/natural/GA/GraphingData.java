@@ -69,7 +69,7 @@ public class GraphingData extends JPanel {
         double[] xs = new double[data.length];
         for (int i = 0; i < xs.length; i++) xs[i] = PADDING + i * xInc;
         double[] nlogn = new double[data.length];
-        for (int i = 0; i < nlogn.length; i++) nlogn[i] = data[i][0] * Math.log(data[i][0]) * 1.05;
+        for (int i = 0; i < nlogn.length; i++) nlogn[i] = data[i][0] * Math.log(data[i][0]);
 
         // Mark data points.
         double prevX;

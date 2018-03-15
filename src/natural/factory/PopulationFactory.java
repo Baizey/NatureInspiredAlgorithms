@@ -12,8 +12,8 @@ public class PopulationFactory {
 
     public static Population oneMax(int geneSize) {
         return new Population(
-                2, geneSize, true, false, 1,
-                Mutation.flipOne(),
+                2, geneSize, true, false, 1D,
+                Mutation.alwaysFlipOne(),
                 Fitness.oneMax(),
                 Crossover.none(),
                 Selection.best(),
@@ -23,7 +23,7 @@ public class PopulationFactory {
 
     public static Population normalPopulation(int geneSize, FitnessInterface fitnessFunction) {
         return new Population(
-                100, geneSize, true, true, 0.05,
+                100, geneSize, true, true, 0.05D,
                 Mutation.flipOne(),
                 fitnessFunction,
                 Crossover.halfAndHalf(),

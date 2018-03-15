@@ -1,15 +1,19 @@
 package natural;
 
+import lsm.helpers.IO.write.text.console.Note;
 import lsm.helpers.Time;
+import natural.factory.ColonyFactory;
 import natural.factory.PopulationFactory;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class Driver {
-    public static void main(String... args) throws Exception {
+    public static void main(String... args) {
         int genes = 100000;
         AbstractPopulation population = PopulationFactory.oneMax(genes);
-        Time.init();
-        population.evolveUntilGoal(genes);
-        Time.write();
+        Time.takeTime(() -> population.evolveUntilGoal(genes));
+        Note.writenl(population.getBestFitness());
 
         /*
         BufferedWriter writer = TextWriter.getWriter("output2", "txt", true);

@@ -10,9 +10,8 @@ public abstract class AbstractPopulation {
     }
 
     public void evolveUntilGoal(double fitnessGoal) {
-        while (getBestFitness() < fitnessGoal) {
+        while (getBestFitness() < fitnessGoal)
             evolve();
-        }
     }
 
     public void evolveUntilNoProgress(int maxStaleGenerations) {
@@ -27,7 +26,7 @@ public abstract class AbstractPopulation {
 
     public abstract void evolve();
 
-    public abstract int getBestFitness();
+    public abstract long getBestFitness();
 
     public int getGeneration() {
         return generation;

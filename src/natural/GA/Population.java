@@ -83,7 +83,7 @@ public class Population extends AbstractPopulation {
 
         // Do calculations that may be needed multiple times
         // Fx: sum of fitness
-        int[] preCalc = preCalculations.calc(currGen);
+        long[] preCalc = preCalculations.calc(currGen);
 
         // Move over current best pop if elitism is true
         if (elitism) {
@@ -142,7 +142,7 @@ public class Population extends AbstractPopulation {
     }
 
     @Override
-    public int getBestFitness() {
+    public long getBestFitness() {
         return currGen[0].getFitness();
     }
 

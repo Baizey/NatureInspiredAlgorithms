@@ -9,9 +9,9 @@ public class WorkerThread extends Thread {
 
     private final Population population;
     private final int startIndex, endIndex;
-    private final int[] preCalc;
+    private final long[] preCalc;
 
-    WorkerThread(Population population, int[] preCalc, int startIndex, int endIndex) {
+    WorkerThread(Population population, long[] preCalc, int startIndex, int endIndex) {
         super();
         this.population = population;
         this.preCalc = preCalc;
