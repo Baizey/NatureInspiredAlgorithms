@@ -11,20 +11,33 @@ import natural.GA.select.Selection;
 public class PopulationFactory {
 
     public static Population oneMax(int geneSize) {
-        return new Population(
-                2, geneSize, true, false, 1D,
-                Mutation.alwaysFlipOne(),
-                Fitness.oneMax(),
-                Crossover.none(),
-                Selection.best(),
-                PreCalcs.none()
-        );
+        if(geneSize >= 1000) {
+            return new Population(
+                    2, geneSize, true, false,
+                    Mutation.flipRandomCheap(1D / geneSize),
+                    //Mutation.flipRandomExact(),
+                    Fitness.oneMax(),
+                    Crossover.none(),
+                    Selection.best(),
+                    PreCalcs.cheapSkipChance(1D / geneSize)
+                    //PreCalcs.exactSkipChance(0.99999999)
+            );
+        } else {
+            return new Population(
+                    2, geneSize, true, false,
+                    Mutation.flipRandomCheap(1D / geneSize),
+                    Fitness.oneMax(),
+                    Crossover.none(),
+                    Selection.best(),
+                    PreCalcs.cheapSkipChance(1D / geneSize)
+            );
+        }
     }
 
     public static Population normalPopulation(int geneSize, FitnessInterface fitnessFunction) {
         return new Population(
-                100, geneSize, true, true, 0.05D,
-                Mutation.flipOne(),
+                100, geneSize, true, true,
+                Mutation.flipOne(0.05D),
                 fitnessFunction,
                 Crossover.halfAndHalf(),
                 Selection.stochasticUniversalSampling(),

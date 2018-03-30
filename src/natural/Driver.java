@@ -2,23 +2,19 @@ package natural;
 
 import lsm.helpers.IO.write.text.console.Note;
 import lsm.helpers.Time;
-import natural.factory.ColonyFactory;
 import natural.factory.PopulationFactory;
 
-import java.util.HashSet;
-import java.util.Set;
-
 public class Driver {
-    public static void main(String... args) {
-        int genes = 100000;
-        AbstractPopulation population = PopulationFactory.oneMax(genes);
-        Time.takeTime(() -> population.evolveUntilGoal(genes));
+    public static void main (String[] args) {
+        int geneSize = 10000;
+        AbstractPopulation population = PopulationFactory.oneMax(geneSize);
+        Time.takeTime(String.valueOf(geneSize), () -> population.evolveUntilGoal(geneSize));
         Note.writenl(population.getBestFitness());
-
+        Note.writenl(population.getGeneration() + " ~ " + (2 * geneSize * Math.log(geneSize)));
         /*
         BufferedWriter writer = TextWriter.getWriter("output2", "txt", true);
-        for (int geneSize = 100; geneSize <= 1000000; geneSize += 10) {
-            int samples = 1;
+        for (int geneSize = 10; geneSize <= 1000000; geneSize += 10) {
+            int samples = 10;
             double[] times = new double[samples];
             for (int i = 0; i < samples; i++) {
                 AbstractPopulation population = PopulationFactory.oneMax(geneSize);

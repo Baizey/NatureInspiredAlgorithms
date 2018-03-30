@@ -3,7 +3,7 @@ package natural.GA;
 import natural.AbstractIndividual;
 
 @SuppressWarnings("WeakerAccess")
-public class Individual extends AbstractIndividual<DNA> {
+public class Individual extends AbstractIndividual<Dna> {
     /**
      * Default Individual has all dna set at 0
      * Generated has each gene 50/50 as 1 or 0
@@ -12,7 +12,7 @@ public class Individual extends AbstractIndividual<DNA> {
      */
     Individual(int length, boolean generate) {
         super(length);
-        dna = new DNA(length);
+        dna = new Dna(length);
         if (generate)
             for (int i = 0; i < length; i++)
                 if (Math.random() >= 0.5) dna.set(i, true);

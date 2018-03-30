@@ -20,7 +20,7 @@ public class GraphingData extends JPanel {
     static {
         ArrayList<String> input = null;
         try {
-            input = TextReader.readFile("output.txt");
+            input = TextReader.readFile("output2.txt");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -59,7 +59,7 @@ public class GraphingData extends JPanel {
             sy += sh;
         }
         // Abcissa label.
-        s = "DNA size";
+        s = "Dna size";
         sy = height - PADDING + (PADDING - sh) / 2 + lm.getAscent();
         float sw = (float) font.getStringBounds(s, frc).getWidth();
         float sx = (width - sw) / 2;
@@ -69,7 +69,7 @@ public class GraphingData extends JPanel {
         double[] xs = new double[data.length];
         for (int i = 0; i < xs.length; i++) xs[i] = PADDING + i * xInc;
         double[] nlogn = new double[data.length];
-        for (int i = 0; i < nlogn.length; i++) nlogn[i] = data[i][0] * Math.log(data[i][0]);
+        for (int i = 0; i < nlogn.length; i++) nlogn[i] = data[i][0] * Math.log(data[i][0]) * 1.8;
 
         // Mark data points.
         double prevX;
@@ -140,15 +140,16 @@ public class GraphingData extends JPanel {
         g2.setPaint(Color.BLACK);
         ArrayDeque<Double> lastPoints = new ArrayDeque<>();
         double meanPoint = 0;
+        int meanOf = 10;
         prevY = (height - PADDING - scale * data[0][1]);
         for (int i = 0; i < data.length; i++) {
             double y = (height - PADDING - scale * data[i][1]);
-            if (lastPoints.size() >= 10)
+            if (lastPoints.size() >= meanOf)
                 meanPoint -= lastPoints.pollLast();
             meanPoint += y;
             lastPoints.addFirst(y);
-            if (i > 9)
-                g2.draw(new Line2D.Double(xs[i - 5], meanPoint / lastPoints.size(), xs[i - 6], prevY / lastPoints.size()));
+            if (i > meanOf - 1)
+                g2.draw(new Line2D.Double(xs[i - meanOf / 2 + 1], meanPoint / lastPoints.size(), xs[i - meanOf / 2], prevY / lastPoints.size()));
             prevY = meanPoint;
         }
     }

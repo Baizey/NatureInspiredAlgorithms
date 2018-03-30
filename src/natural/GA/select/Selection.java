@@ -14,8 +14,8 @@ public class Selection {
 
     public static SelectionInterface stochasticUniversalSampling(){
         return (preCalc, individuals) -> {
-            long min = Math.abs(preCalc[0]);
-            long sum = preCalc[1] + 1;
+            long min = Math.abs(preCalc.longs[0]);
+            long sum = preCalc.longs[1] + 1;
             double pick = Math.abs(random.nextLong()) % sum;
             for (Individual individual : individuals) {
                 pick -= individual.getFitness() + min;

@@ -4,12 +4,12 @@ import natural.AbstractPopulation;
 import natural.GA.crossover.CrossoverInterface;
 import natural.GA.fitness.FitnessInterface;
 import natural.GA.mutations.MutationInterface;
+import natural.GA.preCalc.PreCalcData;
 import natural.GA.preCalc.PreCalcInterface;
 import natural.GA.select.SelectionInterface;
 
 @SuppressWarnings({"WeakerAccess", "unused"})
 public class Population extends AbstractPopulation {
-    private final double mutationRate;
     private final int popSize, startFrom;
     private final boolean elitism;
     private Individual[] nextGen, currGen;
@@ -18,12 +18,12 @@ public class Population extends AbstractPopulation {
     private final CrossoverInterface crossover;
     private final MutationInterface mutator;
     private final PreCalcInterface preCalculations;
+    private PreCalcData preCalcData = null;
 
     public Population(Population other) {
         this.popSize = other.popSize;
         this.elitism = other.elitism;
         this.generation = other.generation;
-        this.mutationRate = other.mutationRate;
         this.startFrom = other.startFrom;
         this.selection = other.selection;
         this.fitness = other.fitness;
@@ -48,7 +48,6 @@ public class Population extends AbstractPopulation {
             int popSize, int geneSize,
             boolean elitism,
             boolean generate,
-            double mutationRate,
             MutationInterface mutationInterface,
             FitnessInterface fitnessInterface,
             CrossoverInterface crossoverInterface,
@@ -66,7 +65,6 @@ public class Population extends AbstractPopulation {
         this.popSize = popSize;
         this.elitism = elitism;
         this.startFrom = elitism ? 1 : 0;
-        this.mutationRate = mutationRate;
         this.mutator = mutationInterface;
         this.fitness = fitnessInterface;
         this.crossover = crossoverInterface;
@@ -80,10 +78,8 @@ public class Population extends AbstractPopulation {
     @Override
     public void evolve() {
         generation++;
-
         // Do calculations that may be needed multiple times
-        // Fx: sum of fitness
-        long[] preCalc = preCalculations.calc(currGen);
+        preCalcData = preCalculations.calc(currGen, preCalcData);
 
         // Move over current best pop if elitism is true
         if (elitism) {
@@ -91,22 +87,12 @@ public class Population extends AbstractPopulation {
             nextGen[0].copyDnaFrom(currGen[0]);
         }
 
-        // TODO: parallel faster than serial
-        /*
-        WorkerThread[] workers = new WorkerThread[popSize];
-        int working = 0;
-        for(int i = startFrom; i < popSize; i += 10, working++)
-            (workers[working] = new WorkerThread(this, preCalc, i, Math.min(popSize, i + 10))).start();
-        for(int i = 0; i < working; i++)
-            workers[i].join();
-        */
-
         for (int i = startFrom; i < popSize; i++) {
-            crossover.crossover(preCalc,
-                    selection.select(preCalc, currGen),
-                    selection.select(preCalc, currGen),
+            crossover.crossover(preCalcData,
+                    selection.select(preCalcData, currGen),
+                    selection.select(preCalcData, currGen),
                     nextGen[i]);
-            mutator.mutate(preCalc, mutationRate, nextGen[i]);
+            mutator.mutate(preCalcData, nextGen[i]);
             fitness.calc(nextGen[i]);
         }
         Individual[] temp = currGen;
@@ -137,7 +123,7 @@ public class Population extends AbstractPopulation {
         return currGen[0];
     }
 
-    public DNA getBestDna() {
+    public Dna getBestDna() {
         return currGen[0].getDna();
     }
 
@@ -168,9 +154,5 @@ public class Population extends AbstractPopulation {
 
     public FitnessInterface getFitness() {
         return fitness;
-    }
-
-    public double getMutationRate() {
-        return mutationRate;
     }
 }

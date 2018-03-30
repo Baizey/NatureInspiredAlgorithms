@@ -1,7 +1,7 @@
 package natural.GA;
 
 @SuppressWarnings({"WeakerAccess"})
-public class DNA {
+public class Dna {
     private static final long MASK = -1L;
     private final long[] words;
     private final int bits;
@@ -12,7 +12,7 @@ public class DNA {
         return index >> ADDRESS_BITS_PER_WORD;
     }
 
-    public DNA(int size) {
+    public Dna(int size) {
         bits = size;
         length = wordIndex(size - 1) + 1;
         words = new long[length];
@@ -77,36 +77,36 @@ public class DNA {
             words[i] = ~words[i];
     }
 
-    public void and(DNA genes) {
+    public void and(Dna genes) {
         for (int i = 0; i < length; i++)
             words[i] &= genes.words[i];
     }
 
-    public void nand(DNA genes) {
+    public void nand(Dna genes) {
         for (int i = 0; i < length; i++)
             words[i] = ~(words[i] & genes.words[i]);
     }
 
-    public void or(DNA genes) {
+    public void or(Dna genes) {
         for (int i = 0; i < length; i++)
             words[i] |= genes.words[i];
     }
 
-    public void nor(DNA genes) {
+    public void nor(Dna genes) {
         for (int i = 0; i < length; i++)
             words[i] = ~(words[i] | genes.words[i]);
     }
 
-    public void xor(DNA genes) {
+    public void xor(Dna genes) {
         for (int i = 0; i < length; i++)
             words[i] ^= genes.words[i];
     }
 
-    public void copyFrom(DNA other) {
+    public void copyFrom(Dna other) {
         System.arraycopy(other.words, 0, words, 0, length);
     }
 
-    public void copyFrom(DNA other, int startIndex, int endIndex) {
+    public void copyFrom(Dna other, int startIndex, int endIndex) {
         int start = wordIndex(startIndex);
         int end = wordIndex(endIndex - 1);
         long firstWord = MASK << startIndex;
