@@ -1,25 +1,29 @@
 package natural;
 
+import lsm.helpers.IO.write.text.TextWriter;
 import lsm.helpers.IO.write.text.console.Note;
 import lsm.helpers.Time;
 import natural.factory.PopulationFactory;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.util.Arrays;
+
 public class Driver {
-    public static void main (String[] args) {
-        int geneSize = 10000;
-        AbstractPopulation population = PopulationFactory.oneMax(geneSize);
-        Time.takeTime(String.valueOf(geneSize), () -> population.evolveUntilGoal(geneSize));
-        Note.writenl(population.getBestFitness());
-        Note.writenl(population.getGeneration() + " ~ " + (2 * geneSize * Math.log(geneSize)));
+    public static void main (String[] args) throws IOException {
         /*
+        int i = 1000;
+        AbstractPopulation population = PopulationFactory.oneMax(i);
+        Time.takeTime(() -> population.evolveUntilGoal(i));
+        Note.writenl(population.getBestFitness());
+        /**/
         BufferedWriter writer = TextWriter.getWriter("output2", "txt", true);
-        for (int geneSize = 10; geneSize <= 1000000; geneSize += 10) {
+        for (int geneSize = 100; geneSize <= 1000000; geneSize += 100) {
             int samples = 10;
             double[] times = new double[samples];
             for (int i = 0; i < samples; i++) {
                 AbstractPopulation population = PopulationFactory.oneMax(geneSize);
-                int finalGeneSize = geneSize;
-                Time.takeTime(String.valueOf(geneSize), () -> population.evolveUntilNoProgress(finalGeneSize));
+                population.evolveUntilNoProgress(geneSize);
                 times[i] = population.getGeneration();
             }
             Arrays.sort(times);
@@ -27,7 +31,7 @@ public class Driver {
             writer.flush();
         }
         writer.close();
-        */
+        /**/
     }
 
 }

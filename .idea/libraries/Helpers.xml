@@ -1,11 +1,11 @@
 <component name="libraryTable">
   <library name="Helpers">
     <CLASSES>
-      <root url="file://$PROJECT_DIR$/../Helpers" />
+      <root url="file://$USER_HOME$/Dropbox/ProjectJava/Helpers" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
-      <root url="file://$PROJECT_DIR$/../Helpers/src" />
+      <root url="file://$USER_HOME$/Dropbox/ProjectJava/Helpers/src" />
     </SOURCES>
   </library>
 </component>

@@ -1,5 +1,6 @@
 package natural.GA.preCalc;
 
+import lsm.helpers.IO.write.text.console.Note;
 import natural.AbstractIndividual;
 
 import java.math.BigDecimal;
@@ -63,13 +64,30 @@ public class PreCalcs {
                                 .divide(BigDecimal.valueOf(i), 10, RoundingMode.HALF_UP));
                 chances.add(permutations.get(i).multiply(at));
                 sumSoFar = sumSoFar.add(chances.get(chances.size() - 1));
+                Note.writenl(sumSoFar.doubleValue());
                 if (sumSoFar.compareTo(r) > 0) break;
                 at = at.multiply(c);
             }
             PreCalcData data = new PreCalcData(0, permutations.size());
             for (int i = 0; i < permutations.size(); i++)
                 data.doubles[i] = chances.get(i).doubleValue();
+            Note.writenl(data.doubles);
             return data;
+        };
+    }
+
+    /**
+     * Pre calculated exactness
+     * with n = 100,000
+     * and precision = 0.999999999 (99.9999999%)
+     * This can be done with a higher n for more accuracy
+     * Calculated using {exactSkipChance}
+     * @return
+     */
+    public static PreCalcInterface exactPrePreCalculatedSkipChance() {
+        return (individuals, previousData) -> {
+            if(previousData != null) return previousData;
+            return new PreCalcData(null, new double[]{0.36787760176657225D, 0.36788128054258995D, 0.1839406402529009D, 0.06131293360323675D, 0.015327926831542701D, 0.003065493397521317D, 5.108951293754449E-4D, 7.298136918749129E-5D, 9.122123781781635E-6D, 1.0134983584243568E-6D, 1.0134172776435344E-7D, 9.212055173410265E-9D});
         };
     }
 

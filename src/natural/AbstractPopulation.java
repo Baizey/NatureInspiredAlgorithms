@@ -1,7 +1,5 @@
 package natural;
 
-import lsm.helpers.IO.write.text.console.Note;
-
 @SuppressWarnings({"WeakerAccess", "unused"})
 public abstract class AbstractPopulation {
     protected int generation = 0;
@@ -12,14 +10,8 @@ public abstract class AbstractPopulation {
     }
 
     public void evolveUntilGoal(double fitnessGoal) {
-        long old = Long.MIN_VALUE;
-        while (getBestFitness() < fitnessGoal) {
+        while (getBestFitness() < fitnessGoal)
             evolve();
-            if(old < getBestFitness()) {
-                Note.writenl(getBestFitness());
-                old = getBestFitness();
-            }
-        }
     }
 
     public void evolveUntilNoProgress(int maxStaleGenerations) {

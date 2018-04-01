@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/../Helpers/Helpers.iml" filepath="$PROJECT_DIR$/../Helpers/Helpers.iml" />
+      <module fileurl="file://$USER_HOME$/Dropbox/ProjectJava/Helpers/Helpers.iml" filepath="$USER_HOME$/Dropbox/ProjectJava/Helpers/Helpers.iml" />
       <module fileurl="file://$PROJECT_DIR$/NatureInspiredAlgorithms.iml" filepath="$PROJECT_DIR$/NatureInspiredAlgorithms.iml" />
     </modules>
   </component>

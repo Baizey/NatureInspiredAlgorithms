@@ -54,7 +54,6 @@ public class Mutation {
             int length = individual.getLength();
             while(i-- > 0)
                 dna.flip(random.nextInt(length));
-            // flipRandomExact(i, individual.getDna(), 0, individual.getLength());
         };
     }
 

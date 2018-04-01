@@ -13,4 +13,9 @@ public class PreCalcData {
         this.longs = new long[longs];
         this.doubles = new double[doubles];
     }
+
+    public PreCalcData(long[] longs, double[] doubles){
+        this.longs = longs;
+        this.doubles = doubles;
+    }
 }

@@ -11,16 +11,14 @@ import natural.GA.select.Selection;
 public class PopulationFactory {
 
     public static Population oneMax(int geneSize) {
-        if(geneSize >= 1000) {
+        if (geneSize >= 1000) {
             return new Population(
                     2, geneSize, true, false,
-                    Mutation.flipRandomCheap(1D / geneSize),
-                    //Mutation.flipRandomExact(),
+                    Mutation.flipRandomExact(),
                     Fitness.oneMax(),
                     Crossover.none(),
                     Selection.best(),
-                    PreCalcs.cheapSkipChance(1D / geneSize)
-                    //PreCalcs.exactSkipChance(0.99999999)
+                    PreCalcs.exactPrePreCalculatedSkipChance()
             );
         } else {
             return new Population(
