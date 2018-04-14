@@ -7,7 +7,7 @@ import natural.ACO.visitation.Visitations;
 public class ColonyFactory {
 
     public static Colony oneMaxBinary(int size, int generationSize, double percentChange) {
-        return new Colony(generationSize, percentChange,
+        return new Colony(true, generationSize, percentChange,
                 GraphFactory.binaryString(size),
                 Visitations.addCurrentNode(),
                 (ant, node) -> {
@@ -22,14 +22,14 @@ public class ColonyFactory {
     }
 
     public static Colony snakeInTheBox(int dimensions, int generationSize, double percentChange) {
-        return new Colony(generationSize, percentChange,
+        return new Colony(true, generationSize, percentChange,
                 GraphFactory.snakeInTheBox(dimensions),
                 Visitations.addCurrentAndEdgeNodes(),
                 (ant, node) -> ant.setFitness(ant.getInsertionCount()));
     }
 
     public static Colony travelingSalesman(double[][] points, int generationSize, double percentChange) {
-        return new Colony(generationSize, percentChange,
+        return new Colony(true, generationSize, percentChange,
                 GraphFactory.travelingSalesMan(points, true),
                 Visitations.addCurrentNode(),
                 (ant, node) -> {

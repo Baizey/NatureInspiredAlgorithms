@@ -14,7 +14,8 @@ public class Colony extends AbstractPopulation {
     private final Node start;
     private final double weightAltering;
 
-    public Colony(int generationSize, double weightAltering, Node[] graph, VisitationInterface visitation, FitnessInterface fitness) {
+    public Colony(boolean useParallel, int generationSize, double weightAltering, Node[] graph, VisitationInterface visitation, FitnessInterface fitness) {
+        super(useParallel);
         this.weightAltering = weightAltering;
         this.visitation = visitation;
         this.fitness = fitness;
