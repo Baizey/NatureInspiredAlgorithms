@@ -1,22 +1,58 @@
 package natural;
 
-import lsm.helpers.IO.write.text.TextWriter;
 import lsm.helpers.IO.write.text.console.Note;
 import lsm.helpers.Time;
+import natural.GA.Population;
+import natural.GA.fitness.FitnessInterface;
 import natural.factory.PopulationFactory;
 
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.util.Arrays;
-
 public class Driver {
-    public static void main (String[] args) throws IOException {
-        /*
-        int i = 1000;
-        AbstractPopulation population = PopulationFactory.oneMax(i);
-        Time.takeTime(() -> population.evolveUntilGoal(i));
-        Note.writenl(population.getBestFitness());
+    @SuppressWarnings("RedundantThrows")
+    public static void main (String[] args) throws Exception {
+
+        Islands islands = new Islands(
+                abstractPops -> {
+                    Population[] pops = (Population[]) abstractPops;
+                    int best = 0;
+                    for(int i = 1; i < pops.length; i++)
+                        if(pops[i].getBestFitness() > pops[best].getBestFitness())
+                            best = i;
+                    for(int i = 0; i < pops.length; i++)
+                        if(i != best) pops[i].copyPopulationDnaFrom(pops[best]);
+                },
+                island -> island.evolve(10),
+                PopulationFactory.oneMax(100),
+                PopulationFactory.oneMax(100),
+                PopulationFactory.oneMax(100),
+                PopulationFactory.oneMax(100),
+                PopulationFactory.oneMax(100),
+                PopulationFactory.oneMax(100));
+
+
         /**/
+        int goal = 10000;
+        int genes = 150;
+        FitnessInterface fitness = (pop) -> {
+            int sum = 0;
+            for(int i = 0; i < pop.getLength(); i++)
+                if(pop.getDna().get(i)) sum += i;
+            pop.setFitness((long)(Integer.MAX_VALUE - Math.abs(sum - goal)));
+        };
+
+        Population population = PopulationFactory.normalPopulation(genes, fitness);
+        Population finalPopulation = population;
+        Time.takeTime(() -> finalPopulation.evolveUntilGoal(Integer.MAX_VALUE));
+        Note.writenl(population.getBestFitness());
+        Note.writenl((population).getBest());
+
+        population = PopulationFactory.normalPopulation(genes, fitness);
+        Population finalPopulation1 = population;
+        Time.init();
+        finalPopulation1.evolveUntilGoalParallel(Integer.MAX_VALUE);
+        Time.write();
+        Note.writenl(population.getBestFitness());
+        Note.writenl(population.getBest());
+        /*
         BufferedWriter writer = TextWriter.getWriter("output2", "txt", true);
         for (int geneSize = 100; geneSize <= 1000000; geneSize += 100) {
             int samples = 10;

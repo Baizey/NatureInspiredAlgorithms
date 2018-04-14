@@ -1,49 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/src/natural/Driver.java" line="20" />
+    <bookmark url="file://$PROJECT_DIR$/src/natural/Driver.java" line="56" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="071a1683-953a-4f67-9fa2-d0ac63891478" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Helpers.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/output2.txt" beforeDir="false" afterPath="$PROJECT_DIR$/output2.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/natural/AbstractPopulation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/natural/AbstractPopulation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/natural/ACO/Colony.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/natural/ACO/Colony.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/natural/Driver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/natural/Driver.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/natural/GA/GraphingData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/natural/GA/GraphingData.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/natural/GA/mutations/Mutation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/natural/GA/mutations/Mutation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/natural/GA/preCalc/PreCalcData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/natural/GA/preCalc/PreCalcData.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/natural/GA/preCalc/PreCalcs.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/natural/GA/preCalc/PreCalcs.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/natural/factory/ColonyFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/natural/factory/ColonyFactory.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/natural/factory/PopulationFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/natural/factory/PopulationFactory.java" afterDir="false" />
-      <change beforePath="$USER_HOME$/Dropbox/ProjectJava/Helpers/Helpers.iml" beforeDir="false" afterPath="$USER_HOME$/Dropbox/ProjectJava/Helpers/Helpers.iml" afterDir="false" />
-      <change beforePath="$USER_HOME$/Dropbox/ProjectJava/Helpers/src/lsm/algorithms/org/nevec/rjm/Bernoulli.java" beforeDir="false" />
-      <change beforePath="$USER_HOME$/Dropbox/ProjectJava/Helpers/src/lsm/algorithms/org/nevec/rjm/BigComplex.java" beforeDir="false" />
-      <change beforePath="$USER_HOME$/Dropbox/ProjectJava/Helpers/src/lsm/algorithms/org/nevec/rjm/BigDecimalMath.java" beforeDir="false" />
-      <change beforePath="$USER_HOME$/Dropbox/ProjectJava/Helpers/src/lsm/algorithms/org/nevec/rjm/BigIntegerMath.java" beforeDir="false" />
-      <change beforePath="$USER_HOME$/Dropbox/ProjectJava/Helpers/src/lsm/algorithms/org/nevec/rjm/BigIntegerPoly.java" beforeDir="false" />
-      <change beforePath="$USER_HOME$/Dropbox/ProjectJava/Helpers/src/lsm/algorithms/org/nevec/rjm/BigSurd.java" beforeDir="false" />
-      <change beforePath="$USER_HOME$/Dropbox/ProjectJava/Helpers/src/lsm/algorithms/org/nevec/rjm/BigSurdVec.java" beforeDir="false" />
-      <change beforePath="$USER_HOME$/Dropbox/ProjectJava/Helpers/src/lsm/algorithms/org/nevec/rjm/Euler.java" beforeDir="false" />
-      <change beforePath="$USER_HOME$/Dropbox/ProjectJava/Helpers/src/lsm/algorithms/org/nevec/rjm/Factorial.java" beforeDir="false" />
-      <change beforePath="$USER_HOME$/Dropbox/ProjectJava/Helpers/src/lsm/algorithms/org/nevec/rjm/Ifactor.java" beforeDir="false" />
-      <change beforePath="$USER_HOME$/Dropbox/ProjectJava/Helpers/src/lsm/algorithms/org/nevec/rjm/Partit.java" beforeDir="false" />
-      <change beforePath="$USER_HOME$/Dropbox/ProjectJava/Helpers/src/lsm/algorithms/org/nevec/rjm/PartitionsP.java" beforeDir="false" />
-      <change beforePath="$USER_HOME$/Dropbox/ProjectJava/Helpers/src/lsm/algorithms/org/nevec/rjm/Permutation.java" beforeDir="false" />
-      <change beforePath="$USER_HOME$/Dropbox/ProjectJava/Helpers/src/lsm/algorithms/org/nevec/rjm/Permute.java" beforeDir="false" />
-      <change beforePath="$USER_HOME$/Dropbox/ProjectJava/Helpers/src/lsm/algorithms/org/nevec/rjm/Prime.java" beforeDir="false" />
-      <change beforePath="$USER_HOME$/Dropbox/ProjectJava/Helpers/src/lsm/algorithms/org/nevec/rjm/RatPoly.java" beforeDir="false" />
-      <change beforePath="$USER_HOME$/Dropbox/ProjectJava/Helpers/src/lsm/algorithms/org/nevec/rjm/Rational.java" beforeDir="false" />
-      <change beforePath="$USER_HOME$/Dropbox/ProjectJava/Helpers/src/lsm/algorithms/org/nevec/rjm/RationalPoly.java" beforeDir="false" />
-      <change beforePath="$USER_HOME$/Dropbox/ProjectJava/Helpers/src/lsm/algorithms/org/nevec/rjm/Wigner3j.java" beforeDir="false" />
-      <change beforePath="$USER_HOME$/Dropbox/ProjectJava/Helpers/src/lsm/algorithms/org/nevec/rjm/Wigner3jGUI.java" beforeDir="false" />
-      <change beforePath="$USER_HOME$/Dropbox/ProjectJava/Helpers/src/lsm/algorithms/webscraper/Spider.java" beforeDir="false" />
-      <change beforePath="$USER_HOME$/Dropbox/ProjectJava/Helpers/src/lsm/algorithms/webscraper/SpiderWeb.java" beforeDir="false" />
-      <change beforePath="$USER_HOME$/Dropbox/ProjectJava/Helpers/src/lsm/algorithms/webscraper/WebCrawler.java" beforeDir="false" />
-      <change beforePath="$USER_HOME$/Dropbox/ProjectJava/Helpers/src/lsm/helpers/Time.java" beforeDir="false" afterPath="$USER_HOME$/Dropbox/ProjectJava/Helpers/src/lsm/helpers/Time.java" afterDir="false" />
-      <change beforePath="$USER_HOME$/Dropbox/ProjectJava/Helpers/src/lsm/helpers/utils/ArrayUtils.java" beforeDir="false" afterPath="$USER_HOME$/Dropbox/ProjectJava/Helpers/src/lsm/helpers/utils/ArrayUtils.java" afterDir="false" />
-      <change beforePath="$USER_HOME$/Dropbox/ProjectJava/Helpers/src/lsm/helpers/utils/Numbers.java" beforeDir="false" afterPath="$USER_HOME$/Dropbox/ProjectJava/Helpers/src/lsm/helpers/utils/Numbers.java" afterDir="false" />
-      <change beforePath="$USER_HOME$/Dropbox/ProjectJava/Helpers/src/module-info.java" beforeDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -55,11 +22,59 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Driver.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/natural/Driver.java">
+      <file leaf-file-name="AbstractPopulation.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/natural/AbstractPopulation.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="372">
-              <caret line="27" column="13" lean-forward="true" selection-start-line="27" selection-start-column="13" selection-end-line="27" selection-end-column="13" />
+            <state relative-caret-position="785">
+              <caret line="65" lean-forward="true" selection-start-line="65" selection-end-line="65" />
+              <folding>
+                <element signature="e#1019#1020#0" expanded="true" />
+                <element signature="e#1075#1076#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Ant.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/natural/ACO/Ant.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="272">
+              <caret line="18" column="38" selection-start-line="18" selection-start-column="38" selection-end-line="18" selection-end-column="38" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Colony.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/natural/ACO/Colony.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="289">
+              <caret line="19" column="37" lean-forward="true" selection-start-line="19" selection-start-column="37" selection-end-line="19" selection-end-column="37" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Node.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/natural/ACO/Node.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="119">
+              <caret line="10" column="34" selection-start-line="10" selection-start-column="34" selection-end-line="10" selection-end-column="34" />
+              <folding>
+                <element signature="e#1420#1421#0" expanded="true" />
+                <element signature="e#1497#1498#0" expanded="true" />
+                <element signature="e#3107#3108#0" expanded="true" />
+                <element signature="e#3166#3167#0" expanded="true" />
+                <element signature="e#3202#3203#0" expanded="true" />
+                <element signature="e#3232#3233#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="GraphFactory.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/natural/factory/GraphFactory.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="289">
+              <caret line="20" column="33" selection-start-line="20" selection-start-column="33" selection-end-line="20" selection-end-column="33" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -67,11 +82,75 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="GraphingData.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/natural/GA/GraphingData.java">
+      <file leaf-file-name="PopulationFactory.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/natural/factory/PopulationFactory.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="71" column="97" selection-start-line="71" selection-start-column="97" selection-end-line="71" selection-end-column="97" />
+            <state relative-caret-position="340">
+              <caret line="26" column="37" lean-forward="true" selection-start-line="26" selection-start-column="37" selection-end-line="26" selection-end-column="37" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ColonyFactory.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/natural/factory/ColonyFactory.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="221">
+              <caret line="15" column="70" lean-forward="true" selection-start-line="15" selection-start-column="70" selection-end-line="15" selection-end-column="70" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Islands.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/natural/Islands.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="221">
+              <caret line="15" column="18" selection-start-line="15" selection-start-column="18" selection-end-line="15" selection-end-column="18" />
+              <folding>
+                <element signature="e#141#186#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Driver.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/natural/Driver.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="374">
+              <caret line="23" column="28" lean-forward="true" selection-start-line="23" selection-start-column="28" selection-end-line="23" selection-end-column="28" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Population.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/natural/GA/Population.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="663">
+              <caret line="60" column="5" lean-forward="true" selection-start-line="60" selection-start-column="5" selection-end-line="60" selection-end-column="5" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#435#480#0" expanded="true" />
+                <element signature="e#5974#5975#0" expanded="true" />
+                <element signature="e#6004#6005#0" expanded="true" />
+                <element signature="e#6039#6040#0" expanded="true" />
+                <element signature="e#6072#6073#0" expanded="true" />
+                <element signature="e#6103#6104#0" expanded="true" />
+                <element signature="e#6145#6146#0" expanded="true" />
+                <element signature="e#6195#6196#0" expanded="true" />
+                <element signature="e#6241#6242#0" expanded="true" />
+                <element signature="e#6298#6299#0" expanded="true" />
+                <element signature="e#6330#6331#0" expanded="true" />
+                <element signature="e#6378#6379#0" expanded="true" />
+                <element signature="e#6410#6411#0" expanded="true" />
+                <element signature="e#6450#6451#0" expanded="true" />
+                <element signature="e#6480#6481#0" expanded="true" />
+                <element signature="e#6526#6527#0" expanded="true" />
+                <element signature="e#6556#6557#0" expanded="true" />
+                <element signature="e#6600#6601#0" expanded="true" />
+                <element signature="e#6630#6631#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -81,8 +160,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Interface" />
         <option value="Class" />
+        <option value="Interface" />
       </list>
     </option>
   </component>
@@ -134,13 +213,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/ni/genetic/crossover/Crossover.java" />
-        <option value="$PROJECT_DIR$/src/ni/genetic/fitness/FitnessInterface.java" />
-        <option value="$PROJECT_DIR$/src/ni/genetic/Population.java" />
-        <option value="$PROJECT_DIR$/src/ni/genetic/select/SelectionInterface.java" />
-        <option value="$PROJECT_DIR$/src/ni/genetic/crossover/CrossoverInterface.java" />
-        <option value="$PROJECT_DIR$/src/ni/genetic/mutations/MutationInterface.java" />
-        <option value="$PROJECT_DIR$/src/ni/genetic/select/Selection.java" />
         <option value="$PROJECT_DIR$/src/ni/antcolony/graphs/Graphs.java" />
         <option value="$PROJECT_DIR$/src/ni/genetic/Gene.java" />
         <option value="$PROJECT_DIR$/src/ni/AbstractIndividual.java" />
@@ -158,13 +230,10 @@
         <option value="$PROJECT_DIR$/src/natural/genetic/fitness/Fitness.java" />
         <option value="$PROJECT_DIR$/src/natural/genetic/mutations/MutationInterface.java" />
         <option value="$PROJECT_DIR$/src/natural/genetic/Population.java" />
-        <option value="$PROJECT_DIR$/src/natural/factory/GraphFactory.java" />
         <option value="$PROJECT_DIR$/src/natural/WorkerThread.java" />
         <option value="$PROJECT_DIR$/src/natural/AbstractIndividual.java" />
         <option value="$PROJECT_DIR$/src/natural/GA/select/SelectionInterface.java" />
         <option value="$PROJECT_DIR$/src/natural/GA/crossover/CrossoverInterface.java" />
-        <option value="$PROJECT_DIR$/src/natural/factory/ColonyFactory.java" />
-        <option value="$PROJECT_DIR$/src/natural/ACO/Colony.java" />
         <option value="$PROJECT_DIR$/src/natural/GA/fitness/FitnessInterface.java" />
         <option value="$PROJECT_DIR$/src/natural/GA/fitness/Fitness.java" />
         <option value="$PROJECT_DIR$/src/natural/GA/crossover/Crossover.java" />
@@ -177,14 +246,24 @@
         <option value="$PROJECT_DIR$/src/natural/GA/Dna.java" />
         <option value="$PROJECT_DIR$/src/natural/GA/Individual.java" />
         <option value="$USER_HOME$/Dropbox/ProjectJava/Helpers/src/lsm/algorithms/org/nevec/rjm/Ifactor.java" />
-        <option value="$PROJECT_DIR$/src/natural/AbstractPopulation.java" />
         <option value="$PROJECT_DIR$/src/natural/GA/mutations/Mutation.java" />
         <option value="$PROJECT_DIR$/src/natural/GA/preCalc/PreCalcData.java" />
-        <option value="$PROJECT_DIR$/src/natural/GA/Population.java" />
         <option value="$PROJECT_DIR$/src/natural/GA/preCalc/PreCalcs.java" />
-        <option value="$PROJECT_DIR$/src/natural/factory/PopulationFactory.java" />
-        <option value="$PROJECT_DIR$/src/natural/Driver.java" />
         <option value="$PROJECT_DIR$/src/natural/GA/GraphingData.java" />
+        <option value="$PROJECT_DIR$/src/natural/factory/GraphFactory.java" />
+        <option value="$PROJECT_DIR$/src/natural/ACO/Node.java" />
+        <option value="$PROJECT_DIR$/src/natural/ConvergenceInterface.java" />
+        <option value="$PROJECT_DIR$/src/natural/EvolutionStepInterface.java" />
+        <option value="$PROJECT_DIR$/src/natural/GA/PopulationIslands.java" />
+        <option value="$PROJECT_DIR$/src/natural/AbstractIsland.java" />
+        <option value="$PROJECT_DIR$/src/natural/GA/Population.java" />
+        <option value="$PROJECT_DIR$/src/natural/IslandKingdom.java" />
+        <option value="$PROJECT_DIR$/src/natural/Islands.java" />
+        <option value="$PROJECT_DIR$/src/natural/Driver.java" />
+        <option value="$PROJECT_DIR$/src/natural/AbstractPopulation.java" />
+        <option value="$PROJECT_DIR$/src/natural/ACO/Colony.java" />
+        <option value="$PROJECT_DIR$/src/natural/factory/ColonyFactory.java" />
+        <option value="$PROJECT_DIR$/src/natural/factory/PopulationFactory.java" />
       </list>
     </option>
   </component>
@@ -200,6 +279,9 @@
       <select />
     </treeState>
   </component>
+  <component name="NodePackageJsonFileManager">
+    <packageJsonPaths />
+  </component>
   <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="350" />
     <option name="y" value="-8" />
@@ -213,8 +295,8 @@
     </navigator>
     <panes>
       <pane id="PackagesPane" />
-      <pane id="AndroidView" />
       <pane id="Scope" />
+      <pane id="AndroidView" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -238,7 +320,14 @@
               <item name="NatureInspiredAlgorithms" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="natural" type="462c0819:PsiDirectoryNode" />
-              <item name="GA" type="462c0819:PsiDirectoryNode" />
+              <item name="ACO" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="NatureInspiredAlgorithms" type="b2602c69:ProjectViewProjectNode" />
+              <item name="NatureInspiredAlgorithms" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="natural" type="462c0819:PsiDirectoryNode" />
+              <item name="factory" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="NatureInspiredAlgorithms" type="b2602c69:ProjectViewProjectNode" />
@@ -246,15 +335,6 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="natural" type="462c0819:PsiDirectoryNode" />
               <item name="GA" type="462c0819:PsiDirectoryNode" />
-              <item name="mutations" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="NatureInspiredAlgorithms" type="b2602c69:ProjectViewProjectNode" />
-              <item name="NatureInspiredAlgorithms" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="natural" type="462c0819:PsiDirectoryNode" />
-              <item name="GA" type="462c0819:PsiDirectoryNode" />
-              <item name="preCalc" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -268,7 +348,7 @@
     <property name="Repository.Attach.Sources" value="false" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$USER_HOME$/Dropbox/ProjectJava/Helpers" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path" value="node" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.15" />
@@ -276,11 +356,12 @@
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="natural" />
+      <recent name="ni" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\lasse\Dropbox\ProjectJava\NatureInspiredAlgorithms\src\ni\antcolony" />
-    </key>
-    <key name="CreateClassDialog.RecentsKey">
-      <recent name="ni" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -295,9 +376,11 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.GraphingData">
+  <component name="RunManager" selected="Application.Driver">
     <configuration default="true" type="Applet" factoryName="Applet">
+      <option name="HEIGHT" value="0" />
       <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <option name="WIDTH" value="0" />
     </configuration>
     <configuration name="Driver" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="natural.Driver" />
@@ -434,8 +517,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.GraphingData" />
         <item itemvalue="Application.Driver" />
+        <item itemvalue="Application.GraphingData" />
         <item itemvalue="Application.Mutation" />
       </list>
     </recent_temporary>
@@ -495,31 +578,39 @@
       <workItem from="1522535867403" duration="2834000" />
       <workItem from="1522539227762" duration="104000" />
       <workItem from="1522539373233" duration="7573000" />
+      <workItem from="1522692782401" duration="1227000" />
+      <workItem from="1522695064657" duration="498000" />
+      <workItem from="1522696122072" duration="215000" />
+      <workItem from="1522775215142" duration="2167000" />
+      <workItem from="1523309962460" duration="3779000" />
+      <workItem from="1523628336881" duration="679000" />
+      <workItem from="1523714924263" duration="1497000" />
+      <workItem from="1523744095534" duration="2829000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="170690000" />
+    <option name="totallyTimeSpent" value="183581000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-6" y="-6" width="1381" height="885" extended-state="6" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info anchor="right" id="Palette" order="3" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Messages" order="10" sideWeight="0.4973545" weight="0.32533333" />
       <window_info id="Palette&#9;" order="5" />
       <window_info id="Image Layers" order="6" />
       <window_info anchor="right" id="Capture Analysis" order="6" />
-      <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.5026455" side_tool="true" weight="0.25866666" />
+      <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.50479746" side_tool="true" weight="0.25599128" />
       <window_info anchor="right" id="Maven Projects" order="4" weight="0.32995737" />
       <window_info anchor="bottom" id="Database Changes" order="11" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="11" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.4973545" visible="true" weight="0.25866666" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49520257" weight="0.2570806" />
       <window_info anchor="bottom" id="Terminal" order="12" />
       <window_info id="Capture Tool" order="3" />
       <window_info anchor="right" id="Designer" order="5" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25472412" />
-      <window_info anchor="bottom" id="Run with VisualVM" weight="0.32933334" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.27665246" />
+      <window_info anchor="bottom" id="Run with VisualVM" order="14" weight="0.32897604" />
       <window_info anchor="right" id="Database" order="8" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -527,8 +618,9 @@
       <window_info anchor="right" id="Theme Preview" order="9" />
       <window_info id="Favorites" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
-      <window_info anchor="bottom" id="Debug with VisualVM" weight="0.32933334" />
+      <window_info anchor="bottom" id="Debug with VisualVM" order="14" weight="0.32933334" />
       <window_info anchor="bottom" id="Tool Output" order="7" />
+      <window_info anchor="bottom" id="Messages" order="10" sideWeight="0.49520257" weight="0.32461873" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="bottom" id="Inspection Results" order="13" weight="0.32980973" />
@@ -548,35 +640,21 @@
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
+  <component name="VcsManagerConfiguration">
+    <ignored-roots>
+      <path value="$PROJECT_DIR$" />
+    </ignored-roots>
+  </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <option name="time" value="3" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/../Helpers/src/lsm/helpers/Time.java" />
-    <entry file="file://$PROJECT_DIR$/output_average.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-29775">
-          <caret line="47" column="22" lean-forward="true" selection-start-line="47" selection-start-column="22" selection-end-line="47" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/ni/NaturalFactory.java" />
-    <entry file="jar://C:/Program Files/Java/jdk-9/lib/src.zip!/java.base/java/util/Arrays.java" />
-    <entry file="file://$PROJECT_DIR$/src/ni/antcolony/AbstractGraphBlock.java" />
-    <entry file="file://$PROJECT_DIR$/src/ni/antcolony/fitness/Fitness.java" />
     <entry file="file://$PROJECT_DIR$/src/ni/antcolony/preCalc/PreCalcs.java" />
     <entry file="file://$PROJECT_DIR$/src/ni/antcolony/preCalc/PreCalcInterface.java" />
     <entry file="jar://C:/Program Files/Java/jdk-9/lib/src.zip!/java.base/java/lang/Math.java" />
     <entry file="file://$PROJECT_DIR$/src/ni/antcolony/Graphs.java" />
-    <entry file="file://$PROJECT_DIR$/src/natural/ACO/Node.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="514">
-          <caret line="119" column="32" selection-start-line="119" selection-start-column="32" selection-end-line="119" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/natural/ACO/visitation/Visitations.java">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -598,24 +676,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/natural/ACO/Ant.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="18" column="38" selection-start-line="18" selection-start-column="38" selection-end-line="18" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://C:/Program Files/Java/jdk-9/lib/src.zip!/java.base/java/lang/Long.java" />
     <entry file="file://$PROJECT_DIR$/src/natural/antcolony/Driver.java" />
     <entry file="jar://C:/Program Files/Java/jdk-9/lib/src.zip!/java.base/java/util/stream/BaseStream.java" />
     <entry file="jar://C:/Program Files/Java/jdk-9/lib/src.zip!/java.base/java/util/stream/IntStream.java" />
-    <entry file="file://$PROJECT_DIR$/src/natural/AbstractIndividual.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://C:/Program Files/Java/jdk-9/lib/src.zip!/java.base/java/util/concurrent/ThreadLocalRandom.java" />
     <entry file="file://$PROJECT_DIR$/src/natural/GA/fitness/FitnessInterface.java">
       <provider selected="true" editor-type-id="text-editor">
@@ -646,27 +710,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../Helpers/src/lsm/helpers/utils/ArrayUtils.java" />
-    <entry file="file://$PROJECT_DIR$/src/natural/ACO/Colony.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="235">
-          <caret line="37" column="71" lean-forward="true" selection-start-line="37" selection-start-column="71" selection-end-line="38" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/natural/factory/ColonyFactory.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="327">
-          <caret line="34" column="32" lean-forward="true" selection-start-line="34" selection-start-column="32" selection-end-line="34" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/natural/factory/GraphFactory.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="816">
-          <caret line="51" column="22" selection-start-line="51" selection-start-column="22" selection-end-line="51" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/natural/GA/mutations/MutationInterface.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
@@ -681,13 +724,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/natural/GA/WorkerThread.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="8" column="42" selection-start-line="8" selection-start-column="42" selection-end-line="8" selection-end-column="42" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/natural/GA/WorkerThread.java" />
     <entry file="file://$PROJECT_DIR$/src/natural/GA/select/Selection.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="289">
@@ -701,13 +738,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="204">
           <caret line="12" column="28" selection-start-line="12" selection-start-column="28" selection-end-line="12" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/natural/GA/Individual.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="476">
-          <caret line="30" column="5" selection-start-line="30" selection-start-column="5" selection-end-line="30" selection-end-column="5" />
         </state>
       </provider>
     </entry>
@@ -735,13 +765,24 @@
     </entry>
     <entry file="file://$USER_HOME$/Dropbox/ProjectJava/Helpers/src/lsm/algorithms/org/nevec/rjm/Ifactor.java" />
     <entry file="file://$USER_HOME$/Dropbox/ProjectJava/Helpers/src/lsm/algorithms/org/nevec/rjm/Wigner3j.java" />
-    <entry file="file://$PROJECT_DIR$/src/natural/GA/mutations/Mutation.java">
+    <entry file="file://$PROJECT_DIR$/src/natural/GA/GraphingData.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="305">
-          <caret line="53" column="32" selection-start-line="53" selection-start-column="32" selection-end-line="53" selection-end-column="32" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state relative-caret-position="1190">
+          <caret line="81" column="29" selection-start-line="81" selection-start-column="29" selection-end-line="81" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Dropbox/ProjectJava/Helpers/src/lsm/algorithms/Astar/InferenceEngine.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="442">
+          <caret line="28" lean-forward="true" selection-start-line="28" selection-end-line="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/natural/AbstractIndividual.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="29" column="16" selection-start-line="29" selection-start-column="16" selection-end-line="29" selection-end-column="16" />
         </state>
       </provider>
     </entry>
@@ -752,51 +793,168 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/natural/AbstractPopulation.java">
+    <entry file="file://$PROJECT_DIR$/src/natural/GA/mutations/Mutation.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="13" lean-forward="true" selection-start-column="13" selection-end-column="13" />
-          <folding>
-            <element signature="e#18#63#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/natural/GA/Population.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret line="78" column="26" lean-forward="true" selection-start-line="78" selection-start-column="26" selection-end-line="78" selection-end-column="26" />
+        <state relative-caret-position="850">
+          <caret line="53" column="32" selection-start-line="53" selection-start-column="32" selection-end-line="53" selection-end-column="32" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/natural/GA/preCalc/PreCalcs.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="273">
-          <caret line="89" column="325" selection-start-line="89" selection-start-column="304" selection-end-line="89" selection-end-column="325" />
+        <state relative-caret-position="74">
+          <caret line="56" column="62" lean-forward="true" selection-start-line="56" selection-start-column="62" selection-end-line="56" selection-end-column="62" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/natural/factory/PopulationFactory.java">
+    <entry file="file://$PROJECT_DIR$/src/natural/GA/PopulationIslands.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="13" column="31" lean-forward="true" selection-start-line="13" selection-start-column="31" selection-end-line="13" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/natural/Driver.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="372">
-          <caret line="27" column="13" lean-forward="true" selection-start-line="27" selection-start-column="13" selection-end-line="27" selection-end-column="13" />
+        <state relative-caret-position="187">
+          <caret line="11" column="5" selection-start-line="11" selection-start-column="5" selection-end-line="11" selection-end-column="5" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/natural/GA/GraphingData.java">
+    <entry file="file://$PROJECT_DIR$/src/natural/ConvergenceInterface.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="71" column="97" selection-start-line="71" selection-start-column="97" selection-end-line="71" selection-end-column="97" />
+        <state relative-caret-position="68">
+          <caret line="4" column="4" selection-start-line="4" selection-start-column="4" selection-end-line="4" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/natural/EvolutionStepInterface.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="3" column="41" selection-start-line="3" selection-start-column="41" selection-end-line="3" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk-9.0.4/lib/src.zip!/java.base/java/util/concurrent/ExecutorService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="655">
+          <caret line="210" column="12" selection-start-line="210" selection-start-column="12" selection-end-line="210" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/natural/GA/Individual.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/natural/GA/Population.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="663">
+          <caret line="60" column="5" lean-forward="true" selection-start-line="60" selection-start-column="5" selection-end-line="60" selection-end-column="5" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#435#480#0" expanded="true" />
+            <element signature="e#5974#5975#0" expanded="true" />
+            <element signature="e#6004#6005#0" expanded="true" />
+            <element signature="e#6039#6040#0" expanded="true" />
+            <element signature="e#6072#6073#0" expanded="true" />
+            <element signature="e#6103#6104#0" expanded="true" />
+            <element signature="e#6145#6146#0" expanded="true" />
+            <element signature="e#6195#6196#0" expanded="true" />
+            <element signature="e#6241#6242#0" expanded="true" />
+            <element signature="e#6298#6299#0" expanded="true" />
+            <element signature="e#6330#6331#0" expanded="true" />
+            <element signature="e#6378#6379#0" expanded="true" />
+            <element signature="e#6410#6411#0" expanded="true" />
+            <element signature="e#6450#6451#0" expanded="true" />
+            <element signature="e#6480#6481#0" expanded="true" />
+            <element signature="e#6526#6527#0" expanded="true" />
+            <element signature="e#6556#6557#0" expanded="true" />
+            <element signature="e#6600#6601#0" expanded="true" />
+            <element signature="e#6630#6631#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/natural/Islands.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="15" column="18" selection-start-line="15" selection-start-column="18" selection-end-line="15" selection-end-column="18" />
+          <folding>
+            <element signature="e#141#186#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/natural/Driver.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="23" column="28" lean-forward="true" selection-start-line="23" selection-start-column="28" selection-end-line="23" selection-end-column="28" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/natural/AbstractPopulation.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="785">
+          <caret line="65" lean-forward="true" selection-start-line="65" selection-end-line="65" />
+          <folding>
+            <element signature="e#1019#1020#0" expanded="true" />
+            <element signature="e#1075#1076#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/natural/ACO/Ant.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="18" column="38" selection-start-line="18" selection-start-column="38" selection-end-line="18" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/natural/ACO/Colony.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="19" column="37" lean-forward="true" selection-start-line="19" selection-start-column="37" selection-end-line="19" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/natural/ACO/Node.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="10" column="34" selection-start-line="10" selection-start-column="34" selection-end-line="10" selection-end-column="34" />
+          <folding>
+            <element signature="e#1420#1421#0" expanded="true" />
+            <element signature="e#1497#1498#0" expanded="true" />
+            <element signature="e#3107#3108#0" expanded="true" />
+            <element signature="e#3166#3167#0" expanded="true" />
+            <element signature="e#3202#3203#0" expanded="true" />
+            <element signature="e#3232#3233#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/natural/factory/GraphFactory.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="20" column="33" selection-start-line="20" selection-start-column="33" selection-end-line="20" selection-end-column="33" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/natural/factory/ColonyFactory.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="15" column="70" lean-forward="true" selection-start-line="15" selection-start-column="70" selection-end-line="15" selection-end-column="70" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/natural/factory/PopulationFactory.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="26" column="37" lean-forward="true" selection-start-line="26" selection-start-column="37" selection-end-line="26" selection-end-column="37" />
         </state>
       </provider>
     </entry>
@@ -841,7 +999,7 @@
       </state>
       <state key="JdkListConfigurable.UI">
         <settings>
-          <last-edited>10</last-edited>
+          <last-edited>9</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
@@ -865,7 +1023,7 @@
       </state>
       <state key="ProjectJDKs.UI">
         <settings>
-          <last-edited>9</last-edited>
+          <last-edited>10</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
