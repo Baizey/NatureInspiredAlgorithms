@@ -15,7 +15,7 @@ public class Visitations {
     public static VisitationInterface addCurrentAndEdgeNodes(){
         return (id, ant, node, pick) -> {
             node.lastUsage = id;
-            for(Node n : node.getNodes()) n.lastUsage = id;
+            for(Node n : node.getEdges()) n.lastUsage = id;
         };
     }
 

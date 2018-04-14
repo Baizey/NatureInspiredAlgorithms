@@ -12,21 +12,21 @@ public class Node {
     public int lastUsage = 0;
     private static int nextId = 0;
     private int nextEdge = 0;
-    private Node[] nodes;
+    private Node[] edges;
     private double[] costs, chances;
     private String[] names;
     public final String name;
 
     public Node(int edges, String name) {
-        this.nodes = new Node[edges];
+        this.edges = new Node[edges];
         this.chances = new double[edges];
         this.costs = new double[edges];
         this.names = new String[edges];
         this.name = name;
     }
 
-    public Node(int edges){
-        this.nodes = new Node[edges];
+    public Node(int edges) {
+        this.edges = new Node[edges];
         this.chances = new double[edges];
         this.costs = new double[edges];
         this.names = new String[edges];
@@ -44,11 +44,15 @@ public class Node {
     public void addEdge(Node node, double cost, String name) {
         costs[nextEdge] = cost;
         names[nextEdge] = name;
-        nodes[nextEdge++] = node;
+        edges[nextEdge++] = node;
+    }
+
+    public void setChances(Node from) {
+        System.arraycopy(from.chances, 0, chances, 0, chances.length);
     }
 
     public void initChances() {
-        double[] bias = new double[nodes.length];
+        double[] bias = new double[edges.length];
         Arrays.fill(bias, 1D);
         initChances(bias);
     }
@@ -56,7 +60,7 @@ public class Node {
     public void initChances(double[] bias) {
         double sum = 0;
         for (double bia : bias) sum += bia;
-        for(int i = 0; i < bias.length; i++)
+        for (int i = 0; i < bias.length; i++)
             chances[i] = bias[i] / sum;
     }
 
@@ -75,12 +79,12 @@ public class Node {
 
     public int getRandom(int currUsage) {
         double pick = 0D;
-        for(int i = 0; i < chances.length; i++)
-            if(nodes[i].lastUsage != currUsage)
+        for (int i = 0; i < chances.length; i++)
+            if (edges[i].lastUsage != currUsage)
                 pick += chances[i];
         pick *= random.nextDouble();
         for (int i = 0; i < chances.length; i++) {
-            if(nodes[i].lastUsage == currUsage) continue;
+            if (edges[i].lastUsage == currUsage) continue;
             pick -= chances[i];
             if (pick <= 0) return i;
         }
@@ -92,20 +96,22 @@ public class Node {
     }
 
     public Node getNode(int index) {
-        return nodes[index];
+        return edges[index];
     }
+
     public double getCost(int index) {
         return costs[index];
     }
+
     public String getName(int index) {
         return names[index];
     }
 
-    public Node[] getNodes() {
-        return nodes;
+    public Node[] getEdges() {
+        return edges;
     }
 
-    public String toString(){
+    public String toString() {
         return name + ": " + Arrays.toString(names);
     }
 

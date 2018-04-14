@@ -1,10 +1,11 @@
 package natural.ACO;
 
-import natural.AbstractPopulation;
 import natural.ACO.fitness.FitnessInterface;
 import natural.ACO.visitation.VisitationInterface;
+import natural.AbstractPopulation;
 
 public class Colony extends AbstractPopulation {
+    private final Node[] graph;
     private int lastUsage = Node.lastUsageStartingPoint;
     private final VisitationInterface visitation;
     private final FitnessInterface fitness;
@@ -13,7 +14,7 @@ public class Colony extends AbstractPopulation {
     private final Node start;
     private final double weightAltering;
 
-    public Colony(int generationSize, double weightAltering, Node start, VisitationInterface visitation, FitnessInterface fitness) {
+    public Colony(int generationSize, double weightAltering, Node[] graph, VisitationInterface visitation, FitnessInterface fitness) {
         this.weightAltering = weightAltering;
         this.visitation = visitation;
         this.fitness = fitness;
@@ -21,7 +22,13 @@ public class Colony extends AbstractPopulation {
         best = new Ant(8);
         bestFromGeneration = new Ant(8);
         curr = new Ant(8);
-        this.start = start;
+        this.graph = graph;
+        this.start = graph[0];
+    }
+
+    public void copyGraphProgression(Colony colony) {
+        for(int i = 0; i < graph.length; i++)
+            graph[i].setChances(colony.graph[i]);
     }
 
     @Override
@@ -54,6 +61,11 @@ public class Colony extends AbstractPopulation {
 
         if (bestFromGeneration.getFitness() > best.getFitness())
             best.copyFrom(bestFromGeneration);
+    }
+
+    @Override
+    public void evolveParallel() throws InterruptedException {
+        evolve();
     }
 
     public String[] edgePath(){

@@ -7,7 +7,7 @@ import java.util.stream.IntStream;
 
 public class GraphFactory {
 
-    public static Node binaryString(int length) {
+    public static Node[] binaryString(int length) {
         Node[] nodes = IntStream.range(0, length + 1).mapToObj(i -> new Node(2)).toArray(Node[]::new);
         nodes[nodes.length - 1] = new Node(0);
         for (int i = 0; i < nodes.length - 1; i++) {
@@ -15,10 +15,10 @@ public class GraphFactory {
             nodes[i].addEdge(nodes[i + 1], "1");
             nodes[i].initChances();
         }
-        return nodes[0];
+        return nodes;
     }
 
-    public static Node snakeInTheBox(int dimensions) {
+    public static Node[] snakeInTheBox(int dimensions) {
         Node[] nodes = IntStream.range(0, 1 << dimensions).mapToObj(i -> new Node(dimensions)).toArray(Node[]::new);
         int[] oneMaskes = new int[dimensions];
         int[] zeroMaskes = new int[dimensions];
@@ -31,10 +31,10 @@ public class GraphFactory {
                 node.addEdge(nodes[(((oneMaskes[j] & i) != 0) ? zeroMaskes[j] & i : oneMaskes[j] | i)], 0);
             node.initChances();
         }
-        return nodes[0];
+        return nodes;
     }
 
-    public static Node travelingSalesMan(double[][] points, boolean addDistanceBias) {
+    public static Node[] travelingSalesMan(double[][] points, boolean addDistanceBias) {
         Node[] nodes = IntStream.range(0, points.length).mapToObj(i -> new Node(points.length - 1)).toArray(Node[]::new);
 
         double[][] distanceMap = new double[points.length][points.length];
@@ -58,7 +58,7 @@ public class GraphFactory {
             for (Node node : nodes)
                 node.initChances();
 
-        return nodes[0];
+        return nodes;
     }
 
 }
