@@ -25,7 +25,7 @@ public class Population extends AbstractPopulation {
     private PreCalcData preCalcData = null;
 
     public Population(Population other) {
-        super(other.maxThreads);
+        super(other.maxThreads, other.popSize);
         this.popSize = other.popSize;
         this.elitism = other.elitism;
         this.generation = other.generation;
