@@ -4,7 +4,6 @@ import natural.ACO.fitness.FitnessInterface;
 import natural.ACO.visitation.VisitationInterface;
 import natural.AbstractPopulation;
 
-import java.util.Arrays;
 import java.util.concurrent.CountDownLatch;
 import java.util.stream.IntStream;
 
@@ -18,7 +17,6 @@ public class Colony extends AbstractPopulation {
     private final Ant[] bestFromGenerationParallel, currParallel;
     private final int generationSize;
     private final Node start;
-    private final Node[] startParallel;
     private final double weightAltering;
 
     public Colony(int generationSize, double weightAltering, Node[] graph, VisitationInterface visitation, FitnessInterface fitness) {
@@ -34,8 +32,6 @@ public class Colony extends AbstractPopulation {
         curr = currParallel[0];
         this.graph = graph;
         this.start = graph[0];
-        this.startParallel = new Node[maxThreads];
-        Arrays.fill(startParallel, start); // TODO: duplicate graph
     }
 
     public Colony(int maxThreads, int generationSize, double weightAltering, Node[] graph, VisitationInterface visitation, FitnessInterface fitness) {
@@ -51,8 +47,6 @@ public class Colony extends AbstractPopulation {
         curr = currParallel[0];
         this.graph = graph;
         this.start = graph[0];
-        this.startParallel = new Node[maxThreads];
-        Arrays.fill(startParallel, start);
     }
 
     public void copyGraphProgression(Colony colony) {
@@ -90,15 +84,14 @@ public class Colony extends AbstractPopulation {
         generation++;
         CountDownLatch lock = new CountDownLatch(maxThreads);
         for (int i = 0, j = 0; i < generationSize; i += threadWork, j++) {
-            // Secure info for thread to have as final anchor points
+            // Secure info for the thread to have as final anchor points
             final int min = i, max = Math.min(generationSize, i + threadWork);
             final int threadId = j;
             final int myUsageFinal = Node.nextUsagePoint + min;
-            Ant bestFromGeneration = bestFromGenerationParallel[threadId];
-            Ant curr = currParallel[threadId];
             pool.submit(() -> {
+                Ant bestFromGeneration = bestFromGenerationParallel[threadId];
+                Ant curr = currParallel[threadId];
                 int myUsage = myUsageFinal;
-                Node start = this.startParallel[threadId];
                 bestFromGeneration.resetFitness();
                 Node at;
                 for (int k = min; k < max; k++) {

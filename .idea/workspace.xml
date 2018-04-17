@@ -7,12 +7,7 @@
     <list default="true" id="071a1683-953a-4f67-9fa2-d0ac63891478" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/natural/ACO/Colony.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/natural/ACO/Colony.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/natural/ACO/Node.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/natural/ACO/Node.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/natural/AbstractPopulation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/natural/AbstractPopulation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/natural/GA/Population.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/natural/GA/Population.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/natural/GA/crossover/Crossover.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/natural/GA/crossover/Crossover.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/natural/GA/preCalc/PreCalcs.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/natural/GA/preCalc/PreCalcs.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/natural/Islands.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/natural/Islands.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -33,14 +28,27 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Colony.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Colony.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/natural/ACO/Colony.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="275">
-              <caret line="95" column="46" selection-start-line="95" selection-start-column="46" selection-end-line="95" selection-end-column="46" />
+            <state relative-caret-position="255">
+              <caret line="86" column="35" selection-start-line="86" selection-start-column="35" selection-end-line="86" selection-end-column="35" />
               <folding>
                 <element signature="e#6348#6349#0" expanded="true" />
                 <element signature="e#6388#6389#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="AbstractPopulation.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/natural/AbstractPopulation.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="340">
+              <caret line="21" column="64" selection-start-line="21" selection-start-column="64" selection-end-line="21" selection-end-column="64" />
+              <folding>
+                <element signature="e#384#385#0" expanded="true" />
+                <element signature="e#457#458#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -160,11 +168,11 @@
         <option value="$PROJECT_DIR$/src/natural/factory/IslandFactory.java" />
         <option value="$PROJECT_DIR$/src/natural/Islands.java" />
         <option value="$PROJECT_DIR$/src/natural/GA/Population.java" />
-        <option value="$PROJECT_DIR$/src/natural/AbstractPopulation.java" />
         <option value="$PROJECT_DIR$/src/natural/GA/crossover/Crossover.java" />
         <option value="$PROJECT_DIR$/src/natural/GA/preCalc/PreCalcs.java" />
         <option value="$PROJECT_DIR$/src/natural/ACO/Node.java" />
         <option value="$PROJECT_DIR$/src/natural/ACO/Colony.java" />
+        <option value="$PROJECT_DIR$/src/natural/AbstractPopulation.java" />
       </list>
     </option>
   </component>
@@ -512,12 +520,12 @@
       <workItem from="1523714924263" duration="1497000" />
       <workItem from="1523744095534" duration="3624000" />
       <workItem from="1523910980951" duration="2595000" />
-      <workItem from="1523994451164" duration="2404000" />
+      <workItem from="1523994451164" duration="3400000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="189375000" />
+    <option name="totallyTimeSpent" value="190371000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -761,13 +769,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/natural/AbstractPopulation.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="16" lean-forward="true" selection-start-column="16" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/natural/GA/Population.java">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -849,11 +850,22 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/natural/ACO/Colony.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="275">
-          <caret line="95" column="46" selection-start-line="95" selection-start-column="46" selection-end-line="95" selection-end-column="46" />
+        <state relative-caret-position="255">
+          <caret line="86" column="35" selection-start-line="86" selection-start-column="35" selection-end-line="86" selection-end-column="35" />
           <folding>
             <element signature="e#6348#6349#0" expanded="true" />
             <element signature="e#6388#6389#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/natural/AbstractPopulation.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="21" column="64" selection-start-line="21" selection-start-column="64" selection-end-line="21" selection-end-column="64" />
+          <folding>
+            <element signature="e#384#385#0" expanded="true" />
+            <element signature="e#457#458#0" expanded="true" />
           </folding>
         </state>
       </provider>

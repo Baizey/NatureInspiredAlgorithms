@@ -17,7 +17,10 @@ public abstract class AbstractPopulation {
     public AbstractPopulation(int maxThreads, int popSize) {
         if(maxThreads > popSize) maxThreads = popSize;
         this.maxThreads = maxThreads;
-        threadWork = popSize / maxThreads + (popSize % maxThreads != 0 ? 1 : 0);
+        // If work doesn't split evenly to threads, add 1 to all threads
+        // Last thread end with less work (and extreme cases a lot of threads end without work)
+        // But it's a damn cheap and easy way to divide the work
+        threadWork = popSize / maxThreads + Math.min(popSize % maxThreads, 1);
         pool = Executors.newFixedThreadPool(maxThreads);
     }
 
