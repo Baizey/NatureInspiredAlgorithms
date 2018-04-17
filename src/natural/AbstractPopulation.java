@@ -6,10 +6,19 @@ import java.util.concurrent.Executors;
 @SuppressWarnings({"WeakerAccess", "unused"})
 public abstract class AbstractPopulation {
     protected int generation = 0;
-    protected ExecutorService pool = null;
+    protected final ExecutorService pool;
+    protected final int maxThreads;
+    protected final int threadWork;
 
-    public AbstractPopulation(boolean useParallel) {
-        if (useParallel) pool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+    public AbstractPopulation(int popSize) {
+        this(Runtime.getRuntime().availableProcessors(), popSize);
+    }
+
+    public AbstractPopulation(int maxThreads, int popSize) {
+        if(maxThreads > popSize) maxThreads = popSize;
+        this.maxThreads = maxThreads;
+        threadWork = popSize / maxThreads + (popSize % maxThreads != 0 ? 1 : 0);
+        pool = Executors.newFixedThreadPool(maxThreads);
     }
 
     public void evolveUntilGeneration(int maxGeneration) {

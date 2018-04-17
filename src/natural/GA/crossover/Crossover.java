@@ -2,8 +2,11 @@ package natural.GA.crossover;
 
 import natural.GA.Individual;
 
+import java.util.Random;
+
 @SuppressWarnings("unused")
 public class Crossover {
+    private static final Random random = new Random();
 
     public static CrossoverInterface halfAndHalf() {
         return (preCalc, male, female, baby) -> {
@@ -16,7 +19,7 @@ public class Crossover {
 
     public static CrossoverInterface halfAndHalfRandom() {
         return (preCalc, male, female, baby) -> {
-            if (Math.random() >= 0.5) {
+            if (random.nextDouble() >= 0.5) {
                 Individual temp = male;
                 male = female;
                 female = temp;

@@ -10,7 +10,7 @@ import natural.GA.preCalc.PreCalcInterface;
 import natural.GA.select.SelectionInterface;
 
 import java.util.Arrays;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.CountDownLatch;
 
 @SuppressWarnings({"WeakerAccess", "unused"})
 public class Population extends AbstractPopulation {
@@ -25,7 +25,7 @@ public class Population extends AbstractPopulation {
     private PreCalcData preCalcData = null;
 
     public Population(Population other) {
-        super(other.pool != null);
+        super(other.maxThreads);
         this.popSize = other.popSize;
         this.elitism = other.elitism;
         this.generation = other.generation;
@@ -64,14 +64,46 @@ public class Population extends AbstractPopulation {
             int popSize, int geneSize,
             boolean elitism,
             boolean generate,
-            boolean useParallel,
             MutationInterface mutationInterface,
             FitnessInterface fitnessInterface,
             CrossoverInterface crossoverInterface,
             SelectionInterface selectionInterface,
             PreCalcInterface preCalculations
     ) {
-        super(useParallel);
+        super(popSize);
+        this.preCalculations = preCalculations;
+        this.currGen = new Individual[popSize];
+        this.nextGen = new Individual[popSize];
+        for (int i = 0; i < popSize; i++) {
+            currGen[i] = new Individual(geneSize, generate);
+            nextGen[i] = new Individual(geneSize, false);
+        }
+
+        this.popSize = popSize;
+        this.elitism = elitism;
+        this.startFrom = elitism ? 1 : 0;
+        this.mutator = mutationInterface;
+        this.fitness = fitnessInterface;
+        this.crossover = crossoverInterface;
+        this.selection = selectionInterface;
+
+        for(Individual individual : currGen)
+            fitness.calc(individual);
+        findBestFitness();
+    }
+
+    public Population(
+            int popSize, int geneSize,
+            boolean elitism,
+            boolean generate,
+            int maxThreads,
+            MutationInterface mutationInterface,
+            FitnessInterface fitnessInterface,
+            CrossoverInterface crossoverInterface,
+            SelectionInterface selectionInterface,
+            PreCalcInterface preCalculations
+    ) {
+        super(maxThreads, popSize);
         this.preCalculations = preCalculations;
         this.currGen = new Individual[popSize];
         this.nextGen = new Individual[popSize];
@@ -119,21 +151,19 @@ public class Population extends AbstractPopulation {
         findBestFitness();
     }
 
+
     @Override
     public void evolveParallel() throws InterruptedException {
         generation++;
-        // Do calculations that may be needed multiple times
         preCalcData = preCalculations.calc(currGen, preCalcData);
-
-        // Move over current best pop if elitism is true
         if (elitism) {
             nextGen[0].setFitness(currGen[0]);
             nextGen[0].copyDnaFrom(currGen[0]);
         }
 
-        for (int i = startFrom; i < popSize; i += 999) {
-            int min = i;
-            int max = Math.min(min + 999, popSize);
+        CountDownLatch counter = new CountDownLatch(maxThreads);
+        for(int i = 0; i < popSize; i += threadWork) {
+            int min = i, max = Math.min(popSize, i + threadWork);
             pool.submit(() -> {
                 for(int k = min; k < max; k++) {
                     crossover.crossover(preCalcData,
@@ -143,9 +173,10 @@ public class Population extends AbstractPopulation {
                     mutator.mutate(preCalcData, nextGen[k]);
                     fitness.calc(nextGen[k]);
                 }
+                counter.countDown();
             });
         }
-        pool.awaitTermination(1, TimeUnit.MILLISECONDS);
+        counter.await();
         Individual[] temp = currGen;
         currGen = nextGen;
         nextGen = temp;

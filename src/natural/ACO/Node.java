@@ -1,15 +1,14 @@
 package natural.ACO;
 
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class Node {
     private static final Random random = ThreadLocalRandom.current();
-    static final int lastUsageStartingPoint = 1;
-    public int lastUsage = 0;
+    static int nextUsagePoint = 0;
+    public int[] lastUsage;
     private static int nextId = 0;
     private int nextEdge = 0;
     private Node[] edges;
@@ -17,20 +16,22 @@ public class Node {
     private String[] names;
     public final String name;
 
+
+    public Node(int edges) {
+        this(edges, Integer.toString(nextId));
+    }
     public Node(int edges, String name) {
+        this(edges, Integer.toString(nextId), 1);
+    }
+
+    public Node(int edges, String name, int maxThreads) {
+        this.lastUsage = new int[maxThreads];
         this.edges = new Node[edges];
         this.chances = new double[edges];
         this.costs = new double[edges];
         this.names = new String[edges];
         this.name = name;
-    }
-
-    public Node(int edges) {
-        this.edges = new Node[edges];
-        this.chances = new double[edges];
-        this.costs = new double[edges];
-        this.names = new String[edges];
-        this.name = Integer.toString(nextId++);
+        nextId++;
     }
 
     public void addEdge(Node edge, double cost) {
@@ -75,16 +76,18 @@ public class Node {
         chances[index] += taking;
     }
 
-    private static final HashSet<Node> EMPTY = new HashSet<>();
-
     public int getRandom(int currUsage) {
+        return getRandom(currUsage, 0);
+    }
+
+    public int getRandom(int currUsage, int thread) {
         double pick = 0D;
         for (int i = 0; i < chances.length; i++)
-            if (edges[i].lastUsage != currUsage)
+            if (edges[i].lastUsage[thread] != currUsage)
                 pick += chances[i];
         pick *= random.nextDouble();
         for (int i = 0; i < chances.length; i++) {
-            if (edges[i].lastUsage == currUsage) continue;
+            if (edges[i].lastUsage[thread] == currUsage) continue;
             pick -= chances[i];
             if (pick <= 0) return i;
         }
