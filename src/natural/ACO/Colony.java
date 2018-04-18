@@ -64,7 +64,7 @@ public class Colony extends AbstractPopulation {
             int pick;
             while ((pick = at.getRandom(Node.nextUsagePoint)) != -1) {
                 curr.add(pick);
-                visitation.handleVisitation(Node.nextUsagePoint, curr, at, pick);
+                visitation.handleVisitation(Node.nextUsagePoint, curr, at, pick, 0);
                 at = at.getNode(pick);
             }
             Node.nextUsagePoint++;
@@ -100,7 +100,7 @@ public class Colony extends AbstractPopulation {
                     int pick;
                     while ((pick = at.getRandom(myUsage, threadId)) != -1) {
                         curr.add(pick);
-                        visitation.handleVisitation(myUsage, curr, at, pick);
+                        visitation.handleVisitation(myUsage, curr, at, pick, threadId);
                         at = at.getNode(pick);
                     }
                     myUsage++;

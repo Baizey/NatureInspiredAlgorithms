@@ -13,7 +13,7 @@ public class PopulationFactory {
     public static Population oneMax(int geneSize) {
         if (geneSize >= 1000) {
             return new Population(
-                    2, geneSize, true, false, true,
+                    2, geneSize, true, false,
                     Mutation.flipRandomExact(),
                     Fitness.oneMax(),
                     Crossover.none(),
@@ -22,7 +22,7 @@ public class PopulationFactory {
             );
         } else {
             return new Population(
-                    2, geneSize, true, false, true,
+                    2, geneSize, true, false,
                     Mutation.flipRandomCheap(1D / geneSize),
                     Fitness.oneMax(),
                     Crossover.none(),
@@ -34,7 +34,7 @@ public class PopulationFactory {
 
     public static Population normalPopulation(int geneSize, FitnessInterface fitnessFunction) {
         return new Population(
-                100, geneSize, true, true, true,
+                100, geneSize, true, true,
                 Mutation.flipOne(0.05D),
                 fitnessFunction,
                 Crossover.halfAndHalf(),

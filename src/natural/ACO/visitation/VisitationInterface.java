@@ -5,6 +5,6 @@ import natural.ACO.Node;
 
 public interface VisitationInterface {
 
-    void handleVisitation(int id, Ant ant, Node at, int pick);
+    void handleVisitation(int id, Ant ant, Node at, int pick, int threadId);
 
 }
