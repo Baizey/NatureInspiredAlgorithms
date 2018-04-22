@@ -13,6 +13,6 @@ public class DefinedLayout extends Layout {
     @Override
     public void execute() {
         for(Cell cell : graph.getModel().getAllCells())
-            cell.relocate(cell.x, cell.y);
+            cell.relocate(cell.x - cell.size / 2, cell.y - cell.size / 2);
     }
 }

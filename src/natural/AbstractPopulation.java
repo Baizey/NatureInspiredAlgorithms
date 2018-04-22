@@ -24,54 +24,80 @@ public abstract class AbstractPopulation {
         pool = Executors.newFixedThreadPool(maxThreads);
     }
 
-    public void evolveUntilGeneration(int maxGeneration) {
-        while (generation < maxGeneration)
+    public void evolveUntilGeneration(int maxGeneration) throws InterruptedException {
+        evolveUntilGeneration(maxGeneration, a -> {});
+    }
+    public void evolveUntilGeneration(int maxGeneration, Action action) throws InterruptedException {
+        while (generation < maxGeneration){
             evolve();
+            action.act(this);
+        }
     }
 
-    public void evolveUntilGoal(double fitnessGoal) {
-        while (getBestFitness() < fitnessGoal)
+    public void evolveUntilGoal(double fitnessGoal) throws InterruptedException { evolveUntilGoal(fitnessGoal, a -> {}); }
+    public void evolveUntilGoal(double fitnessGoal, Action action) throws InterruptedException {
+        while (getBestFitness() < fitnessGoal) {
             evolve();
+            action.act(this);
+        }
     }
 
-    public void evolveUntilNoProgress(int maxStaleGenerations) {
+    public void evolveUntilNoProgress(int maxStaleGenerations) throws InterruptedException { evolveUntilNoProgress(maxStaleGenerations, a -> {}); }
+    public void evolveUntilNoProgress(int maxStaleGenerations, Action action) throws InterruptedException {
         double prev = 0;
         for (int i = 0; i < maxStaleGenerations; i++) {
             evolve();
+            action.act(this);
             long curr = getBestFitness();
             if (curr > prev) i = -1;
             prev = curr;
         }
     }
 
-    public void evolve(int times) {
-        for (int i = 0; i < times; i++) evolve();
+    public void evolve(int times) throws InterruptedException { evolve(times, a -> {});}
+    public void evolve(int times, Action action) throws InterruptedException {
+        for (int i = 0; i < times; i++) {
+            evolve();
+            action.act(this);
+        }
     }
 
     public abstract void evolve();
 
-    public void evolveUntilGenerationParallel(int maxGeneration) throws InterruptedException {
-        while (generation < maxGeneration)
+    public void evolveUntilGenerationParallel(int maxGeneration) throws InterruptedException { evolveUntilGenerationParallel(maxGeneration, a -> {}); }
+    public void evolveUntilGenerationParallel(int maxGeneration, Action action) throws InterruptedException {
+        while (generation < maxGeneration){
             evolveParallel();
+            action.act(this);
+        }
     }
 
-    public void evolveUntilGoalParallel(double fitnessGoal) throws InterruptedException {
-        while (getBestFitness() < fitnessGoal)
+    public void evolveUntilGoalParallel(double fitnessGoal) throws InterruptedException { evolveUntilGoalParallel(fitnessGoal, a -> {}); }
+    public void evolveUntilGoalParallel(double fitnessGoal, Action action) throws InterruptedException {
+        while (getBestFitness() < fitnessGoal){
             evolveParallel();
+            action.act(this);
+        }
     }
 
-    public void evolveUntilNoProgressParallel(int maxStaleGenerations) throws InterruptedException {
+    public void evolveUntilNoProgressParallel(int maxStaleGenerations) throws InterruptedException { evolveUntilNoProgressParallel(maxStaleGenerations, a -> {}); }
+    public void evolveUntilNoProgressParallel(int maxStaleGenerations, Action action) throws InterruptedException {
         double prev = 0;
         for (int i = 0; i < maxStaleGenerations; i++) {
             evolveParallel();
+            action.act(this);
             long curr = getBestFitness();
             if (curr > prev) i = -1;
             prev = curr;
         }
     }
 
-    public void evolveParallel(int times) throws InterruptedException {
-        for (int i = 0; i < times; i++) evolveParallel();
+    public void evolveParallel(int times) throws InterruptedException { evolveParallel(times, a -> {}); }
+    public void evolveParallel(int times, Action action) throws InterruptedException {
+        for (int i = 0; i < times; i++) {
+            evolveParallel();
+            action.act(this);
+        }
     }
 
     public abstract void evolveParallel() throws InterruptedException;
@@ -81,4 +107,6 @@ public abstract class AbstractPopulation {
     public int getGeneration() {
         return generation;
     }
+
+    public abstract AbstractIndividual getBest();
 }

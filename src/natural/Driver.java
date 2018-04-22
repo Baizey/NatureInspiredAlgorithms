@@ -20,7 +20,7 @@ public class Driver {
                     for(int i = 0; i < pops.length; i++)
                         if(i != best) pops[i].copyPopulationDnaFrom(pops[best]);
                 },
-                island -> island.evolve(10),
+                island -> { try { island.evolve(10); } catch (InterruptedException ignored) { } },
                 PopulationFactory.oneMax(100),
                 PopulationFactory.oneMax(100),
                 PopulationFactory.oneMax(100),
@@ -41,7 +41,13 @@ public class Driver {
 
         Population population = PopulationFactory.normalPopulation(genes, fitness);
         Population finalPopulation = population;
-        Time.takeTime(() -> finalPopulation.evolveUntilGoal(Integer.MAX_VALUE));
+        Time.takeTime(() -> {
+            try {
+                finalPopulation.evolveUntilGoal(Integer.MAX_VALUE);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
         Note.writenl(population.getBestFitness());
         Note.writenl((population).getBest());
 

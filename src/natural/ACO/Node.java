@@ -20,8 +20,13 @@ public class Node {
     public Node(int edges) {
         this(edges, Integer.toString(nextId));
     }
+
+    public Node(int edges, int maxThreads) {
+        this(edges, Integer.toString(nextId), maxThreads);
+    }
+
     public Node(int edges, String name) {
-        this(edges, Integer.toString(nextId), 1);
+        this(edges, name, 1);
     }
 
     public Node(int edges, String name, int maxThreads) {

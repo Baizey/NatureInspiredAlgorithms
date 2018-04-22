@@ -6,9 +6,9 @@ import natural.ACO.visitation.Visitations;
 
 public class ColonyFactory {
 
-    public static Colony oneMaxBinary(int size, int generationSize, double percentChange) {
+    public static Colony oneMaxBinary(int maxThreads, int size, int generationSize, double percentChange) {
         return new Colony(generationSize, percentChange,
-                GraphFactory.binaryString(size),
+                GraphFactory.binaryString(maxThreads, size),
                 Visitations.addCurrentNode(),
                 (ant, node) -> {
                     int fitness = 0;
@@ -21,25 +21,55 @@ public class ColonyFactory {
                 });
     }
 
-    public static Colony snakeInTheBox(int dimensions, int generationSize, double percentChange) {
+    public static Colony snakeInTheBox(int maxThreads, int dimensions, int generationSize, double percentChange) {
         return new Colony(generationSize, percentChange,
-                GraphFactory.snakeInTheBox(dimensions),
+                GraphFactory.snakeInTheBox(maxThreads, dimensions),
                 Visitations.addCurrentAndEdgeNodes(),
                 (ant, node) -> ant.setFitness(ant.getInsertionCount()));
     }
 
-    public static Colony travelingSalesman(double[][] points, int generationSize, double percentChange) {
-        return new Colony(generationSize, percentChange,
-                GraphFactory.travelingSalesMan(points, true),
+    public static Colony travelingSalesmanCircle(double[][] points, int generationSize, double percentChange) {
+        return travelingSalesmanCircle(points, generationSize, percentChange, Runtime.getRuntime().availableProcessors());
+    }
+    public static Colony travelingSalesmanCircle(double[][] points, int generationSize, double percentChange, int maxThreads) {
+        return new Colony(maxThreads, generationSize, percentChange,
+                GraphFactory.travelingSalesMan(maxThreads, points, true),
                 Visitations.addCurrentNode(),
                 (ant, node) -> {
-                    int fitness = Integer.MAX_VALUE;
+                    if(ant.getInsertionCount() < node.getEdges().length){
+                        ant.setFitness(ant.getInsertionCount());
+                        return;
+                    }
                     Node at = node;
+                    long totalCost = 0;
                     for(int i = 0; i < ant.getInsertionCount(); i++) {
-                        fitness -= at.getCost(ant.getChoice(i));
+                        totalCost += at.getCost(ant.getChoice(i));
                         at = at.getNode(ant.getChoice(i));
                     }
-                    ant.setFitness(fitness);
+                    totalCost += at.getCost(0);
+                    ant.setFitness((long) (Long.MAX_VALUE - totalCost));
+                });
+    }
+
+    public static Colony travelingSalesmanPath(double[][] points, int generationSize, double percentChange) {
+        return travelingSalesmanPath(points, generationSize, percentChange, Runtime.getRuntime().availableProcessors());
+    }
+    public static Colony travelingSalesmanPath(double[][] points, int generationSize, double percentChange, int maxThreads) {
+        return new Colony(maxThreads, generationSize, percentChange,
+                GraphFactory.travelingSalesMan(maxThreads, points, true),
+                Visitations.addCurrentNode(),
+                (ant, node) -> {
+                    if(ant.getInsertionCount() < node.getEdges().length){
+                        ant.setFitness(ant.getInsertionCount());
+                        return;
+                    }
+                    Node at = node;
+                    long totalCost = 0;
+                    for(int i = 0; i < ant.getInsertionCount(); i++) {
+                        totalCost += at.getCost(ant.getChoice(i));
+                        at = at.getNode(ant.getChoice(i));
+                    }
+                    ant.setFitness((long) (Long.MAX_VALUE - totalCost));
                 });
     }
 

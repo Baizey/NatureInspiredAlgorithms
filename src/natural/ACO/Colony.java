@@ -2,10 +2,11 @@ package natural.ACO;
 
 import natural.ACO.fitness.FitnessInterface;
 import natural.ACO.visitation.VisitationInterface;
+import natural.AbstractIndividual;
 import natural.AbstractPopulation;
 
 import java.util.concurrent.CountDownLatch;
-import java.util.stream.IntStream;
+import java.util.concurrent.TimeUnit;
 
 public class Colony extends AbstractPopulation {
     private final Node[] graph;
@@ -14,7 +15,6 @@ public class Colony extends AbstractPopulation {
     private final Ant best;
     private Ant bestFromGeneration;
     private final Ant curr;
-    private final Ant[] bestFromGenerationParallel, currParallel;
     private final int generationSize;
     private final Node start;
     private final double weightAltering;
@@ -26,10 +26,8 @@ public class Colony extends AbstractPopulation {
         this.fitness = fitness;
         this.generationSize = generationSize;
         best = new Ant(8);
-        bestFromGenerationParallel = IntStream.of(8).limit(maxThreads).mapToObj(Ant::new).toArray(Ant[]::new);
-        currParallel = IntStream.of(8).limit(maxThreads).mapToObj(Ant::new).toArray(Ant[]::new);
-        bestFromGeneration = bestFromGenerationParallel[0];
-        curr = currParallel[0];
+        bestFromGeneration = new Ant(8);
+        curr = new Ant(8);
         this.graph = graph;
         this.start = graph[0];
     }
@@ -41,10 +39,8 @@ public class Colony extends AbstractPopulation {
         this.fitness = fitness;
         this.generationSize = generationSize;
         best = new Ant(8);
-        bestFromGenerationParallel = IntStream.of(8).limit(maxThreads).mapToObj(Ant::new).toArray(Ant[]::new);
-        currParallel = IntStream.of(8).limit(maxThreads).mapToObj(Ant::new).toArray(Ant[]::new);
-        bestFromGeneration = bestFromGenerationParallel[0];
-        curr = currParallel[0];
+        bestFromGeneration = new Ant(8);
+        curr = new Ant(8);
         this.graph = graph;
         this.start = graph[0];
     }
@@ -58,20 +54,22 @@ public class Colony extends AbstractPopulation {
     public void evolve() {
         generation++;
         bestFromGeneration.resetFitness();
+        int usage = Node.nextUsagePoint;
         for (int i = 0; i < generationSize; i++) {
             curr.resetInsertion();
             Node at = start;
             int pick;
-            while ((pick = at.getRandom(Node.nextUsagePoint)) != -1) {
+            while ((pick = at.getRandom(usage)) != -1) {
                 curr.add(pick);
-                visitation.handleVisitation(Node.nextUsagePoint, curr, at, pick, 0);
+                visitation.handleVisitation(usage, curr, at, pick, 0);
                 at = at.getNode(pick);
             }
-            Node.nextUsagePoint++;
+            usage++;
             fitness.calc(curr, start);
             if (curr.getFitness() > bestFromGeneration.getFitness())
                 bestFromGeneration.copyFrom(curr);
         }
+        Node.nextUsagePoint = usage;
         promoteBestRoute();
     }
 
@@ -87,37 +85,36 @@ public class Colony extends AbstractPopulation {
             // Secure info for the thread to have as final anchor points
             final int min = i, max = Math.min(generationSize, i + threadWork);
             final int threadId = j;
-            final int myUsageFinal = Node.nextUsagePoint + min;
+            final int myUsage = Node.nextUsagePoint + min;
             pool.submit(() -> {
-                Ant bestFromGeneration = bestFromGenerationParallel[threadId];
-                Ant curr = currParallel[threadId];
-                int myUsage = myUsageFinal;
-                bestFromGeneration.resetFitness();
+                Ant bestFromGeneration = new Ant(8);
+                Ant curr = new Ant(8);
                 Node at;
-                for (int k = min; k < max; k++) {
+                for (int k = min, q = 0; k < max; k++, q++) {
                     curr.resetInsertion();
                     at = start;
                     int pick;
-                    while ((pick = at.getRandom(myUsage, threadId)) != -1) {
+                    while ((pick = at.getRandom(myUsage + q, threadId)) != -1) {
                         curr.add(pick);
-                        visitation.handleVisitation(myUsage, curr, at, pick, threadId);
+                        visitation.handleVisitation(myUsage + q, curr, at, pick, threadId);
                         at = at.getNode(pick);
                     }
-                    myUsage++;
                     fitness.calc(curr, start);
                     if (curr.getFitness() > bestFromGeneration.getFitness())
                         bestFromGeneration.copyFrom(curr);
                 }
+                updateBestFromGen(bestFromGeneration);
                 lock.countDown();
             });
         }
-        lock.await();
+        lock.await(1000, TimeUnit.MINUTES);
         Node.nextUsagePoint += generationSize;
-        // Find best path from the different threads
-        for (Ant ant : bestFromGenerationParallel)
-            if (ant.getFitness() > bestFromGeneration.getFitness())
-                this.bestFromGeneration = ant;
         promoteBestRoute();
+    }
+
+    private synchronized void updateBestFromGen(Ant ant) {
+        if(ant.getFitness() > bestFromGeneration.getFitness())
+            bestFromGeneration.copyFrom(ant);
     }
 
     private void promoteBestRoute() {
@@ -158,5 +155,14 @@ public class Colony extends AbstractPopulation {
     @Override
     public long getBestFitness() {
         return best.getFitness();
+    }
+
+    @Override
+    public AbstractIndividual getBest() {
+        return best;
+    }
+
+    public Node[] getGraph() {
+        return graph;
     }
 }

@@ -73,15 +73,15 @@ public class Model {
     public void addCell(String id, CellType type, double x, double y) {
         switch (type) {
             case RECTANGLE:
-                RectangleCell rectangleCell = new RectangleCell(id, x ,y);
+                RectangleCell rectangleCell = new RectangleCell(id, x, y);
                 addCell(rectangleCell);
                 break;
             case TRIANGLE:
-                TriangleCell triangleCell = new TriangleCell(id, x ,y);
+                TriangleCell triangleCell = new TriangleCell(id, x, y);
                 addCell(triangleCell);
                 break;
             case CIRCLE:
-                CircleCell circleCel1 = new CircleCell(id, x ,y);
+                CircleCell circleCel1 = new CircleCell(id, x, y);
                 addCell(circleCel1);
                 break;
             default:

@@ -1,13 +1,11 @@
 package natural;
 
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 @SuppressWarnings({"unused", "WeakerAccess"})
-public class Islands {
+public class Islands extends AbstractPopulation {
 
-    private final ExecutorService pool;
     private final AbstractPopulation[] islands;
     private final ConvergenceInterface convergence;
     private final EvolutionStepInterface evolutionStep;
@@ -17,20 +15,52 @@ public class Islands {
             EvolutionStepInterface evolutionStep,
             AbstractPopulation... populations
     ) {
-        pool = Executors.newFixedThreadPool(populations.length);
+        super(populations.length, populations.length);
         this.islands = populations;
         this.convergence = convergence;
         this.evolutionStep = evolutionStep;
     }
 
-    public void evolve() throws InterruptedException {
+    @Override
+    public void evolve() { evolveParallel(); }
+
+    @Override
+    public void evolveParallel() {
         CountDownLatch counter = new CountDownLatch(islands.length);
         for (AbstractPopulation island : islands)
             pool.submit(() -> {
                 evolutionStep.evolve(island);
                 counter.countDown();
+                return null;
             });
-        counter.await();
+        try { counter.await(1000, TimeUnit.SECONDS); } catch (InterruptedException ignored) {}
         convergence.merge(islands);
+    }
+
+    @Override
+    public long getBestFitness() {
+        return 0;
+    }
+
+    public AbstractPopulation getIsland(int i) {
+        return islands[i];
+    }
+
+
+    public AbstractPopulation getBestIsland() {
+        int best = 0;
+        for(int i = 1; i < islands.length; i++)
+            if(islands[i].getBestFitness() > islands[best].getBestFitness())
+                best = i;
+        return islands[best];
+    }
+
+    @Override
+    public AbstractIndividual getBest() {
+        int best = 0;
+        for(int i = 1; i < islands.length; i++)
+            if(islands[i].getBestFitness() > islands[best].getBestFitness())
+                best = i;
+        return islands[best].getBest();
     }
 }
