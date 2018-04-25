@@ -28,6 +28,13 @@ public class ColonyFactory {
                 (ant, node) -> ant.setFitness(ant.getInsertionCount()));
     }
 
+    public static Colony travelingSalesman(boolean circlePath, double[][] points, int generationSize, double percentChange, int maxThreads) {
+        if(circlePath)
+            return travelingSalesmanCircle(points, generationSize, percentChange, maxThreads);
+        else
+            return travelingSalesmanPath(points, generationSize, percentChange, maxThreads);
+    }
+
     public static Colony travelingSalesmanCircle(double[][] points, int generationSize, double percentChange) {
         return travelingSalesmanCircle(points, generationSize, percentChange, Runtime.getRuntime().availableProcessors());
     }
@@ -47,7 +54,7 @@ public class ColonyFactory {
                         at = at.getNode(ant.getChoice(i));
                     }
                     totalCost += at.getCost(0);
-                    ant.setFitness((long) (Long.MAX_VALUE - totalCost));
+                    ant.setFitness(Long.MAX_VALUE - totalCost);
                 });
     }
 
@@ -69,7 +76,7 @@ public class ColonyFactory {
                         totalCost += at.getCost(ant.getChoice(i));
                         at = at.getNode(ant.getChoice(i));
                     }
-                    ant.setFitness((long) (Long.MAX_VALUE - totalCost));
+                    ant.setFitness(Long.MAX_VALUE - totalCost);
                 });
     }
 

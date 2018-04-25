@@ -54,7 +54,10 @@ public class GraphFactory {
         if (addDistanceBias) {
             for (Node node : nodes) {
                 double sum = Arrays.stream(node.getCosts()).sum();
-                node.initChances(Arrays.stream(node.getCosts()).map(i -> sum - i).map(i -> i <= 0D ? 1D : i).toArray());
+                double[] chances = new double[node.getCosts().length];
+                for(int i = 0; i < node.getCosts().length; i++)
+                    chances[i] = (sum - node.getCost(i));
+                node.initChances(chances);
             }
         } else for (Node node : nodes)
             node.initChances();
