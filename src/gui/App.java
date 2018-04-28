@@ -25,12 +25,16 @@ import javafx.stage.Stage;
 import natural.ACO.Colony;
 import natural.ACO.Node;
 import natural.AbstractPopulation;
-import natural.Islands;
-import natural.factory.ColonyFactory;
+import natural.GA.Population;
+import natural.GA.crossover.Crossover;
+import natural.GA.fitness.Fitness;
+import natural.GA.mutations.Mutation;
+import natural.GA.preCalc.PreCalcs;
+import natural.GA.select.Selection;
+import natural.factory.PopulationFactory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Random;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -88,14 +92,11 @@ public class App extends Application {
     }
 
     private final Wrap abortPressed = new Wrap<>(Boolean.FALSE);
+    private final Wrap version = new Wrap<>(0);
 
     private void gotoMenuOptions(Algorithm algorithm, Problem problem) {
         // Kill old processes if they're running
-        try {
-            abortPressed.set(true);
-            Thread.sleep(250);
-        } catch (Exception ignored) {
-        }
+        version.set((Integer) version.get() + 1); // Tell any old algorithm threads they're to terminate
         content.setCenter(new Label("Waiting for input"));
         options.getChildren().clear();
         abortPressed.set(false);
@@ -106,7 +107,7 @@ public class App extends Application {
         Label title = new Label(algorithm.abbrivation + ": " + problem.abbrivation);
         title.setFont(new Font(30D));
 
-        // Parallization options
+        // Thread options
         Label optimizationOptionLabel = new Label("Thread usage: ");
         ComboBox<String> optimizationOption = new ComboBox<>(FXCollections.observableArrayList("None", "Parallel", "Islands"));
         optimizationOption.getSelectionModel().selectFirst();
@@ -136,131 +137,150 @@ public class App extends Application {
         });
 
 
+        NumberTextField geneSizeOption = new NumberTextField(50, 1, 100000);
+        ComboBox<String> biasOption = new ComboBox<>(FXCollections.observableArrayList("None", "Random"));
+
+        // TSP option
+        var useCircle = new Wrap<>(true);
+
+        // Genetic algorithm buttons
+        NumberTextField goal = new NumberTextField(50, 1, 1000);
+        NumberTextField popSize = new NumberTextField(50, 1, 1000);
+        ComboBox<String> selection = new ComboBox<>(FXCollections.observableArrayList("Random"));
+        ComboBox<String> crossover = new ComboBox<>(FXCollections.observableArrayList("Random"));
+        ComboBox<String> mutation = new ComboBox<>(FXCollections.observableArrayList("Random"));
+        TextField numArray = new TextField();
+
+        // Ant colony optimization buttons
+        NumberTextField percentOption = new NumberTextField(0.05, 0, 1);
+        NumberTextField popOption = new NumberTextField(1000, 1, 100000);
+        NumberTextField randomGraphOption = new NumberTextField(20, 3, 100);
+        ComboBox<String> graphOption = new ComboBox<>(FXCollections.observableArrayList("Random"));
+
+        // Figure out which buttons to display
         switch (algorithm.abbrivation) {
             case "GA":
                 switch (problem.abbrivation) {
                     case "OM":
+                        options.getChildren().addAll(
+                                UICreater.numericalField("Genesize", geneSizeOption),
+                                UICreater.dropdownMenu("Bias", biasOption));
                         break;
-                    case "SSS":
+                    case "SS":
+                        options.getChildren().addAll(
+                                UICreater.numericalField("Goal", goal),
+                                UICreater.textField("Numbers", numArray),
+                                UICreater.numericalField("Pop size", popSize),
+                                UICreater.dropdownMenu("Selection", selection),
+                                UICreater.dropdownMenu("Crossover", crossover),
+                                UICreater.dropdownMenu("Mutation", mutation));
                         break;
                 }
                 break;
             case "ACO":
-                Label percentLabel = new Label("Percent change: ");
-                NumberTextField percentOption = new NumberTextField(0.05, 0, 1);
-                Label generationLabel = new Label("Population per generation: ");
-                NumberTextField generationOption = new NumberTextField(1000, 1, 100000);
                 options.getChildren().addAll(
-                        new HBox(percentLabel, percentOption),
-                        new HBox(generationLabel, generationOption)
-                );
-
-                var useCircle = new Wrap<>(true);
-                Label genesizeLabel = new Label("Genesize: ");
-                NumberTextField geneSizeOption = new NumberTextField(50, 1, 100000);
-                Label randomGraphLabel = new Label("Random graph size: ");
-                NumberTextField randomGraphOption = new NumberTextField(20, 3, 100);
-                Label graphLabel = new Label("Graph: ");
-                ComboBox<String> graphOption = new ComboBox<>(FXCollections.observableArrayList("Random"));
+                        UICreater.numericalField("Percent change", percentOption),
+                        UICreater.numericalField("Pop per generation", popOption));
                 switch (problem.abbrivation) {
                     case "OM":
-                        options.getChildren().addAll(new HBox(genesizeLabel, geneSizeOption));
+                        options.getChildren().addAll(
+                                UICreater.numericalField("Genesize", geneSizeOption),
+                                UICreater.dropdownMenu("Bias", biasOption));
                         break;
                     case "TSPP":
                         useCircle.set(false);
                     case "TSPC":
-                        graphOption.getSelectionModel().selectFirst();
                         options.getChildren().addAll(
-                                new HBox(randomGraphLabel, randomGraphOption),
-                                new HBox(graphLabel, graphOption)
-                        );
+                                UICreater.numericalField("Random graph size", randomGraphOption),
+                                UICreater.dropdownMenu("Graph", graphOption));
                         break;
                 }
-
-                var best = new Wrap<>(-1L);
-                var island = new Wrap<Islands>(null);
-                var colony = new Wrap<Colony>(null);
-                var useParallel = new Wrap<>(false);
-
-                runButton.setOnAction(action -> {
-                    runButton.setDisable(true);
-                    abortButton.setDisable(false);
-                    island.set(null);
-                    colony.set(null);
-                    best.set(-1L);
-
-
-
-                    useParallel.set(optimizationOption.getValue().equalsIgnoreCase("Parallel"));
-                    int threads = 1;
-                    if(useParallel.get()) {
-                        if(optimizationThreadCount.getSelectionModel().getSelectedItem().equalsIgnoreCase("Auto"))
-                            threads = Runtime.getRuntime().availableProcessors();
-                        else
-                            threads = Integer.parseInt(optimizationThreadCount.getSelectionModel().getSelectedItem());
-                    }
-                    // Make graph
-                    double[][] points = new double[randomGraphOption.getNumberAsInt()][];
-                    Random random = new Random();
-                    for(int i = 0; i <points.length; i++)
-                        points[i] = new double[]{
-                            random.nextInt((int) content.getWidth()),
-                            random.nextInt((int) content.getHeight())};
-                    if(optimizationOption.getValue().equalsIgnoreCase("Islands")) {
-                        var counter = new Wrap<>(0);
-                        island.set(new Islands(
-                                islands -> {
-                                    counter.set(counter.get() + 1);
-                                    if(counter.get() > 100) {
-                                        counter.set(0);
-                                        Colony[] colonies = (Colony[]) islands;
-                                        int curr = 0;
-                                        for(int i = 1; i < islands.length; i++)
-                                            if(islands[i].getBestFitness() > islands[curr].getBestFitness())
-                                                curr = i;
-                                        for(int i = 0; i < islands.length; i++)
-                                            if(i != curr)
-                                                colonies[i].copyGraphProgression(colonies[curr]);
-                                    }
-                                },
-                                AbstractPopulation::evolve,
-                                IntStream.range(0, threads)
-                                        .mapToObj(i -> ColonyFactory.travelingSalesman(useCircle.get(), points, generationOption.getNumberAsInt(), percentOption.getNumberAsDouble(), 1))
-                                        .toArray(Colony[]::new)
-                        ));
-                        colony.set((Colony) island.get().getIsland(0));
-                    } else
-                        colony.set(ColonyFactory.travelingSalesman(useCircle.get(), points, generationOption.getNumberAsInt(), percentOption.getNumberAsDouble(), threads));
-                    drawGraph(colony.get().getGraph());
-
-                    Task task = new Task() {
-                        protected Object call() {
-                            try {
-                                (island.get() != null ? island : colony).get().evolveUntilNoProgressParallel(100, (c) -> {
-                                    if ((boolean) abortPressed.get()) {
-                                        abortPressed.set(false);
-                                        throw new InterruptedException("Aborted");
-                                    }
-                                    updateMessage(String.valueOf((best.set(Math.max(best.get(), c.getBestFitness())))));
-                                });
-                            } catch (InterruptedException ignored) {
-                            }
-                            runButton.setDisable(false);
-                            abortButton.setDisable(true);
-                            return null;
-                        }
-                    };
-
-
-                    task.messageProperty().addListener(((observable, oldValue, newValue) -> updateGraph(colony.get(), useCircle.get())));
-                    new Thread(task).start();
-                });
-
-
                 break;
         }
 
+        final int myVersion = (Integer) this.version.get();
+        runButton.setOnAction(action -> {
+            if(version.isSame(myVersion))
+                return;
+
+            final AbstractPopulation work;
+
+            // Thread options
+            final boolean useParallel = getSelected(optimizationOption).equalsIgnoreCase("Parallel");
+            final boolean useIslands = getSelected(optimizationOption).equalsIgnoreCase("Islands");
+            int choosenThreads = getSelected(optimizationThreadCount).equalsIgnoreCase("Auto")
+                    ? Runtime.getRuntime().availableProcessors()
+                    : Integer.parseInt(getSelected(optimizationThreadCount));
+            if(!(useIslands || useIslands)) choosenThreads = 1;
+
+            // Pop/Gene size options
+            final int pops = popOption.getNumberAsInt();
+            final int genes = geneSizeOption.getNumberAsInt();
+
+            // ACO options
+            final String graphType = getSelected(graphOption);
+            final int randomGraphSize = randomGraphOption.getNumberAsInt();
+            final double percentChanging = percentOption.getNumberAsDouble();
+
+            // GA SS options
+            final int goalChoice = goal.getNumberAsInt();
+            int[] numArrayChoice;
+            try {
+                numArrayChoice = Pattern.compile(" ").splitAsStream(numArray.getCharacters().toString()).mapToInt(Integer::parseInt).toArray();
+            } catch(Exception error){
+                numArrayChoice = null;
+            }
+            final String selectionChoice = getSelected(selection);
+            final String crossoverChoice = getSelected(crossover);
+            final String mutationChoice = getSelected(mutation);
+
+            AbstractPopulation initialPopulation = null;
+            switch (algorithm.abbrivation){
+                case "GA":
+                    switch(problem.abbrivation){
+                        case "OM":
+                            initialPopulation = PopulationFactory.oneMax(genes);
+                            break;
+                        case "SS":
+                            initialPopulation = new Population(
+                                pops, 100, true, true, choosenThreads,
+                                Mutation.get(mutationChoice),
+                                Fitness.subsetSum(goalChoice, numArrayChoice),
+                                Crossover.get(crossoverChoice),
+                                Selection.get(selectionChoice),
+                                PreCalcs.get(crossoverChoice, selectionChoice)
+                            );
+                            break;
+                    }
+                    break;
+                case "ACO":
+                    break;
+            }
+
+            if (useIslands) {
+                // TODO: handle islands
+            } else {
+                work = initialPopulation;
+            }
+
+            Task task = new Task() {
+                protected Object call() throws Exception {
+
+                    return null;
+                }
+            };
+
+            task.messageProperty().addListener(((observable, oldValue, newValue) ->{
+                // TODO: handle updating UI
+            }));
+            new Thread(task).start();
+        });
+
         options.getChildren().addAll(runButton, abortButton);
+    }
+
+    private String getSelected(ComboBox<String> box) {
+        return box.getSelectionModel().getSelectedItem();
     }
 
     private BorderPane makeSettingMenu() {
@@ -319,5 +339,11 @@ class Wrap<T> {
 
     T get() {
         return value;
+    }
+
+    boolean isSame(T value){
+        if(this.value == null)
+            return value == null;
+        return this.value.equals(value);
     }
 }

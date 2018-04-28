@@ -107,5 +107,11 @@ public class PreCalcs {
     public static PreCalcInterface none() {
         return (individuals, previousData) -> null;
     }
+
+    public static PreCalcInterface get(String crossoverChoice, String selectionChoice) {
+        if(selectionChoice.equalsIgnoreCase("stochastic"))
+            return minAndSum();
+        return none();
+    }
 }
 

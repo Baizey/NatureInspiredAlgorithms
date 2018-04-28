@@ -99,5 +99,14 @@ public class Mutation {
         };
     }
 
+    public static MutationInterface get(String mutationChoice) {
+        switch (mutationChoice){
+            case "flip one": return flipXGenes(1);
+            case "flip two": return flipXGenes(1);
+            case "flip three": return flipXGenes(1);
+            case "(1 + 1)": return flipRandomExact();
+            default: return none();
+        }
+    }
 }
 

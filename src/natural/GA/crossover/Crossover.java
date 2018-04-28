@@ -46,4 +46,13 @@ public class Crossover {
     public static CrossoverInterface none() {
         return (preCalc, male, female, baby) -> baby.getDna().copyFrom(male.getDna());
     }
+
+    public static CrossoverInterface get(String crossoverChoice) {
+        switch (crossoverChoice){
+            case "halfandhalf": return halfAndHalf();
+            case "halfandhalfrandom": return halfAndHalfRandom();
+            case "fitnessDeterminedHalfAndHalf": return fitnessDeterminedHalfAndHalf();
+            default: return none();
+        }
+    }
 }
