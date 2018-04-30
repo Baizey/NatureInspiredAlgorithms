@@ -28,7 +28,6 @@ public class Model {
     }
 
     public void clear() {
-
         allCells = new ArrayList<>();
         addedCells = new ArrayList<>();
         removedCells = new ArrayList<>();
@@ -37,8 +36,7 @@ public class Model {
         addedEdges = new ArrayList<>();
         removedEdges = new ArrayList<>();
 
-        cellMap = new HashMap<>(); // <id,cell>
-
+        cellMap = new HashMap<>(); // <id, cell>
     }
 
     public void clearAddedLists() {
@@ -95,15 +93,12 @@ public class Model {
 
     }
 
+    public void addEdge(Cell source, Cell target) {
+        addedEdges.add(new Edge(source, target));
+    }
+
     public void addEdge(String sourceId, String targetId) {
-
-        Cell sourceCell = cellMap.get(sourceId);
-        Cell targetCell = cellMap.get(targetId);
-
-        Edge edge = new Edge(sourceCell, targetCell);
-
-        addedEdges.add(edge);
-
+        addedEdges.add(new Edge(cellMap.get(sourceId), cellMap.get(targetId)));
     }
 
     /**
@@ -112,13 +107,9 @@ public class Model {
      * @param cellList
      */
     public void attachOrphansToGraphParent(List<Cell> cellList) {
-
-        for (Cell cell : cellList) {
-            if (cell.getCellParents().size() == 0) {
+        for (Cell cell : cellList)
+            if (cell.getCellParents().size() == 0)
                 graphParent.addCellChild(cell);
-            }
-        }
-
     }
 
     /**
@@ -127,10 +118,8 @@ public class Model {
      * @param cellList
      */
     public void disconnectFromGraphParent(List<Cell> cellList) {
-
-        for (Cell cell : cellList) {
+        for (Cell cell : cellList)
             graphParent.removeCellChild(cell);
-        }
     }
 
     public void merge() {

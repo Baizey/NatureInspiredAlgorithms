@@ -131,6 +131,17 @@ public class Dna {
         return (a & mask) | (b & ~mask);
     }
 
+    public boolean[] toArray(){
+        boolean[] arr = new boolean[length * ADDRESS_BITS_PER_WORD];
+        for(int i = 0; i < length; i++){
+            int start = i * ADDRESS_BITS_PER_WORD;
+            long bit = 1L;
+            for(int j = 0; j < ADDRESS_BITS_PER_WORD; j++, bit <<= 1)
+                arr[start + j] = (bit & words[i]) != 0;
+        }
+        return arr;
+    }
+
     @Override
     public String toString(){
         StringBuilder sb = new StringBuilder();

@@ -1,4 +1,7 @@
-package natural;
+package natural.islands;
+
+import natural.AbstractIndividual;
+import natural.AbstractPopulation;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;

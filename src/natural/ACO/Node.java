@@ -14,8 +14,12 @@ public class Node {
     private Node[] edges;
     private double[] costs, chances;
     private String[] names;
+    private final int id;
     public final String name;
 
+    public static void resetId(){
+        nextId = 0;
+    }
 
     public Node(int edges) {
         this(edges, Integer.toString(nextId));
@@ -36,7 +40,17 @@ public class Node {
         this.costs = new double[edges];
         this.names = new String[edges];
         this.name = name;
-        nextId++;
+        id = nextId++;
+    }
+
+    public Node(Node node) {
+        this.lastUsage = new int[node.lastUsage.length];
+        this.edges = new Node[node.edges.length];
+        this.chances = Arrays.copyOf(node.chances, node.chances.length);
+        this.costs = Arrays.copyOf(node.costs, node.costs.length);
+        this.names = Arrays.copyOf(node.names, node.names.length);
+        this.name = node.name;
+        id = nextId++;
     }
 
     public void addEdge(Node edge, double cost) {
@@ -133,5 +147,9 @@ public class Node {
 
     public double[] getCosts() {
         return costs;
+    }
+
+    public int getId() {
+        return id;
     }
 }

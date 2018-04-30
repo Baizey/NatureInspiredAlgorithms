@@ -29,7 +29,7 @@ public class Colony extends AbstractPopulation {
         bestFromGeneration = new Ant(8);
         curr = new Ant(8);
         this.graph = graph;
-        this.start = graph[0];
+        this.start = this.graph[0];
     }
 
     public Colony(int maxThreads, int generationSize, double weightAltering, Node[] graph, VisitationInterface visitation, FitnessInterface fitness) {
@@ -42,6 +42,32 @@ public class Colony extends AbstractPopulation {
         bestFromGeneration = new Ant(8);
         curr = new Ant(8);
         this.graph = graph;
+        this.start = this.graph[0];
+    }
+
+    public Colony(Colony other) {
+        super(other.maxThreads, other.generationSize);
+        this.weightAltering = other.weightAltering;
+        this.visitation = other.visitation;
+        this.fitness = other.fitness;
+        this.generationSize = other.generationSize;
+        best = new Ant(8);
+        bestFromGeneration = new Ant(8);
+        curr = new Ant(8);
+
+        graph = new Node[other.graph.length];
+        Node[] oldGraph = other.graph;
+
+        for(int i = 0; i < graph.length; i++)
+            graph[i] = new Node(oldGraph[i]);
+
+        for(int j = 0; j < graph.length; j++){
+            Node[] oldE = oldGraph[j].getEdges();
+            Node[] newE = graph[j].getEdges();
+            for(int k = 0; k < newE.length; k++)
+                newE[k] = graph[oldE[k].getId()];
+        }
+
         this.start = graph[0];
     }
 

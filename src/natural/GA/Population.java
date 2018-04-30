@@ -1,6 +1,5 @@
 package natural.GA;
 
-import lsm.helpers.IO.write.text.console.Note;
 import natural.AbstractPopulation;
 import natural.GA.crossover.CrossoverInterface;
 import natural.GA.fitness.FitnessInterface;
@@ -181,8 +180,6 @@ public class Population extends AbstractPopulation {
         currGen = nextGen;
         nextGen = temp;
         findBestFitness();
-        Note.writenl(getBest());
-        Note.writenl(getBestFitness());
     }
 
 

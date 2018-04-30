@@ -5,6 +5,7 @@ import lsm.helpers.Time;
 import natural.GA.Population;
 import natural.GA.fitness.FitnessInterface;
 import natural.factory.PopulationFactory;
+import natural.islands.Islands;
 
 public class Driver {
     @SuppressWarnings("RedundantThrows")

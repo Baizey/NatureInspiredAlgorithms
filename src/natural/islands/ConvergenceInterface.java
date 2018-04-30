@@ -1,4 +1,6 @@
-package natural;
+package natural.islands;
+
+import natural.AbstractPopulation;
 
 public interface ConvergenceInterface {
 

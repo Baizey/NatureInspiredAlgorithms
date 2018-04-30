@@ -1,7 +1,6 @@
 package gui.graph.layout;
 
 import gui.graph.Graph;
-import gui.graph.cell.Cell;
 
 public class DefinedLayout extends Layout {
     private final Graph graph;
@@ -10,9 +9,12 @@ public class DefinedLayout extends Layout {
         this.graph = graph;
     }
 
-    @Override
+    private int inserted = 0;
     public void execute() {
-        for(Cell cell : graph.getModel().getAllCells())
+
+        for(; inserted < graph.getModel().getAllCells().size(); inserted++) {
+            var cell = graph.getModel().getAllCells().get(inserted);
             cell.relocate(cell.x - cell.size / 2, cell.y - cell.size / 2);
+        }
     }
 }
