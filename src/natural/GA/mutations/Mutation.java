@@ -100,7 +100,7 @@ public class Mutation {
     }
 
     public static MutationInterface get(String mutationChoice) {
-        switch (mutationChoice){
+        switch (mutationChoice.toLowerCase()){
             case "flip one": return flipXGenes(1);
             case "flip two": return flipXGenes(1);
             case "flip three": return flipXGenes(1);

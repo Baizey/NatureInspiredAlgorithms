@@ -11,7 +11,6 @@ import gui.graph.layout.Layout;
 import javafx.application.Application;
 import javafx.beans.property.DoubleProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
@@ -23,6 +22,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import lsm.helpers.IO.write.text.console.Note;
 import natural.ACO.Colony;
 import natural.ACO.Node;
 import natural.AbstractPopulation;
@@ -39,8 +39,6 @@ import natural.islands.Convergence;
 import natural.islands.ConvergenceInterface;
 import natural.islands.Islands;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
@@ -49,26 +47,19 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class App extends Application {
+    public static final Problem
+            OneMax = new Problem("OneMax"),
+            TSPCircle = new Problem("Traveling Salesman Problem Circle"),
+            TSPPath = new Problem("Traveling Salesman Problem Path"),
+            LeadingOnes = new Problem("Leading Ones"),
+            SubsetSum = new Problem("Subset Sum");
+    public static final Algorithm
+            GeneticAlgorithm = new Algorithm("Genetic Algorithm", OneMax, SubsetSum),
+            AntColonyOptimization = new Algorithm("Ant Colony Optimization", OneMax, TSPCircle, TSPPath);
+    private static final Algorithm[] algorithms = {GeneticAlgorithm, AntColonyOptimization};
 
-    ObservableList<ForceUpdater> items = FXCollections.observableArrayList(ForceUpdater.extractor());
-    ForceUpdater updater = new ForceUpdater();
-
-    private AbstractPopulation population;
-    private double[][] TSP;
     private BorderPane content;
     private VBox options;
-
-    private static final Algorithm[] algorithms = {
-            new Algorithm(
-                    "Genetic Algorithm",
-                    new Problem("OneMax"),
-                    new Problem("Subset Sum")),
-            new Algorithm(
-                    "Ant Colony Optimization",
-                    new Problem("OneMax"),
-                    new Problem("Traveling Salesman Problem Circle"),
-                    new Problem("Traveling Salesman Problem Path")),
-    };
 
     @Override
     public void start(Stage primaryStage) {
@@ -151,9 +142,10 @@ public class App extends Application {
         // Genetic algorithm buttons
         NumberTextField goal = new NumberTextField(50, 1, 1000);
         NumberTextField popSize = new NumberTextField(50, 1, 1000);
-        ComboBox<String> selection = new ComboBox<>(FXCollections.observableArrayList("Random"));
-        ComboBox<String> crossover = new ComboBox<>(FXCollections.observableArrayList("Random"));
-        ComboBox<String> mutation = new ComboBox<>(FXCollections.observableArrayList("Random"));
+        ComboBox<String> selection = new ComboBox<>(FXCollections.observableArrayList("Best", "Stochastic", "Random"));
+        ComboBox<String> crossover = new ComboBox<>(FXCollections.observableArrayList("copy best", "half and half", "half and half random", "fitness determined half and half"));
+        ComboBox<String> mutation = new ComboBox<>(FXCollections.observableArrayList("none", "flip one", "flip two", "flip three", "(1 + 1)"));
+        ComboBox<String> oneMaxType = new ComboBox<>(FXCollections.observableArrayList(OneMax.name, LeadingOnes.name));
         TextField numArray = new TextField();
 
         // Ant colony optimization buttons
@@ -168,6 +160,7 @@ public class App extends Application {
                 switch (problem.abbrivation) {
                     case "OM":
                         options.getChildren().addAll(
+                                UICreater.dropdownMenu("Fitness type", oneMaxType),
                                 UICreater.numericalField("Genesize", geneSizeOption),
                                 UICreater.dropdownMenu("Bias", biasOption));
                         break;
@@ -245,7 +238,10 @@ public class App extends Application {
                 case "GA":
                     switch (problem.abbrivation) {
                         case "OM":
-                            initialPopulation.value = PopulationFactory.oneMax(genes);
+                            if (oneMaxType.getSelectionModel().getSelectedItem().equalsIgnoreCase(OneMax.name))
+                                initialPopulation.value = PopulationFactory.oneMax(genes, getSelected(biasOption).equalsIgnoreCase("random"));
+                            else
+                                initialPopulation.value = PopulationFactory.leadingOnes(genes, getSelected(biasOption).equalsIgnoreCase("random"));
                             break;
                         case "SS":
                             initialPopulation.value = new Population(
@@ -269,7 +265,7 @@ public class App extends Application {
                         case "TSPC":
                             double[][] points = new double[randomGraphSize][];
                             Random random = new Random();
-                            for(int i = 0; i < points.length; i++)
+                            for (int i = 0; i < points.length; i++)
                                 points[i] = new double[]{random.nextInt((int) content.getWidth()), random.nextInt((int) content.getHeight())};
                             initialPopulation.value = ColonyFactory.travelingSalesman(useCircle.value, points, pops, percentChanging, choosenThreads);
                             break;
@@ -280,23 +276,23 @@ public class App extends Application {
             if (useIslands) {
                 AbstractPopulation[] newIslands = new AbstractPopulation[choosenThreads];
                 newIslands[0] = initialPopulation.value;
-                for(int i = 1; i < newIslands.length; i++) {
-                    newIslands[i] = algorithm.abbrivation.equalsIgnoreCase("GA")
-                            ? new Population((Population)initialPopulation.value)
-                            : new Colony((Colony)initialPopulation.value);
-                    if(algorithm.abbrivation.equalsIgnoreCase("ACO")) {
+                for (int i = 1; i < newIslands.length; i++) {
+                    newIslands[i] = algorithm.abbrivation.equalsIgnoreCase(GeneticAlgorithm.abbrivation)
+                            ? new Population((Population) initialPopulation.value)
+                            : new Colony((Colony) initialPopulation.value);
+                    if (algorithm.abbrivation.equalsIgnoreCase(AntColonyOptimization.abbrivation)) {
                         Node[] oldG = ((Colony) newIslands[0]).getGraph();
                         Node[] newG = ((Colony) newIslands[i]).getGraph();
-                        for(int j = 0; j < newG.length; j++){
+                        for (int j = 0; j < newG.length; j++) {
                             Node[] oldE = oldG[j].getEdges();
                             Node[] newE = newG[j].getEdges();
-                            for(int k = 0; k < newE.length; k++)
+                            for (int k = 0; k < newE.length; k++)
                                 newE[k] = newG[oldE[k].getId()];
                         }
                     }
                 }
 
-                ConvergenceInterface convergence = algorithm.abbrivation.equalsIgnoreCase("GA")
+                ConvergenceInterface convergence = algorithm.abbrivation.equalsIgnoreCase(GeneticAlgorithm.abbrivation)
                         ? Convergence.keepBestAfterPopulationX(100)
                         : Convergence.keepBestAfterColonyX(100);
                 work = new Islands(convergence, AbstractPopulation::evolve, newIslands);
@@ -310,12 +306,15 @@ public class App extends Application {
                         if (!version.isSame(myVersion))
                             throw new InterruptedException("Halting");
                         if (pop.getBestFitness() > best.value) {
+
+                            Note.writenl(pop.getBest().getDna());
+
                             best.set(pop.getBestFitness());
                             updateMessage(best.toString());
-                            Thread.sleep(1);
+                            Thread.sleep(0);
                         }
                     };
-                    switch(problem.abbrivation){
+                    switch (problem.abbrivation) {
                         case "OM":
                             if (useIslands)
                                 work.evolveUntilGoal(genes, action);
@@ -354,20 +353,20 @@ public class App extends Application {
                                 break;
                             case "TSPP":
                             case "TSPC":
-                                updateTSPGraph((Colony)initialPopulation.value, useCircle.value);
+                                updateTSPGraph((Colony) initialPopulation.value, useCircle.value);
                                 break;
                         }
                         break;
                 }
             }));
             drawTSPGraph(new Node[0]);
-            switch(problem.abbrivation) {
+            switch (problem.abbrivation) {
                 case "OM":
                     drawOMEdges();
                     break;
                 case "TSPP":
                 case "TSPC":
-                    drawTSPGraph(((Colony)initialPopulation.value).getGraph());
+                    drawTSPGraph(((Colony) initialPopulation.value).getGraph());
                     break;
             }
             new Thread(task).start();
@@ -398,9 +397,9 @@ public class App extends Application {
         Model model = graph.getModel();
         graph.beginUpdate();
 
-        for (int i = 0; i < nodes.length; i++) {
-            double[] pos = Pattern.compile(" *, *").splitAsStream(nodes[i].name).mapToDouble(Double::parseDouble).toArray();
-            model.addCell(new CircleCell(nodes[i].name, pos[0], pos[1]));
+        for (Node node : nodes) {
+            double[] pos = Pattern.compile(" *, *").splitAsStream(node.name).mapToDouble(Double::parseDouble).toArray();
+            model.addCell(new CircleCell(node.name, pos[0], pos[1]));
         }
 
         graph.endUpdate();
@@ -471,7 +470,7 @@ public class App extends Application {
         double progress = (double) ones / (double) totalGenes;
         double x = (content.getWidth()) * progress;
         double y = content.getHeight() / 2D;
-        y -= (y * (1D - Math.abs(0.5D - progress) * 2D) * ((heightProgress - 0.5D) * 2D));
+        y -= (y * (1D - Math.abs(1D - progress * 2D)) * ((heightProgress * 2D - 1D)));
         graph.beginUpdate();
         model.addCell(new CircleCell("", x, y));
         graph.endUpdate();
@@ -480,33 +479,17 @@ public class App extends Application {
     }
 
     private static double getPos(boolean[] dna) {
-        int m = 0;
-        for (var b : dna) if (b) m++;
-        int n = dna.length;
-        BigDecimal zeroes = BigDecimal.ZERO,
-                ones = BigDecimal.ZERO,
-                perms = BigDecimal.ONE,
-                factor = BigDecimal.ONE;
-        BigDecimal result = BigDecimal.ONE;
-        for (int i = n - 1; i >= 0; i--) {
-            if (!dna[i]) {
-                zeroes = zeroes.add(BigDecimal.ONE);
-                perms = perms.multiply(zeroes);
-                factor = factor.multiply(BigDecimal.valueOf(n - i));
-                continue;
+        double  max = 0, min = 0,
+                count = 0;
+        int maxValue = dna.length, minValue = 1;
+        for (int i = 0; i < dna.length; i++) {
+            if (dna[i]) {
+                count += i + 1;
+                min += minValue++;
+                max += maxValue--;
             }
-            ones = ones.add(BigDecimal.ONE);
-            perms = perms.multiply(ones);
-            result = result.add(zeroes.multiply(factor).divide(perms, RoundingMode.HALF_UP));
-            factor = factor.multiply(BigDecimal.valueOf(n - i));
         }
-
-        BigDecimal total = BigDecimal.ONE;
-        for (int i = n; i > n - m; i--)
-            total = total.multiply(BigDecimal.valueOf(i));
-        for (int i = 2; i <= m; i++)
-            total = total.divide(BigDecimal.valueOf(i), 10, RoundingMode.HALF_UP);
-        return result.divide(total, 10, RoundingMode.HALF_UP).doubleValue();
+        return (count - min) / (max - min);
     }
 
     public static void main(String[] args) {

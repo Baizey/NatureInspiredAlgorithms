@@ -30,7 +30,7 @@ public class Selection {
     }
 
     public static SelectionInterface get(String selectionChoice) {
-        switch(selectionChoice) {
+        switch(selectionChoice.toLowerCase()) {
             case "stochastic": return stochasticUniversalSampling();
             case "random": return random();
             default: return best();

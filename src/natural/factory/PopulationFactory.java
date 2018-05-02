@@ -10,26 +10,33 @@ import natural.GA.select.Selection;
 
 public class PopulationFactory {
 
+
+    public static Population leadingOnes(int geneSize) {
+        return leadingOnes(geneSize, false);
+    }
+    public static Population leadingOnes(int geneSize, boolean randomBias) {
+        return new Population(
+                2, geneSize, true, randomBias,
+                Mutation.flipRandomExact(),
+                Fitness.leadingOnes(),
+                Crossover.none(),
+                Selection.best(),
+                PreCalcs.exactPrePreCalculatedSkipChance()
+        );
+    }
+
     public static Population oneMax(int geneSize) {
-        if (geneSize >= 1000) {
-            return new Population(
-                    2, geneSize, true, false,
-                    Mutation.flipRandomExact(),
-                    Fitness.oneMax(),
-                    Crossover.none(),
-                    Selection.best(),
-                    PreCalcs.exactPrePreCalculatedSkipChance()
-            );
-        } else {
-            return new Population(
-                    2, geneSize, true, false,
-                    Mutation.flipRandomCheap(1D / geneSize),
-                    Fitness.oneMax(),
-                    Crossover.none(),
-                    Selection.best(),
-                    PreCalcs.cheapSkipChance(1D / geneSize)
-            );
-        }
+        return oneMax(geneSize, false);
+    }
+    public static Population oneMax(int geneSize, boolean randomBias) {
+        return new Population(
+                2, geneSize, true, randomBias,
+                Mutation.flipRandomExact(),
+                Fitness.oneMax(),
+                Crossover.none(),
+                Selection.best(),
+                PreCalcs.exactPrePreCalculatedSkipChance()
+        );
     }
 
     public static Population normalPopulation(int geneSize, FitnessInterface fitnessFunction) {

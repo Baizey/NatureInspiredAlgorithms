@@ -142,6 +142,29 @@ public class Dna {
         return arr;
     }
 
+    private static long[] maskes = new long[63];
+    static {
+        long mask = 1L;
+        for(int i = 0; i < maskes.length; i++, mask = (mask << 1) + 1)
+            maskes[i] = mask;
+    }
+
+    public int leadingOnes(){
+        int trailing = 0;
+        for(var word : words)
+            if(word == -1L)
+                trailing += 64;
+            else if(word == 0L)
+                return trailing;
+            else {
+                for(int j = 0; j < maskes.length; j++)
+                    if((word & maskes[j]) != maskes[j])
+                        return trailing + j;
+                return trailing + 63;
+            }
+        return trailing;
+    }
+
     @Override
     public String toString(){
         StringBuilder sb = new StringBuilder();

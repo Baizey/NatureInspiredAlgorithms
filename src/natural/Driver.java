@@ -11,6 +11,8 @@ public class Driver {
     @SuppressWarnings("RedundantThrows")
     public static void main (String[] args) throws Exception {
 
+
+        if(true) return;
         Islands islands = new Islands(
                 abstractPops -> {
                     Population[] pops = (Population[]) abstractPops;
@@ -22,7 +24,7 @@ public class Driver {
                         if(i != best) pops[i].copyPopulationDnaFrom(pops[best]);
                 },
                 island -> { try { island.evolve(10); } catch (InterruptedException ignored) { } },
-                PopulationFactory.oneMax(100),
+                PopulationFactory.oneMax(100, false),
                 PopulationFactory.oneMax(100),
                 PopulationFactory.oneMax(100),
                 PopulationFactory.oneMax(100),

@@ -48,10 +48,10 @@ public class Crossover {
     }
 
     public static CrossoverInterface get(String crossoverChoice) {
-        switch (crossoverChoice){
-            case "halfandhalf": return halfAndHalf();
-            case "halfandhalfrandom": return halfAndHalfRandom();
-            case "fitnessDeterminedHalfAndHalf": return fitnessDeterminedHalfAndHalf();
+        switch (crossoverChoice.toLowerCase()){
+            case "half and half": return halfAndHalf();
+            case "half and half random": return halfAndHalfRandom();
+            case "fitness determined half and half": return fitnessDeterminedHalfAndHalf();
             default: return none();
         }
     }

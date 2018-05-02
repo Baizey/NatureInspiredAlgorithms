@@ -6,6 +6,10 @@ public class Fitness {
         return (individual) -> individual.setFitness(individual.getDna().cardinality());
     }
 
+    public static FitnessInterface leadingOnes(){
+        return (individual -> individual.setFitness(individual.getDna().leadingOnes()));
+    }
+
     public static FitnessInterface zeroMax(){
         return (individual) -> individual.setFitness(individual.getLength() - individual.getDna().cardinality());
     }

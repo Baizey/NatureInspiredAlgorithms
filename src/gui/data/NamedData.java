@@ -14,4 +14,8 @@ public abstract class NamedData {
                 sb.append(c);
         this.abbrivation = sb.toString();
     }
+
+    public String toString(){
+        return abbrivation;
+    }
 }
