@@ -1,9 +1,9 @@
-package natural.ACO.fitness;
+package natural.interfaces;
 
 import natural.ACO.Ant;
 import natural.ACO.Node;
 
-public interface FitnessInterface {
+public interface AntColonyFitness {
 
     void calc(Ant ant, Node start);
 

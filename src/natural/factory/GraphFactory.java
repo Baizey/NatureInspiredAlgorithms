@@ -1,8 +1,8 @@
 package natural.factory;
 
 import natural.ACO.Node;
+import natural.interfaces.Bias;
 
-import java.util.Arrays;
 import java.util.stream.IntStream;
 
 public class GraphFactory {
@@ -34,7 +34,7 @@ public class GraphFactory {
         return nodes;
     }
 
-    public static Node[] travelingSalesMan(int maxThreads, double[][] points, boolean addDistanceBias) {
+    public static Node[] travelingSalesMan(int maxThreads, double[][] points, Bias bias) {
         var nodes = new Node[points.length];
         for(int i = 0; i < nodes.length; i++)
             nodes[i] = new Node(points.length - 1, points[i][0] + ", " + points[i][1], maxThreads);
@@ -51,16 +51,9 @@ public class GraphFactory {
             }
         }
 
-        if (addDistanceBias) {
-            for (Node node : nodes) {
-                double sum = Arrays.stream(node.getCosts()).sum();
-                double[] chances = new double[node.getCosts().length];
-                for(int i = 0; i < node.getCosts().length; i++)
-                    chances[i] = (sum - node.getCost(i));
-                node.initChances(chances);
-            }
-        } else for (Node node : nodes)
-            node.initChances();
+        for(Node node : nodes)
+            bias.createBias(node);
+
         return nodes;
     }
 

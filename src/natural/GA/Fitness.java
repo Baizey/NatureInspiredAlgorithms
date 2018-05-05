@@ -1,20 +1,22 @@
-package natural.GA.fitness;
+package natural.GA;
+
+import natural.interfaces.GeneticAlgorithmFitness;
 
 public class Fitness {
 
-    public static FitnessInterface oneMax(){
+    public static GeneticAlgorithmFitness oneMax(){
         return (individual) -> individual.setFitness(individual.getDna().cardinality());
     }
 
-    public static FitnessInterface leadingOnes(){
+    public static GeneticAlgorithmFitness leadingOnes(){
         return (individual -> individual.setFitness(individual.getDna().leadingOnes()));
     }
 
-    public static FitnessInterface zeroMax(){
+    public static GeneticAlgorithmFitness zeroMax(){
         return (individual) -> individual.setFitness(individual.getLength() - individual.getDna().cardinality());
     }
 
-    public static FitnessInterface subsetSum(int goal, int... nums) {
+    public static GeneticAlgorithmFitness subsetSum(int goal, int... nums) {
         return individual -> {
             int sum = 0;
             for(int i = 0; i < nums.length; i++)

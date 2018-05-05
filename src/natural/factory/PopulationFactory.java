@@ -1,12 +1,12 @@
 package natural.factory;
 
 import natural.GA.Population;
-import natural.GA.crossover.Crossover;
-import natural.GA.fitness.Fitness;
-import natural.GA.fitness.FitnessInterface;
-import natural.GA.mutations.Mutation;
-import natural.GA.preCalc.PreCalcs;
-import natural.GA.select.Selection;
+import natural.GA.Crossover;
+import natural.GA.Fitness;
+import natural.interfaces.GeneticAlgorithmFitness;
+import natural.GA.Mutation;
+import natural.GA.PreCalcs;
+import natural.GA.Selection;
 
 public class PopulationFactory {
 
@@ -39,7 +39,7 @@ public class PopulationFactory {
         );
     }
 
-    public static Population normalPopulation(int geneSize, FitnessInterface fitnessFunction) {
+    public static Population normalPopulation(int geneSize, GeneticAlgorithmFitness fitnessFunction) {
         return new Population(
                 100, geneSize, true, true,
                 Mutation.flipOne(0.05D),

@@ -1,6 +1,4 @@
-package natural.GA.crossover;
-
-import natural.GA.Individual;
+package natural.GA;
 
 import java.util.Random;
 
@@ -8,7 +6,7 @@ import java.util.Random;
 public class Crossover {
     private static final Random random = new Random();
 
-    public static CrossoverInterface halfAndHalf() {
+    public static natural.interfaces.Crossover halfAndHalf() {
         return (preCalc, male, female, baby) -> {
             int geneSize = baby.getLength();
             int split = geneSize / 2;
@@ -17,7 +15,7 @@ public class Crossover {
         };
     }
 
-    public static CrossoverInterface halfAndHalfRandom() {
+    public static natural.interfaces.Crossover halfAndHalfRandom() {
         return (preCalc, male, female, baby) -> {
             if (random.nextDouble() >= 0.5) {
                 Individual temp = male;
@@ -31,7 +29,7 @@ public class Crossover {
         };
     }
 
-    public static CrossoverInterface fitnessDeterminedHalfAndHalf() {
+    public static natural.interfaces.Crossover fitnessDeterminedHalfAndHalf() {
         return (preCalc, male, female, baby) -> {
             double maleFitness = male.getFitness(),
                     femaleFitness = female.getFitness(),
@@ -43,11 +41,11 @@ public class Crossover {
         };
     }
 
-    public static CrossoverInterface none() {
+    public static natural.interfaces.Crossover none() {
         return (preCalc, male, female, baby) -> baby.getDna().copyFrom(male.getDna());
     }
 
-    public static CrossoverInterface get(String crossoverChoice) {
+    public static natural.interfaces.Crossover get(String crossoverChoice) {
         switch (crossoverChoice.toLowerCase()){
             case "half and half": return halfAndHalf();
             case "half and half random": return halfAndHalfRandom();

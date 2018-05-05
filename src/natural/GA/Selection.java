@@ -1,6 +1,4 @@
-package natural.GA.select;
-
-import natural.GA.Individual;
+package natural.GA;
 
 import java.util.Random;
 
@@ -8,11 +6,11 @@ public class Selection {
 
     private static final Random random = new Random();
 
-    public static SelectionInterface random(){
+    public static natural.interfaces.Selection random(){
         return (preCalc, individuals) -> individuals[(int) (Math.random() * individuals.length)];
     }
 
-    public static SelectionInterface stochasticUniversalSampling(){
+    public static natural.interfaces.Selection stochasticUniversalSampling(){
         return (preCalc, individuals) -> {
             long min = Math.abs(preCalc.longs[0]);
             long sum = preCalc.longs[1] + 1;
@@ -25,11 +23,11 @@ public class Selection {
         };
     }
 
-    public static SelectionInterface best() {
+    public static natural.interfaces.Selection best() {
         return (preCalc, individuals) -> individuals[0];
     }
 
-    public static SelectionInterface get(String selectionChoice) {
+    public static natural.interfaces.Selection get(String selectionChoice) {
         switch(selectionChoice.toLowerCase()) {
             case "stochastic": return stochasticUniversalSampling();
             case "random": return random();

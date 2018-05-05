@@ -1,7 +1,4 @@
-package natural.GA.mutations;
-
-import natural.GA.Dna;
-import natural.GA.preCalc.PreCalcData;
+package natural.GA;
 
 import java.util.Random;
 
@@ -9,11 +6,11 @@ import java.util.Random;
 public class Mutation {
     private static final Random random = new Random();
 
-    public static MutationInterface alwaysFlipOne() {
+    public static natural.interfaces.Mutation alwaysFlipOne() {
         return (preCalc, individual) -> individual.getDna().flip(random.nextInt(individual.getLength()));
     }
 
-    public static MutationInterface flipOne(double mutationRate) {
+    public static natural.interfaces.Mutation flipOne(double mutationRate) {
         return (preCalc, individual) -> {
             if (random.nextDouble() < mutationRate) {
                 int i = random.nextInt(individual.getLength());
@@ -22,7 +19,7 @@ public class Mutation {
         };
     }
 
-    public static MutationInterface flipXGenes(int count) {
+    public static natural.interfaces.Mutation flipXGenes(int count) {
         return (preCalc, individual) -> {
             int genes = individual.getLength();
             Dna dna = individual.getDna();
@@ -43,7 +40,7 @@ public class Mutation {
      *
      * @return individual mutated
      */
-    public static MutationInterface flipRandomExact() {
+    public static natural.interfaces.Mutation flipRandomExact() {
         return (preCalc, individual) -> {
             double[] chances = preCalc.doubles;
             double r = random.nextDouble() - chances[0];
@@ -65,7 +62,7 @@ public class Mutation {
         }
     }
 
-    public static MutationInterface flipRandomCheap(double mutationRate) {
+    public static natural.interfaces.Mutation flipRandomCheap(double mutationRate) {
         return (preCalc, individual) -> {
             int genes = individual.getLength();
             Dna dna = individual.getDna();
@@ -94,12 +91,12 @@ public class Mutation {
         return true;
     }
 
-    public static MutationInterface none() {
+    public static natural.interfaces.Mutation none() {
         return (preCalc, individual) -> {
         };
     }
 
-    public static MutationInterface get(String mutationChoice) {
+    public static natural.interfaces.Mutation get(String mutationChoice) {
         switch (mutationChoice.toLowerCase()){
             case "flip one": return flipXGenes(1);
             case "flip two": return flipXGenes(1);

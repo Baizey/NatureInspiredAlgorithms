@@ -1,7 +1,8 @@
-package natural.GA.preCalc;
+package natural.GA;
 
 import lsm.helpers.IO.write.text.console.Note;
 import natural.AbstractIndividual;
+import natural.interfaces.PreCalc;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -10,7 +11,7 @@ import java.util.Arrays;
 
 public class PreCalcs {
 
-    public static PreCalcInterface minAndSum() {
+    public static PreCalc minAndSum() {
         return (individuals, previousData) -> {
             if (previousData == null) previousData = new PreCalcData(2, 0);
             previousData.longs[0] = Arrays.stream(individuals).mapToLong(AbstractIndividual::getFitness).min().orElse(0);
@@ -20,7 +21,7 @@ public class PreCalcs {
         };
     }
 
-    public static PreCalcInterface cheapSkipChance(double mutationRate) {
+    public static PreCalc cheapSkipChance(double mutationRate) {
         return (individuals, previousData) -> {
             if (previousData != null) return previousData;
             PreCalcData result = new PreCalcData(30, 30);
@@ -41,7 +42,7 @@ public class PreCalcs {
      * @param precision percent precision (0 <= x < 1)
      * @return
      */
-    public static PreCalcInterface exactSkipChance(double precision) {
+    public static PreCalc exactSkipChance(double precision) {
         return (individuals, previousData) -> {
             if (previousData != null) return previousData;
             BigDecimal r = BigDecimal.valueOf(precision);
@@ -85,7 +86,7 @@ public class PreCalcs {
      * This approximates to 1/(e * k!) where k is genes flipped
      * @return
      */
-    public static PreCalcInterface exactPrePreCalculatedSkipChance() {
+    public static PreCalc exactPrePreCalculatedSkipChance() {
         return (individuals, previousData) -> {
             if (previousData != null) return previousData;
             return new PreCalcData(null, new double[]{
@@ -104,11 +105,11 @@ public class PreCalcs {
         };
     }
 
-    public static PreCalcInterface none() {
+    public static PreCalc none() {
         return (individuals, previousData) -> null;
     }
 
-    public static PreCalcInterface get(String crossoverChoice, String selectionChoice) {
+    public static PreCalc get(String crossoverChoice, String selectionChoice) {
         if(selectionChoice.equalsIgnoreCase("stochastic"))
             return minAndSum();
         return none();

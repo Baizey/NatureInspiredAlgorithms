@@ -22,21 +22,14 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import lsm.helpers.IO.write.text.console.Note;
 import natural.ACO.Colony;
 import natural.ACO.Node;
 import natural.AbstractPopulation;
-import natural.Action;
-import natural.GA.Population;
-import natural.GA.crossover.Crossover;
-import natural.GA.fitness.Fitness;
-import natural.GA.mutations.Mutation;
-import natural.GA.preCalc.PreCalcs;
-import natural.GA.select.Selection;
+import natural.GA.*;
 import natural.factory.ColonyFactory;
+import natural.factory.IslandFactory;
 import natural.factory.PopulationFactory;
-import natural.islands.Convergence;
-import natural.islands.ConvergenceInterface;
+import natural.interfaces.Action;
 import natural.islands.Islands;
 
 import java.util.ArrayList;
@@ -245,7 +238,7 @@ public class App extends Application {
                             break;
                         case "SS":
                             initialPopulation.value = new Population(
-                                    pops, 100, true, true, choosenThreads,
+                                    pops, 100, true, true, useParallel ? choosenThreads : 1,
                                     Mutation.get(mutationChoice),
                                     Fitness.subsetSum(goalChoice, numArrayChoice),
                                     Crossover.get(crossoverChoice),
@@ -274,42 +267,22 @@ public class App extends Application {
             }
 
             if (useIslands) {
-                AbstractPopulation[] newIslands = new AbstractPopulation[choosenThreads];
-                newIslands[0] = initialPopulation.value;
-                for (int i = 1; i < newIslands.length; i++) {
-                    newIslands[i] = algorithm.abbrivation.equalsIgnoreCase(GeneticAlgorithm.abbrivation)
-                            ? new Population((Population) initialPopulation.value)
-                            : new Colony((Colony) initialPopulation.value);
-                    if (algorithm.abbrivation.equalsIgnoreCase(AntColonyOptimization.abbrivation)) {
-                        Node[] oldG = ((Colony) newIslands[0]).getGraph();
-                        Node[] newG = ((Colony) newIslands[i]).getGraph();
-                        for (int j = 0; j < newG.length; j++) {
-                            Node[] oldE = oldG[j].getEdges();
-                            Node[] newE = newG[j].getEdges();
-                            for (int k = 0; k < newE.length; k++)
-                                newE[k] = newG[oldE[k].getId()];
-                        }
-                    }
-                }
-
-                ConvergenceInterface convergence = algorithm.abbrivation.equalsIgnoreCase(GeneticAlgorithm.abbrivation)
-                        ? Convergence.keepBestAfterPopulationX(100)
-                        : Convergence.keepBestAfterColonyX(100);
-                work = new Islands(convergence, AbstractPopulation::evolve, newIslands);
+                if(algorithm.abbrivation.equalsIgnoreCase("GA"))
+                    work = IslandFactory.islandsOfPopulations((Population) initialPopulation.value, choosenThreads, 100);
+                else
+                    work = IslandFactory.islandsOfColonies((Colony) initialPopulation.value, choosenThreads, 100);
+                initialPopulation.value = ((Islands) work).getIsland(0);
             } else {
                 work = initialPopulation.value;
             }
             Task task = new Task() {
                 protected Object call() throws Exception {
                     var best = new Wrap<>(-1L);
-                    Action action = pop -> {
+                    Action action = () -> {
                         if (!version.isSame(myVersion))
                             throw new InterruptedException("Halting");
-                        if (pop.getBestFitness() > best.value) {
-
-                            Note.writenl(pop.getBest().getDna());
-
-                            best.set(pop.getBestFitness());
+                        if (initialPopulation.value.getBestFitness() > best.value) {
+                            best.set(initialPopulation.value.getBestFitness());
                             updateMessage(best.toString());
                             Thread.sleep(0);
                         }

@@ -1,9 +1,9 @@
-package natural.GA.mutations;
+package natural.interfaces;
 
         import natural.GA.Individual;
-        import natural.GA.preCalc.PreCalcData;
+        import natural.GA.PreCalcData;
 
 @SuppressWarnings("unused")
-public interface MutationInterface {
+public interface Mutation {
     void mutate(PreCalcData preCalc, Individual individual);
 }

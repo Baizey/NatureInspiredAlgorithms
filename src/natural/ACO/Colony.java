@@ -1,7 +1,7 @@
 package natural.ACO;
 
-import natural.ACO.fitness.FitnessInterface;
-import natural.ACO.visitation.VisitationInterface;
+import natural.interfaces.AntColonyFitness;
+import natural.interfaces.Visitation;
 import natural.AbstractIndividual;
 import natural.AbstractPopulation;
 
@@ -10,8 +10,8 @@ import java.util.concurrent.TimeUnit;
 
 public class Colony extends AbstractPopulation {
     private final Node[] graph;
-    private final VisitationInterface visitation;
-    private final FitnessInterface fitness;
+    private final Visitation visitation;
+    private final AntColonyFitness fitness;
     private final Ant best;
     private Ant bestFromGeneration;
     private final Ant curr;
@@ -19,7 +19,7 @@ public class Colony extends AbstractPopulation {
     private final Node start;
     private final double weightAltering;
 
-    public Colony(int generationSize, double weightAltering, Node[] graph, VisitationInterface visitation, FitnessInterface fitness) {
+    public Colony(int generationSize, double weightAltering, Node[] graph, Visitation visitation, AntColonyFitness fitness) {
         super(generationSize);
         this.weightAltering = weightAltering;
         this.visitation = visitation;
@@ -32,7 +32,7 @@ public class Colony extends AbstractPopulation {
         this.start = this.graph[0];
     }
 
-    public Colony(int maxThreads, int generationSize, double weightAltering, Node[] graph, VisitationInterface visitation, FitnessInterface fitness) {
+    public Colony(int maxThreads, int generationSize, double weightAltering, Node[] graph, Visitation visitation, AntColonyFitness fitness) {
         super(maxThreads, generationSize);
         this.weightAltering = weightAltering;
         this.visitation = visitation;

@@ -1,4 +1,4 @@
-package natural.GA.preCalc;
+package natural.GA;
 
 /**
  * Flexible (and likely confusing) data container

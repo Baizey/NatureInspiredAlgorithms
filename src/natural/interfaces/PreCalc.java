@@ -1,6 +1,7 @@
-package natural.GA.preCalc;
+package natural.interfaces;
 
 import natural.GA.Individual;
+import natural.GA.PreCalcData;
 
 /**
  * Used to handle calculations that are not done for each individual
@@ -9,6 +10,6 @@ import natural.GA.Individual;
  * Individual[] population: current generations population
  * PreCalcData previousData: pre calculated data from previous generation (or null if first generation)
  */
-public interface PreCalcInterface {
+public interface PreCalc {
     PreCalcData calc(Individual[] population, PreCalcData previousData);
 }

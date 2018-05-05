@@ -1,31 +1,28 @@
 package natural.factory;
 
 import natural.ACO.Colony;
-import natural.ACO.Node;
-import natural.ACO.visitation.Visitations;
+import natural.ACO.Fitness;
+import natural.ACO.NodeBias;
+import natural.ACO.Visitations;
 
+@SuppressWarnings({"WeakerAccess", "unused"})
 public class ColonyFactory {
 
+    public static Colony oneMaxBinary(int size, int generationSize, double percentChange) {
+        return oneMaxBinary(Runtime.getRuntime().availableProcessors(), size, generationSize, percentChange);
+    }
     public static Colony oneMaxBinary(int maxThreads, int size, int generationSize, double percentChange) {
         return new Colony(generationSize, percentChange,
                 GraphFactory.binaryString(maxThreads, size),
                 Visitations.addCurrentNode(),
-                (ant, node) -> {
-                    int fitness = 0;
-                    Node at = node;
-                    for(int i = 0; i < ant.getInsertionCount(); i++) {
-                        if(at.getName(ant.getChoice(i)).charAt(0) == '1') fitness++;
-                        at = at.getNode(ant.getChoice(i));
-                    }
-                    ant.setFitness(fitness);
-                });
+                Fitness.oneMax());
     }
 
     public static Colony snakeInTheBox(int maxThreads, int dimensions, int generationSize, double percentChange) {
         return new Colony(generationSize, percentChange,
                 GraphFactory.snakeInTheBox(maxThreads, dimensions),
                 Visitations.addCurrentAndEdgeNodes(),
-                (ant, node) -> ant.setFitness(ant.getInsertionCount()));
+                Fitness.mostNodesTraversed());
     }
 
     public static Colony travelingSalesman(boolean circlePath, double[][] points, int generationSize, double percentChange, int maxThreads) {
@@ -40,22 +37,9 @@ public class ColonyFactory {
     }
     public static Colony travelingSalesmanCircle(double[][] points, int generationSize, double percentChange, int maxThreads) {
         return new Colony(maxThreads, generationSize, percentChange,
-                GraphFactory.travelingSalesMan(maxThreads, points, true),
+                GraphFactory.travelingSalesMan(maxThreads, points, NodeBias.polynomialBias()),
                 Visitations.addCurrentNode(),
-                (ant, node) -> {
-                    if(ant.getInsertionCount() < node.getEdges().length){
-                        ant.setFitness(ant.getInsertionCount());
-                        return;
-                    }
-                    Node at = node;
-                    long totalCost = 0;
-                    for(int i = 0; i < ant.getInsertionCount(); i++) {
-                        totalCost += at.getCost(ant.getChoice(i));
-                        at = at.getNode(ant.getChoice(i));
-                    }
-                    totalCost += at.getCost(0);
-                    ant.setFitness(Long.MAX_VALUE - totalCost);
-                });
+                Fitness.lowestCostAllNodesCircle());
     }
 
     public static Colony travelingSalesmanPath(double[][] points, int generationSize, double percentChange) {
@@ -63,21 +47,9 @@ public class ColonyFactory {
     }
     public static Colony travelingSalesmanPath(double[][] points, int generationSize, double percentChange, int maxThreads) {
         return new Colony(maxThreads, generationSize, percentChange,
-                GraphFactory.travelingSalesMan(maxThreads, points, true),
+                GraphFactory.travelingSalesMan(maxThreads, points, NodeBias.polynomialBias()),
                 Visitations.addCurrentNode(),
-                (ant, node) -> {
-                    if(ant.getInsertionCount() < node.getEdges().length){
-                        ant.setFitness(ant.getInsertionCount());
-                        return;
-                    }
-                    Node at = node;
-                    long totalCost = 0;
-                    for(int i = 0; i < ant.getInsertionCount(); i++) {
-                        totalCost += at.getCost(ant.getChoice(i));
-                        at = at.getNode(ant.getChoice(i));
-                    }
-                    ant.setFitness(Long.MAX_VALUE - totalCost);
-                });
+                Fitness.lowestCostAllNodesPath());
     }
 
 }

@@ -1,12 +1,10 @@
 package natural.GA;
 
 import natural.AbstractPopulation;
-import natural.GA.crossover.CrossoverInterface;
-import natural.GA.fitness.FitnessInterface;
-import natural.GA.mutations.MutationInterface;
-import natural.GA.preCalc.PreCalcData;
-import natural.GA.preCalc.PreCalcInterface;
-import natural.GA.select.SelectionInterface;
+import natural.interfaces.*;
+import natural.interfaces.Crossover;
+import natural.interfaces.Mutation;
+import natural.interfaces.Selection;
 
 import java.util.Arrays;
 import java.util.concurrent.CountDownLatch;
@@ -16,11 +14,11 @@ public class Population extends AbstractPopulation {
     private final int popSize, startFrom;
     private final boolean elitism;
     private Individual[] nextGen, currGen;
-    private final SelectionInterface selection;
-    private final FitnessInterface fitness;
-    private final CrossoverInterface crossover;
-    private final MutationInterface mutator;
-    private final PreCalcInterface preCalculations;
+    private final Selection selection;
+    private final GeneticAlgorithmFitness fitness;
+    private final Crossover crossover;
+    private final Mutation mutator;
+    private final PreCalc preCalculations;
     private PreCalcData preCalcData = null;
 
     public Population(Population other) {
@@ -47,11 +45,14 @@ public class Population extends AbstractPopulation {
             currGen[i].setFitness(other.currGen[i].getFitness());
         }
 
-        long[] longs = other.preCalcData.longs == null ? null
-                : Arrays.copyOf(other.preCalcData.longs, other.preCalcData.longs.length);
-        double[] doubles = other.preCalcData.doubles == null ? null
-                : Arrays.copyOf(other.preCalcData.doubles, other.preCalcData.doubles.length);
-        preCalcData = new PreCalcData(longs, doubles);
+
+        if(other.preCalcData != null) {
+            long[] longs = other.preCalcData.longs == null ? null
+                    : Arrays.copyOf(other.preCalcData.longs, other.preCalcData.longs.length);
+            double[] doubles = other.preCalcData.doubles == null ? null
+                    : Arrays.copyOf(other.preCalcData.doubles, other.preCalcData.doubles.length);
+            preCalcData = new PreCalcData(longs, doubles);
+        }
     }
 
     public void copyPopulationDnaFrom(Population other){
@@ -63,32 +64,22 @@ public class Population extends AbstractPopulation {
             int popSize, int geneSize,
             boolean elitism,
             boolean generate,
-            MutationInterface mutationInterface,
-            FitnessInterface fitnessInterface,
-            CrossoverInterface crossoverInterface,
-            SelectionInterface selectionInterface,
-            PreCalcInterface preCalculations
+            Mutation mutationInterface,
+            GeneticAlgorithmFitness fitnessInterface,
+            Crossover crossoverInterface,
+            Selection selectionInterface,
+            PreCalc preCalculations
     ) {
-        super(popSize);
-        this.preCalculations = preCalculations;
-        this.currGen = new Individual[popSize];
-        this.nextGen = new Individual[popSize];
-        for (int i = 0; i < popSize; i++) {
-            currGen[i] = new Individual(geneSize, generate);
-            nextGen[i] = new Individual(geneSize, false);
-        }
-
-        this.popSize = popSize;
-        this.elitism = elitism;
-        this.startFrom = elitism ? 1 : 0;
-        this.mutator = mutationInterface;
-        this.fitness = fitnessInterface;
-        this.crossover = crossoverInterface;
-        this.selection = selectionInterface;
-
-        for(Individual individual : currGen)
-            fitness.calc(individual);
-        findBestFitness();
+        this(popSize,
+            geneSize,
+            elitism,
+            generate,
+            Runtime.getRuntime().availableProcessors(),
+            mutationInterface,
+            fitnessInterface,
+            crossoverInterface,
+            selectionInterface,
+            preCalculations);
     }
 
     public Population(
@@ -96,13 +87,13 @@ public class Population extends AbstractPopulation {
             boolean elitism,
             boolean generate,
             int maxThreads,
-            MutationInterface mutationInterface,
-            FitnessInterface fitnessInterface,
-            CrossoverInterface crossoverInterface,
-            SelectionInterface selectionInterface,
-            PreCalcInterface preCalculations
+            Mutation mutationInterface,
+            GeneticAlgorithmFitness fitnessInterface,
+            Crossover crossoverInterface,
+            Selection selectionInterface,
+            PreCalc preCalculations
     ) {
-        super(maxThreads, popSize);
+        super(Math.min(popSize, maxThreads) - (elitism ? 1 : 0), popSize - (elitism ? 1 : 0));
         this.preCalculations = preCalculations;
         this.currGen = new Individual[popSize];
         this.nextGen = new Individual[popSize];
@@ -159,9 +150,8 @@ public class Population extends AbstractPopulation {
             nextGen[0].setFitness(currGen[0]);
             nextGen[0].copyDnaFrom(currGen[0]);
         }
-
         CountDownLatch counter = new CountDownLatch(maxThreads);
-        for(int i = 0; i < popSize; i += threadWork) {
+        for(int i = startFrom; i < popSize; i += threadWork) {
             int min = i, max = Math.min(popSize, i + threadWork);
             pool.submit(() -> {
                 for(int k = min; k < max; k++) {
@@ -213,11 +203,11 @@ public class Population extends AbstractPopulation {
         return currGen[0].getFitness();
     }
 
-    public SelectionInterface getSelectionInterface() {
+    public Selection getSelectionInterface() {
         return selection;
     }
 
-    public CrossoverInterface getCrossover() {
+    public Crossover getCrossover() {
         return crossover;
     }
 
@@ -225,11 +215,11 @@ public class Population extends AbstractPopulation {
         return nextGen;
     }
 
-    public MutationInterface getMutation() {
+    public Mutation getMutation() {
         return mutator;
     }
 
-    public FitnessInterface getFitness() {
+    public GeneticAlgorithmFitness getFitness() {
         return fitness;
     }
 }

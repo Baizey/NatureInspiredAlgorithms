@@ -1,9 +1,9 @@
-package natural.GA.select;
+package natural.interfaces;
 
 import natural.GA.Individual;
-import natural.GA.preCalc.PreCalcData;
+import natural.GA.PreCalcData;
 
-public interface SelectionInterface {
+public interface Selection {
 
     Individual select(PreCalcData preCalc, Individual[] individuals);
 

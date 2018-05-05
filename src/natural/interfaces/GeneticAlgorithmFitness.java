@@ -1,8 +1,8 @@
-package natural.GA.fitness;
+package natural.interfaces;
 
 import natural.GA.Individual;
 
 @SuppressWarnings("unused")
-public interface FitnessInterface {
+public interface GeneticAlgorithmFitness {
     void calc(Individual individual);
 }

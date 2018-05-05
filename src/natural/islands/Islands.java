@@ -25,10 +25,10 @@ public class Islands extends AbstractPopulation {
     }
 
     @Override
-    public void evolve() { evolveParallel(); }
+    public void evolve() throws Exception { evolveParallel(); }
 
     @Override
-    public void evolveParallel() {
+    public void evolveParallel() throws Exception {
         CountDownLatch counter = new CountDownLatch(islands.length);
         for (AbstractPopulation island : islands)
             pool.submit(() -> {
@@ -36,14 +36,10 @@ public class Islands extends AbstractPopulation {
                 counter.countDown();
                 return null;
             });
-        try { counter.await(1000, TimeUnit.SECONDS); } catch (InterruptedException ignored) {}
+        counter.await(1000, TimeUnit.SECONDS);
         convergence.merge(islands);
     }
 
-    @Override
-    public long getBestFitness() {
-        return 0;
-    }
 
     public AbstractPopulation getIsland(int i) {
         return islands[i];
@@ -60,10 +56,11 @@ public class Islands extends AbstractPopulation {
 
     @Override
     public AbstractIndividual getBest() {
-        int best = 0;
-        for(int i = 1; i < islands.length; i++)
-            if(islands[i].getBestFitness() > islands[best].getBestFitness())
-                best = i;
-        return islands[best].getBest();
+        return getBestIsland().getBest();
+    }
+
+    @Override
+    public long getBestFitness() {
+        return getBest().getFitness();
     }
 }
