@@ -2,50 +2,72 @@ package natural.ACO;
 
 import natural.AbstractIndividual;
 
-public class Ant extends AbstractIndividual<int[]> {
+import java.util.Arrays;
+
+public class Ant extends AbstractIndividual<Edge[]> {
 
     private int insertionPoint = 0;
 
-    public Ant(int estimatedMaxLength){
+    public Ant(int estimatedMaxLength) {
         super(estimatedMaxLength);
-        dna = new int[length];
+        this.dna = new Edge[length];
     }
 
-    public void resetInsertion(){
+    public void resetInsertion() {
         insertionPoint = 0;
     }
 
-    public void add(int n){
-        if(insertionPoint >= length) {
+    public void add(Edge edge) {
+        if (insertionPoint >= length) {
             length *= 2;
-            int[] dna = new int[length];
+            Edge[] dna = new Edge[length];
             System.arraycopy(this.dna, 0, dna, 0, insertionPoint);
             this.dna = dna;
         }
-        dna[insertionPoint++] = n;
+        dna[insertionPoint++] = edge;
     }
 
     public void copyFrom(Ant other) {
+        fitness = other.fitness;
         insertionPoint = other.insertionPoint;
-        if(insertionPoint > length) {
+        if (other.length > length)
             length = other.length;
-            this.dna = new int[length];
-        }
-        this.fitness = other.fitness;
-        System.arraycopy(other.dna, 0, dna, 0, insertionPoint);
+        dna = Arrays.copyOf(other.dna, length);
     }
 
-    public int[] getUsedDna(){
-        int[] result = new int[insertionPoint];
-        System.arraycopy(dna, 0, result, 0, insertionPoint);
-        return result;
+    public Edge[] getUsedDna() {
+        return Arrays.copyOf(dna, insertionPoint);
     }
 
-    public int getChoice(int index){
-        return dna[index];
+    public int getChoiceId(int index) {
+        return dna[index].target.getId();
     }
 
-    public int getInsertionCount(){
+    public Node getFirstNode(){
+        return dna[0].source;
+    }
+
+    public Node getLastNode(){
+        return dna[insertionPoint - 1].target;
+    }
+
+    public Node[] getNodes(){
+        return Arrays.stream(dna).map(e -> e.source).toArray(Node[]::new);
+    }
+
+    public Edge[] getEdges(){
+        return Arrays.copyOf(dna, insertionPoint);
+    }
+
+    public int getInsertionCount() {
         return insertionPoint;
+    }
+
+    public Edge getEdge(int i) {
+        return dna[i];
+    }
+
+    public void setEdge(int i, Edge edge) {
+        dna[i] = edge;
     }
 }

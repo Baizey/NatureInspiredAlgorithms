@@ -10,6 +10,7 @@ package gui;
 public class Wrap<Var> {
     public Var value;
 
+    public Wrap() { this(null); }
     public Wrap(Var value) {
         set(value);
     }

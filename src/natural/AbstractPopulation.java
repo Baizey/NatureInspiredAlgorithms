@@ -17,6 +17,7 @@ public abstract class AbstractPopulation {
     }
 
     public AbstractPopulation(int maxThreads, int popSize) {
+        maxThreads = Math.max(maxThreads, 1);
         if (maxThreads > popSize) maxThreads = popSize;
         this.maxThreads = maxThreads;
         // If work doesn't split evenly to threads, add 1 to all threads
@@ -38,12 +39,12 @@ public abstract class AbstractPopulation {
         }
     }
 
-    public void evolveUntilGoal(double fitnessGoal) throws Exception {
+    public void evolveUntilGoal(long fitnessGoal) throws Exception {
         evolveUntilGoal(fitnessGoal, () -> {
         });
     }
 
-    public void evolveUntilGoal(double fitnessGoal, Action action) throws Exception {
+    public void evolveUntilGoal(long fitnessGoal, Action action) throws Exception {
         while (getBestFitness() < fitnessGoal) {
             evolve();
             action.act();
@@ -56,12 +57,14 @@ public abstract class AbstractPopulation {
     }
 
     public void evolveUntilNoProgress(int maxStaleGenerations, Action action) throws Exception {
-        double prev = 0;
-        for (int i = 0; i < maxStaleGenerations; i++) {
+        long prev = 0;
+        int counter = 0;
+        while(counter < maxStaleGenerations) {
             evolve();
             action.act();
             long curr = getBestFitness();
-            if (curr > prev) i = -1;
+            if (curr > prev) counter = 0;
+            else counter++;
             prev = curr;
         }
     }
@@ -92,12 +95,12 @@ public abstract class AbstractPopulation {
         }
     }
 
-    public void evolveUntilGoalParallel(double fitnessGoal) throws Exception {
+    public void evolveUntilGoalParallel(long fitnessGoal) throws Exception {
         evolveUntilGoalParallel(fitnessGoal, () -> {
         });
     }
 
-    public void evolveUntilGoalParallel(double fitnessGoal, Action action) throws Exception {
+    public void evolveUntilGoalParallel(long fitnessGoal, Action action) throws Exception {
         while (getBestFitness() < fitnessGoal) {
             evolveParallel();
             action.act();
@@ -109,12 +112,14 @@ public abstract class AbstractPopulation {
     }
 
     public void evolveUntilNoProgressParallel(int maxStaleGenerations, Action action) throws Exception {
-        double prev = 0;
-        for (int i = 0; i < maxStaleGenerations; i++) {
+        long prev = 0;
+        int counter = 0;
+        while(counter < maxStaleGenerations) {
             evolveParallel();
             action.act();
             long curr = getBestFitness();
-            if (curr > prev) i = -1;
+            if (curr > prev) counter = 0;
+            else counter++;
             prev = curr;
         }
     }

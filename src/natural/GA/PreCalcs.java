@@ -89,19 +89,12 @@ public class PreCalcs {
     public static PreCalc exactPrePreCalculatedSkipChance() {
         return (individuals, previousData) -> {
             if (previousData != null) return previousData;
-            return new PreCalcData(null, new double[]{
-                    0.36787760176657225D,
-                    0.36788128054258995D,
-                    0.1839406402529009D,
-                    0.06131293360323675D,
-                    0.015327926831542701D,
-                    0.003065493397521317D,
-                    5.108951293754449E-4D,
-                    7.298136918749129E-5D,
-                    9.122123781781635E-6D,
-                    1.0134983584243568E-6D,
-                    1.0134172776435344E-7D,
-                    9.212055173410265E-9D});
+            BigDecimal decimal = BigDecimal.ONE.divide(BigDecimal.valueOf(Math.E), 10, RoundingMode.HALF_UP);
+            var doubles = new double[50];
+            doubles[0] = decimal.doubleValue();
+            for(int i = 1; i < doubles.length; i++)
+                doubles[i] = (decimal = decimal.divide(BigDecimal.valueOf(i), 10, RoundingMode.HALF_UP)).doubleValue();
+            return new PreCalcData(null, doubles);
         };
     }
 
@@ -109,9 +102,11 @@ public class PreCalcs {
         return (individuals, previousData) -> null;
     }
 
-    public static PreCalc get(String crossoverChoice, String selectionChoice) {
+    public static PreCalc get(String crossoverChoice, String selectionChoice, String mutation) {
         if(selectionChoice.equalsIgnoreCase("stochastic"))
             return minAndSum();
+        if(mutation.equalsIgnoreCase("(1 + 1)"))
+            return exactPrePreCalculatedSkipChance();
         return none();
     }
 }

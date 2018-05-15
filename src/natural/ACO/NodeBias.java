@@ -30,4 +30,12 @@ public class NodeBias {
         return Node::initChances;
     }
 
+
+    public static Bias get(String bias) {
+        switch(bias.toLowerCase()){
+            case "none": return noBias();
+            case "linear": return linearBias();
+            default: return polynomialBias();
+        }
+    }
 }

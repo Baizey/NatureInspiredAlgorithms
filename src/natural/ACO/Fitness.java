@@ -9,8 +9,8 @@ public class Fitness {
             int fitness = 0;
             Node at = node;
             for (int i = 0; i < ant.getInsertionCount(); i++) {
-                if (at.getName(ant.getChoice(i)).charAt(0) == '1') fitness++;
-                at = at.getNode(ant.getChoice(i));
+                if (at.getName(ant.getChoiceId(i)).charAt(0) == '1') fitness++;
+                at = at.getTarget(ant.getChoiceId(i));
             }
             ant.setFitness(fitness);
         };
@@ -20,36 +20,16 @@ public class Fitness {
         return (ant, node) -> ant.setFitness(ant.getInsertionCount());
     }
 
-    public static AntColonyFitness lowestCostAllNodesCircle() {
-        return (ant, node) -> {
-            if (ant.getInsertionCount() < node.getEdges().length) {
-                ant.setFitness(ant.getInsertionCount());
-                return;
-            }
-            Node at = node;
-            long totalCost = 0;
-            for (int i = 0; i < ant.getInsertionCount(); i++) {
-                totalCost += at.getCost(ant.getChoice(i));
-                at = at.getNode(ant.getChoice(i));
-            }
-            totalCost += at.getCost(0);
-            ant.setFitness(Long.MAX_VALUE - totalCost);
-        };
-    }
-
     public static AntColonyFitness lowestCostAllNodesPath() {
         return (ant, node) -> {
             if (ant.getInsertionCount() < node.getEdges().length) {
                 ant.setFitness(ant.getInsertionCount());
                 return;
             }
-            Node at = node;
-            long totalCost = 0;
-            for (int i = 0; i < ant.getInsertionCount(); i++) {
-                totalCost += at.getCost(ant.getChoice(i));
-                at = at.getNode(ant.getChoice(i));
-            }
-            ant.setFitness(Long.MAX_VALUE - totalCost);
+            long totalCost = Integer.MAX_VALUE;
+            for(int i = 0; i < ant.getInsertionCount(); i++)
+                totalCost -= ant.getEdge(i).cost;
+            ant.setFitness(totalCost);
         };
     }
 }

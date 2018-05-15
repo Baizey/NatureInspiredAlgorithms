@@ -3,6 +3,7 @@ package natural.islands;
 import gui.Wrap;
 import natural.ACO.Colony;
 import natural.GA.Population;
+import natural.interfaces.ConvergenceInterface;
 
 public class Convergence {
 

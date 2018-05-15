@@ -1,74 +1,34 @@
 package natural.ACO;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 
-@SuppressWarnings({"unused", "WeakerAccess"})
 public class Node {
-    private static final Random random = ThreadLocalRandom.current();
-    static int nextUsagePoint = 0;
-    public int[] lastUsage;
-    private static int nextId = 0;
-    private int nextEdge = 0;
-    private Node[] edges;
-    private double[] costs, chances;
-    private String[] names;
-    private final int id;
+
+    private static final Random random = new Random();
+    static int nextUsagePoint = 1;
+    int[] lastUsage;
+    private static int NEXTID = 0;
+
+    private Edge[] edges;
+
+    private final int id = NEXTID++;
     public final String name;
+    private HashMap<Node, Integer> edgeMap = new HashMap<>();
 
-    public static void resetId(){
-        nextId = 0;
-    }
-
-    public Node(int edges) {
-        this(edges, Integer.toString(nextId));
-    }
-
-    public Node(int edges, int maxThreads) {
-        this(edges, Integer.toString(nextId), maxThreads);
-    }
-
-    public Node(int edges, String name) {
-        this(edges, name, 1);
-    }
-
-    public Node(int edges, String name, int maxThreads) {
-        this.lastUsage = new int[maxThreads];
-        this.edges = new Node[edges];
-        this.chances = new double[edges];
-        this.costs = new double[edges];
-        this.names = new String[edges];
+    public Node(String name, int maxThreads) {
         this.name = name;
-        id = nextId++;
+        this.lastUsage = new int[maxThreads];
     }
 
-    public Node(Node node) {
-        this.lastUsage = new int[node.lastUsage.length];
-        this.edges = new Node[node.edges.length];
-        this.chances = Arrays.copyOf(node.chances, node.chances.length);
-        this.costs = Arrays.copyOf(node.costs, node.costs.length);
-        this.names = Arrays.copyOf(node.names, node.names.length);
-        this.name = node.name;
-        id = nextId++;
+    public void setMaxEdges(int n){
+        this.edges = new Edge[n];
     }
 
-    public void addEdge(Node edge, double cost) {
-        addEdge(edge, cost, edge.name);
-    }
-
-    public void addEdge(Node edge, String name) {
-        addEdge(edge, 0D, name);
-    }
-
-    public void addEdge(Node node, double cost, String name) {
-        costs[nextEdge] = cost;
-        names[nextEdge] = name;
-        edges[nextEdge++] = node;
-    }
-
-    public void setChances(Node from) {
-        System.arraycopy(from.chances, 0, chances, 0, chances.length);
+    public void setEdge(Edge edge, int i) {
+        edges[i] = edge;
+        edgeMap.put(edge.target, i);
     }
 
     public void initChances() {
@@ -81,18 +41,21 @@ public class Node {
         double sum = 0;
         for (double bia : bias) sum += bia;
         for (int i = 0; i < bias.length; i++)
-            chances[i] = bias[i] / sum;
+            edges[i].chance = bias[i] / sum;
     }
 
-    public void movePercentageTo(double percentage, int index) {
+    public void movePercentageTo(double percentage, int id) {
         double taking = 0D;
-        for (int i = 0; i < chances.length; i++) {
-            if (i == index) continue;
-            double takes = chances[i] * percentage;
-            chances[i] -= takes;
+        for (int i = 0; i < edges.length; i++) {
+            if (edges[i].target.id == id) {
+                id = i;
+                continue;
+            }
+            double takes = edges[i].chance * percentage;
+            edges[i].chance -= takes;
             taking += takes;
         }
-        chances[index] += taking;
+        edges[id].chance += taking;
     }
 
     public int getRandom(int currUsage) {
@@ -101,55 +64,72 @@ public class Node {
 
     public int getRandom(int currUsage, int thread) {
         double pick = 0D;
-        for (int i = 0; i < chances.length; i++)
-            if (edges[i].lastUsage[thread] != currUsage)
-                pick += chances[i];
+        for (int i = 0; i < edges.length; i++)
+            if (edges[i].target.lastUsage[thread] != currUsage)
+                pick += edges[i].chance;
         pick *= random.nextDouble();
-        for (int i = 0; i < chances.length; i++) {
-            if (edges[i].lastUsage[thread] == currUsage) continue;
-            pick -= chances[i];
+        for (int i = 0; i < edges.length; i++) {
+            if (edges[i].target.lastUsage[thread] == currUsage) continue;
+            pick -= edges[i].chance;
             if (pick <= 0) return i;
         }
         return -1;
     }
 
-    public void killChance(int index) {
-        chances[index] = 0D;
-    }
-
-    public Node getNode(int index) {
-        return edges[index];
+    public Node getTarget(int index) {
+        return edges[index].target;
     }
 
     public double getCost(int index) {
-        return costs[index];
+        return edges[index].cost;
     }
 
     public String getName(int index) {
-        return names[index];
+        return edges[index].name;
     }
 
-    public Node[] getEdges() {
+    public Edge[] getEdges() {
         return edges;
     }
 
     public String toString() {
-        return name + ": " + Arrays.toString(names);
+        return name + ": " + Arrays.toString(Arrays.stream(edges).map(i -> i.name).toArray());
     }
 
     public double[] getChances() {
-        return chances;
+        return Arrays.stream(edges).mapToDouble(i -> i.chance).toArray();
     }
 
     public String[] getNames() {
-        return names;
+        return Arrays.stream(edges).map(i -> i.name).toArray(String[]::new);
     }
 
     public double[] getCosts() {
-        return costs;
+        return Arrays.stream(edges).mapToDouble(i -> i.cost).toArray();
     }
 
     public int getId() {
         return id;
+    }
+
+    public static void resetIdCounter() {
+        NEXTID = 0;
+    }
+
+    public void setChances(Node node) {
+        for(int i = 0; i < edges.length; i++)
+            edges[i].chance = node.edges[i].chance;
+    }
+
+    public Edge getEdge(int pick) {
+        return edges[pick];
+    }
+
+    public int getIndex(Node target) {
+        return edgeMap.get(target);
+    }
+
+    public Edge getEdge(Node target) {
+        return edges[edgeMap.get(target)];
     }
 }

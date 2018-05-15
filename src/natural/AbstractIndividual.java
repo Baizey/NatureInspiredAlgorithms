@@ -38,5 +38,4 @@ public abstract class AbstractIndividual <T> {
     public T getDna(){
         return dna;
     }
-
 }

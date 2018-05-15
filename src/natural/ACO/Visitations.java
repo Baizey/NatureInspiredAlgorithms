@@ -15,7 +15,7 @@ public class Visitations {
     public static Visitation addCurrentAndEdgeNodes(){
         return (id, ant, node, pick, threadId) -> {
             node.lastUsage[threadId] = id;
-            for(Node n : node.getEdges()) n.lastUsage[threadId] = id;
+            for(Edge edge : node.getEdges()) edge.target.lastUsage[threadId] = id;
         };
     }
 

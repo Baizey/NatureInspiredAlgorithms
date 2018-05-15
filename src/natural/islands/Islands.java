@@ -2,6 +2,8 @@ package natural.islands;
 
 import natural.AbstractIndividual;
 import natural.AbstractPopulation;
+import natural.interfaces.ConvergenceInterface;
+import natural.interfaces.EvolutionStepInterface;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;

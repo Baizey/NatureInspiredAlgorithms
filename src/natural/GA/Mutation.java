@@ -99,8 +99,8 @@ public class Mutation {
     public static natural.interfaces.Mutation get(String mutationChoice) {
         switch (mutationChoice.toLowerCase()){
             case "flip one": return flipXGenes(1);
-            case "flip two": return flipXGenes(1);
-            case "flip three": return flipXGenes(1);
+            case "flip two": return flipXGenes(2);
+            case "flip three": return flipXGenes(3);
             case "(1 + 1)": return flipRandomExact();
             default: return none();
         }

@@ -1,4 +1,4 @@
-package natural.islands;
+package natural.interfaces;
 
 import natural.AbstractPopulation;
 
