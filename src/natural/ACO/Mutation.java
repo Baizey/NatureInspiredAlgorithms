@@ -46,10 +46,10 @@ public class Mutation {
         // change them
         ant.setEdge(p1, c);
         ant.setEdge(p2, d);
+    }
 
-        // Reverse half the path to make it function
-        for (int i = (p1 + 1 == length ? 0 : p1 + 1); i != p2; i = (++i == length ? 0 : i))
-            ant.setEdge(i, ant.getEdge(i).target.getEdge(ant.getEdge(i).source));
+    public static AntMutation noneCircle() {
+        return ant -> ant.add(ant.getLastNode().getEdge(ant.getFirstNode()));
     }
 
     public static AntMutation none() {
@@ -63,6 +63,7 @@ public class Mutation {
                 if (useCircle) return twoOptCircle();
                 return twoOpt();
             default:
+                if(useCircle) return noneCircle();
                 return none();
         }
     }

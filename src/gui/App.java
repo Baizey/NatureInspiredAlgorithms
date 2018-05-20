@@ -15,17 +15,21 @@ import javafx.concurrent.Task;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.chart.LineChart;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import natural.ACO.*;
+import lsm.helpers.utils.Wrap;
+import natural.ACO.Colony;
+import natural.ACO.Edge;
+import natural.ACO.Node;
+import natural.ACO.NodeBias;
 import natural.AbstractPopulation;
 import natural.GA.*;
-import natural.GA.Fitness;
-import natural.GA.Mutation;
+import natural.benchmark.GraphingData;
 import natural.factory.ColonyFactory;
 import natural.factory.IslandFactory;
 import natural.factory.PopulationFactory;
@@ -48,11 +52,13 @@ public class App extends Application {
             TSPCircle = new Problem("Traveling Salesman Problem Circle"),
             TSPPath = new Problem("Traveling Salesman Problem Path"),
             LeadingOnes = new Problem("Leading Ones"),
-            SubsetSum = new Problem("Subset Sum");
+            SubsetSum = new Problem("Subset Sum"),
+            benchmark = new Problem("benchmark");
     public static final Algorithm
             GeneticAlgorithm = new Algorithm("Genetic Algorithm", OneMax, SubsetSum),
-            AntColonyOptimization = new Algorithm("Ant Colony Optimization", TSPCircle, TSPPath);
-    private static final Algorithm[] algorithms = {GeneticAlgorithm, AntColonyOptimization};
+            AntColonyOptimization = new Algorithm("Ant Colony Optimization", TSPCircle, TSPPath),
+            precalced = new Algorithm("Precalculated", benchmark);
+    private static final Algorithm[] algorithms = {GeneticAlgorithm, AntColonyOptimization, precalced};
 
     private static final HashMap<String, String> tspMaps = new HashMap<>() {{
         put("Berlin52", "565.0 575.0\n25.0 185.0\n345.0 750.0\n945.0 685.0\n845.0 655.0\n880.0 660.0\n25.0 230.0\n525.0 1000.0\n580.0 1175.0\n650.0 1130.0\n1605.0 620.0\n1220.0 580.0\n1465.0 200.0\n1530.0 5.0\n845.0 680.0\n725.0 370.0\n145.0 665.0\n415.0 635.0\n510.0 875.0\n560.0 365.0\n300.0 465.0\n520.0 585.0\n480.0 415.0\n835.0 625.0\n975.0 580.0\n1215.0 245.0\n1320.0 315.0\n1250.0 400.0\n660.0 180.0\n410.0 250.0\n420.0 555.0\n575.0 665.0\n1150.0 1160.0\n700.0 580.0\n685.0 595.0\n685.0 610.0\n770.0 610.0\n795.0 645.0\n720.0 635.0\n760.0 650.0\n475.0 960.0\n95.0 260.0\n875.0 920.0\n700.0 500.0\n555.0 815.0\n830.0 485.0\n1170.0 65.0\n830.0 610.0\n605.0 625.0\n595.0 360.0\n1340.0 725.0\n1740.0 245.0");
@@ -91,7 +97,7 @@ public class App extends Application {
 
     private void gotoMenuOptions(Algorithm algorithm, Problem problem) {
         // Kill old processes if they're running
-        version.value++;
+        version.set(version.get() + 1);
         content.setCenter(new Label("Waiting for input"));
         content.setBottom(new Label("Best fitness will show here"));
         options.getChildren().clear();
@@ -110,6 +116,47 @@ public class App extends Application {
                 IntStream.range(1, 16).mapToObj(i -> i == 1 ? "Auto" : String.valueOf(i)).toArray(String[]::new)));
         optimizationThreadCount.getSelectionModel().selectFirst();
 
+        // Benchmark button
+        Button benchButton = new Button("Display");
+        GridPane.setHalignment(benchButton, HPos.CENTER);
+        benchButton.setMinWidth(options.getWidth() - 40D);
+        ComboBox<String> benchmark = new ComboBox<>(FXCollections.observableArrayList(
+                "OneMax",
+                "LeadingOnes",
+                "Subset sum",
+                "TSPC",
+                "TSPP"));
+        benchButton.setOnAction(event -> {
+            String filename = "";
+            String context = "";
+            switch(getSelected(benchmark).toLowerCase()){
+                case "onemax":
+                    filename = "OMAvg";
+                    context = "Expected: e * n * log(n)";
+                    break;
+                case "leadingones":
+                    filename = "LOAvg";
+                    context = "Expected: 0.86 * n^2";
+                    break;
+                case "subset sum":
+                    filename = "SSAvg";
+                    context = "Expected: ?";
+                    break;
+                case "tspc":
+                    filename = "TSPC";
+                    context = "Expected: Upper bound: (sqrt(2n) + 1.75) * 1000; Lower bound: (0.7078 * sqrt(n) + 0.551) * 1000";
+                    break;
+                case "tspp":
+                    filename = "TSPP";
+                    context = "Expected: Upper bound: (sqrt(2n + 2) + 1.75) * 1000; Lower bound: (0.7078 * sqrt(n + 1) + 0.551) * 1000";
+                    break;
+            }
+            LineChart chart = null;
+            try { chart = GraphingData.getDisplay(filename); } catch (Exception e) { e.printStackTrace(); }
+            content.setCenter(chart);
+            content.setBottom(new Label(context));
+        });
+
         // Run button
         Button runButton = new Button("Run");
         GridPane.setHalignment(runButton, HPos.CENTER);
@@ -123,10 +170,9 @@ public class App extends Application {
         abortButton.setDisable(true);
         abortButton.setOnAction(action -> {
             abortButton.setDisable(true);
-            version.value++;
+            version.set(version.get() + 1);
             runButton.setDisable(false);
         });
-
 
         NumberTextField geneSizeOption = new NumberTextField(50, 1, 100000);
         ComboBox<String> OMBiasOption = new ComboBox<>(FXCollections.observableArrayList("None", "Random"));
@@ -155,14 +201,21 @@ public class App extends Application {
         ComboBox<String> TSPBiasOption = new ComboBox<>(FXCollections.observableArrayList("None", "Linear", "Polynomial"));
 
         // Figure out which buttons to display
-        options.getChildren().addAll(
-                title,
-                UICreate.field("Wait for UI", waitForUi),
-                UICreate.field("Thread usage", optimizationOption),
-                UICreate.field("Thread/Island count", optimizationThreadCount),
-                UICreate.field("Island converging", islandConverging)
-        );
+        if(!algorithm.abbrivation.equalsIgnoreCase("p"))
+            options.getChildren().addAll(
+                    title,
+                    UICreate.field("Wait for UI", waitForUi),
+                    UICreate.field("Thread usage", optimizationOption),
+                    UICreate.field("Thread/Island count", optimizationThreadCount),
+                    UICreate.field("Island converging", islandConverging)
+            );
+
         switch (algorithm.abbrivation) {
+            case "P":
+                options.getChildren().addAll(
+                        UICreate.field("Choose", benchmark)
+                );
+                break;
             case "GA":
                 switch (problem.abbrivation) {
                     case "OM":
@@ -243,12 +296,12 @@ public class App extends Application {
                     switch (problem.abbrivation) {
                         case "OM":
                             if (oneMaxType.getSelectionModel().getSelectedItem().equalsIgnoreCase(OneMax.name))
-                                initialPopulation.value = PopulationFactory.oneMax(genes, getSelected(OMBiasOption).equalsIgnoreCase("random"));
+                                initialPopulation.set(PopulationFactory.oneMax(genes, getSelected(OMBiasOption).equalsIgnoreCase("random")));
                             else
-                                initialPopulation.value = PopulationFactory.leadingOnes(genes, getSelected(OMBiasOption).equalsIgnoreCase("random"));
+                                initialPopulation.set(PopulationFactory.leadingOnes(genes, getSelected(OMBiasOption).equalsIgnoreCase("random")));
                             break;
                         case "SS":
-                            initialPopulation.value = new Population(
+                            initialPopulation.set(new Population(
                                     pops, numArrayChoice.length, true,
                                     getSelected(SSBiasOption).equalsIgnoreCase("random"),
                                     useParallel ? choosenThreads : 1,
@@ -256,7 +309,7 @@ public class App extends Application {
                                     Fitness.subsetSum(goalChoice, numArrayChoice),
                                     Crossover.get(crossoverChoice),
                                     Selection.get(selectionChoice),
-                                    PreCalcs.get(crossoverChoice, selectionChoice, mutationChoice)
+                                    PreCalcs.get(crossoverChoice, selectionChoice, mutationChoice))
                             );
                             break;
                     }
@@ -264,7 +317,7 @@ public class App extends Application {
                 case "ACO":
                     switch (problem.abbrivation) {
                         case "TSPP":
-                            useCircle.value = false;
+                            useCircle.set(false);
                         case "TSPC":
                             if (graphType.equalsIgnoreCase("random")) {
                                 points = new double[randomGraphSize][];
@@ -277,7 +330,7 @@ public class App extends Application {
                                         .toArray(double[][]::new);
                             }
 
-                            initialPopulation.value = ColonyFactory.travelingSalesman(points, pops, percentChanging, choosenThreads, NodeBias.get(getSelected(TSPBiasOption)), natural.ACO.Mutation.get(ACOMutation, useCircle.value));
+                            initialPopulation.set(ColonyFactory.travelingSalesman(points, pops, percentChanging, choosenThreads, NodeBias.get(getSelected(TSPBiasOption)), natural.ACO.Mutation.get(ACOMutation, useCircle.get())));
                             break;
                     }
                     break;
@@ -286,14 +339,20 @@ public class App extends Application {
             if (useIslands) {
                 int islandConvergingPoint = islandConverging.getNumberAsInt();
                 if (algorithm.abbrivation.equalsIgnoreCase("GA"))
-                    work = IslandFactory.islandsOfPopulations((Population) initialPopulation.value, choosenThreads, islandConvergingPoint);
+                    work = IslandFactory.islandsOfPopulations((Population) initialPopulation.get(), choosenThreads, islandConvergingPoint);
                 else
                     work = IslandFactory.islandsOfTSPColonies(
                             choosenThreads, islandConvergingPoint,
-                            useCircle.value, points, pops, percentChanging, choosenThreads, NodeBias.get(getSelected(TSPBiasOption)), natural.ACO.Mutation.get(ACOMutation, useCircle.value));
-                initialPopulation.value = ((Islands) work).getIsland(0);
+                            useCircle.get(),
+                            points,
+                            pops,
+                            percentChanging,
+                            choosenThreads,
+                            NodeBias.get(getSelected(TSPBiasOption)),
+                            natural.ACO.Mutation.get(ACOMutation, useCircle.get()));
+                initialPopulation.set(((Islands) work).getIsland(0));
             } else {
-                work = initialPopulation.value;
+                work = initialPopulation.get();
             }
 
             // Used to force the algorithm to wait for UI to finish using data before overwriting it
@@ -309,13 +368,13 @@ public class App extends Application {
                     Action action = () -> {
                             if (!version.isSame(myVersion))
                             throw new InterruptedException("Halting...");
-                        if (initialPopulation.value.getBestFitness() != best.value) {
-                            best.set(initialPopulation.value.getBestFitness());
+                        if (initialPopulation.get().getBestFitness() != best.get()) {
+                            best.set(initialPopulation.get().getBestFitness());
                             if (useUiLock)
-                                UILock.value = new CountDownLatch(1);
+                                UILock.set(new CountDownLatch(1));
                             updateMessage(best.toString());
                             if (useUiLock)
-                                UILock.value.await(10, TimeUnit.SECONDS);
+                                UILock.get().await(10, TimeUnit.SECONDS);
                         }
                     };
                     // Changes between different algorithm runs
@@ -346,19 +405,19 @@ public class App extends Application {
                     case "GA":
                         switch (problem.abbrivation) {
                             case "OM":
-                                updateOMGraph((Population) initialPopulation.value);
+                                updateOMGraph((Population) initialPopulation.get());
                                 break;
                             case "SS":
-                                updateSSGraph((Population) initialPopulation.value, numArrayChoice);
+                                updateSSGraph((Population) initialPopulation.get(), numArrayChoice);
                                 break;
                         }
                         break;
                     case "ACO":
-                        updateTSPGraph((Colony) initialPopulation.value, useCircle.value);
+                        updateTSPGraph((Colony) initialPopulation.get(), useCircle.get());
                         break;
                 }
                 if (useUiLock)
-                    UILock.value.countDown();
+                    UILock.get().countDown();
             }));
 
             /*
@@ -372,14 +431,17 @@ public class App extends Application {
                     break;
                 case "TSPP":
                 case "TSPC":
-                    drawTSPGraph(((Colony) initialPopulation.value).getGraph());
+                    drawTSPGraph(((Colony) initialPopulation.get()).getGraph());
                     break;
             }
 
             new Thread(task).start();
         });
 
-        options.getChildren().addAll(runButton, abortButton);
+        if(algorithm.abbrivation.equalsIgnoreCase("p"))
+            options.getChildren().addAll(benchButton);
+        else
+            options.getChildren().addAll(runButton, abortButton);
     }
 
     private String getSelected(ComboBox<String> box) {

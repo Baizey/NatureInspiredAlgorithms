@@ -26,7 +26,7 @@ public class IslandFactory {
         ) {
         return new Islands(
                 Convergence.keepBestAfterColonyX(convergencePoint),
-                AbstractPopulation::evolve,
+                pop -> pop.evolve(5),
                 IntStream.generate(() -> 0).limit(colonies).mapToObj(i -> ColonyFactory.travelingSalesman(graph, generationSize, percentChange, maxThreads, bias, mutation)).toArray(Colony[]::new)
         );
     }

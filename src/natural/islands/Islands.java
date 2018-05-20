@@ -1,5 +1,6 @@
 package natural.islands;
 
+import lsm.helpers.IO.write.text.console.Note;
 import natural.AbstractIndividual;
 import natural.AbstractPopulation;
 import natural.interfaces.ConvergenceInterface;
@@ -32,13 +33,14 @@ public class Islands extends AbstractPopulation {
     @Override
     public void evolveParallel() throws Exception {
         CountDownLatch counter = new CountDownLatch(islands.length);
+        Note.writenl(islands.length);
         for (AbstractPopulation island : islands)
             pool.submit(() -> {
                 evolutionStep.evolve(island);
                 counter.countDown();
                 return null;
             });
-        counter.await(1000, TimeUnit.SECONDS);
+        counter.await(100, TimeUnit.MINUTES);
         convergence.merge(islands);
     }
 

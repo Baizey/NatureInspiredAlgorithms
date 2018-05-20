@@ -6,10 +6,10 @@ import natural.benchmark.GraphingData;
 public class Driver {
 
     public static void main(String[] args) throws Exception {
-        String filename = "LO";
+        String filename = "TSPP";
         //filename += "Avg";
-        //GraphingData.generate(filename, 5, 5);
-        GraphingData.display(filename);
+        GraphingData.generate(filename);
+        GraphingData.launchDisplay(filename);
     }
 
 }

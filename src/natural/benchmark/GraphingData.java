@@ -10,6 +10,8 @@ import lsm.helpers.IO.read.text.TextReader;
 import lsm.helpers.IO.write.text.TextWriter;
 import lsm.helpers.IO.write.text.console.Note;
 import lsm.helpers.Time;
+import lsm.helpers.utils.Wrap;
+import natural.ACO.Ant;
 import natural.ACO.Mutation;
 import natural.ACO.NodeBias;
 import natural.AbstractPopulation;
@@ -32,15 +34,23 @@ public class GraphingData extends Application {
         double[][] data = TextReader.getTextReader(filename + ".txt").lines()
                 .map(i -> Pattern.compile(" ").splitAsStream(i).mapToDouble(Double::parseDouble).toArray())
                 .toArray(double[][]::new);
-
         lineNames = Arrays.stream(formulas).map(l -> l.name).toArray(String[]::new);
         lines = new double[formulas.length][][];
-        for (var i = new Wrap<>(0); i.value < lines.length; i.value++)
-            lines[i.value] = Arrays.stream(data).map(point -> formulas[i.value].lineFormula.convert(point)).toArray(double[][]::new);
+        for (var i = new Wrap<>(0); i.get() < lines.length; i.set(i.get() + 1))
+            lines[i.get()] = Arrays.stream(data).map(point -> formulas[i.get()].lineFormula.convert(point)).toArray(double[][]::new);
+    }
+
+    public static void launchDisplay(String filename) throws Exception {
+        display(filename);
         launch();
     }
 
-    public void start(Stage stage) {
+    public static LineChart getDisplay(String filename) throws Exception {
+        display(filename);
+        return getDisplay();
+    }
+
+    public static LineChart getDisplay() {
         final var xAxis = new NumberAxis();
         xAxis.setLabel(GraphingData.xAxis);
         final var yAxis = new NumberAxis();
@@ -54,17 +64,20 @@ public class GraphingData extends Application {
                 series.getData().add(new XYChart.Data<>(point[0], point[1]));
             lineChart.getData().add(series);
         }
-
         lineChart.setCreateSymbols(false);
         lineChart.setAnimated(false);
-        Scene scene = new Scene(lineChart, 800, 600);
+        return lineChart;
+    }
+
+    public void start(Stage stage) {
+        Scene scene = new Scene(getDisplay(), 800, 600);
         stage.setScene(scene);
         stage.show();
     }
 
     private static String filename;
 
-    public static void setFilename(String filename){
+    public static void setFilename(String filename) {
         GraphingData.filename = filename;
     }
 
@@ -78,7 +91,10 @@ public class GraphingData extends Application {
                 displayLO();
                 break;
             case "TS":
-                displayTSP();
+                if(filename.substring(0, 4).equalsIgnoreCase("tspc"))
+                    displayTSPC();
+                else
+                    displayTSPP();
         }
     }
 
@@ -110,26 +126,26 @@ public class GraphingData extends Application {
                 generate(PopulationFactory::oneMax,
                         (at, pop) -> pop.evolveUntilGoal(at),
                         AbstractPopulation::getGeneration,
-                        Math.max(step, 1), step * 100, times);
+                        step, step, step * 100, times);
                 break;
             case "LO":
                 generate(PopulationFactory::leadingOnes,
                         (at, pop) -> pop.evolveUntilGoal(at),
                         AbstractPopulation::getGeneration,
-                        Math.max(step, 1), step * 100, times);
+                        step, step, step * 100, times);
                 break;
             case "TS":
-                if(filename.substring(0, 4).equalsIgnoreCase("tspc"))
-                    useCircle.value = true;
+                boolean isCircle = filename.substring(0, 4).equalsIgnoreCase("tspc");
+                if (isCircle) useCircle.set(true);
                 generate(i -> {
                             double[][] points = new double[Math.max(i, 2)][];
-                            for(int j = 0; j < points.length; j++)
+                            for (int j = 0; j < points.length; j++)
                                 points[j] = new double[]{random.nextInt(1000), random.nextInt(1000)};
-                            return ColonyFactory.travelingSalesman(points, 1000, 0.05, Runtime.getRuntime().availableProcessors(), NodeBias.linearBias(), useCircle.value ? Mutation.twoOptCircle() : Mutation.twoOpt());
+                            return ColonyFactory.travelingSalesman(points, 1000, 0.01, Runtime.getRuntime().availableProcessors(), NodeBias.linearBias(), useCircle.get() ? Mutation.twoOptCircle() : Mutation.twoOpt());
                         },
-                        (at, pop) -> pop.evolveUntilNoProgressParallel(100),
-                        (pop) -> pop.getGeneration() - 100,
-                        step, Math.min(step * 100, 120), times);
+                        (at, pop) -> pop.evolveUntilNoProgressParallel(1000),
+                        (pop) -> (int) Arrays.stream(((Ant) pop.getBest()).getEdges()).mapToDouble(i -> i.cost).sum(),
+                        Math.max(5, step), step, Math.min(step * 100, 120), times);
                 break;
         }
     }
@@ -150,35 +166,46 @@ public class GraphingData extends Application {
         GraphingData.init(
                 filename, "Genes", "Generations",
                 new Line[]{
-                        new Line("+10%", point -> new double[]{point[0],        Math.E * point[0] * Math.log(point[0]) * 1.1D}),
-                        new Line("Expected", point -> new double[]{point[0],    Math.E * point[0] * Math.log(point[0]) * 1.0D}),
-                        new Line("-10%", point -> new double[]{point[0],        Math.E * point[0] * Math.log(point[0]) * 0.9D}),
+                        new Line("+10%", point -> new double[]{point[0], Math.E * point[0] * Math.log(point[0]) * 1.1D}),
+                        new Line("Expected", point -> new double[]{point[0], Math.E * point[0] * Math.log(point[0]) * 1.0D}),
+                        new Line("-10%", point -> new double[]{point[0], Math.E * point[0] * Math.log(point[0]) * 0.9D}),
                         new Line("Data", point -> point)
                 });
     }
 
-    private static void displayTSP() throws Exception {
+    private static void displayTSPC() throws Exception {
         GraphingData.init(
-                filename, "Points", "Generations",
+                filename, "Points", "Path distance",
                 new Line[]{
-                        new Line("+10%", point -> new double[]{point[0],        point[0] * Math.log(point[0]) * 1.1D}),
-                        new Line("Expected", point -> new double[]{point[0],    point[0] * Math.log(point[0]) * 1.0D}),
-                        new Line("-10%", point -> new double[]{point[0],        point[0] * Math.log(point[0]) * 0.9D}),
+                        new Line("Upper bound", point -> new double[]{point[0], 1000D * (Math.sqrt(2D * point[0]) + 1.75)}),
+                        new Line("Average", point -> new double[]{point[0], 1000D * (((Math.sqrt(2D * point[0]) + 1.75) + .7078D * Math.sqrt(point[0]) + .551D) / 2D)}),
+                        new Line("Lower bound", point -> new double[]{point[0], 1000D * (.7078D * Math.sqrt(point[0]) + .551D)}),
                         new Line("Data", point -> point)
                 });
     }
 
-    private static void generate(PopulationCreator creator, Evolution evolution, Counter counter, int step, int max, int times) throws Exception {
+    private static void displayTSPP() throws Exception {
+        GraphingData.init(
+                filename, "Points", "Path distance",
+                new Line[]{
+                        new Line("Upper bound", point -> new double[]{point[0] + 1, 1000D * (Math.sqrt(2D * point[0]) + 1.75)}),
+                        new Line("Average", point -> new double[]{point[0] + 1, 1000D * (((Math.sqrt(2D * point[0]) + 1.75) + .7078D * Math.sqrt(point[0]) + .551D) / 2D)}),
+                        new Line("Lower bound", point -> new double[]{point[0] + 1, 1000D * (.7078D * Math.sqrt(point[0]) + .551D)}),
+                        new Line("Data", point -> point)
+                });
+    }
+
+    private static void generate(PopulationCreator creator, Evolution evolution, Counter counter, int start, int step, int max, int times) throws Exception {
         var writer = TextWriter.getWriter(filename, "txt", true);
         Time.init();
-        for (var i = step; i <= max; i += step) {
+        for (var i = start; i <= max; i += step) {
             var generations = 0L;
             for (var j = 0; j < times; j++) {
                 var population = creator.getPop(i);
                 evolution.evolve(i, population);
                 generations += counter.count(population);
             }
-            writer.write(i + " " + ((double)generations / times) + "\n");
+            writer.write(i + " " + ((double) generations / times) + "\n");
             Note.write(i).write(" -> ");
             Time.reset();
             writer.flush();
@@ -199,12 +226,5 @@ interface Evolution {
 
 interface Counter {
     int count(AbstractPopulation population);
-}
-
-class Wrap<T> {
-    T value;
-    Wrap(T value) {
-        this.value = value;
-    }
 }
 

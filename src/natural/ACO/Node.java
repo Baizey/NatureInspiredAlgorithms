@@ -8,10 +8,10 @@ public class Node {
 
     private static final Random random = new Random();
     static int nextUsagePoint = 1;
-    int[] lastUsage;
+    public int[] lastUsage;
     private static int NEXTID = 0;
 
-    private Edge[] edges;
+    private Edge[] edges = new Edge[0];
 
     private final int id = NEXTID++;
     public final String name;
@@ -24,6 +24,13 @@ public class Node {
 
     public void setMaxEdges(int n){
         this.edges = new Edge[n];
+    }
+
+    public void addEdge(Edge edge){
+        Edge[] edges = new Edge[this.edges.length + 1];
+        System.arraycopy(this.edges, 0, edges, 0, edges.length);
+        edges[edges.length - 1] = edge;
+        edgeMap.put(edge.source, edges.length - 1);
     }
 
     public void setEdge(Edge edge, int i) {

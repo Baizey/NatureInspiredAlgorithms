@@ -6,36 +6,39 @@ import java.util.Arrays;
 
 public class NodeBias {
 
-    public static Bias linearBias(){
+    public static Bias linearBias() {
         return node -> {
             double max = Arrays.stream(node.getCosts()).max().orElse(1D);
             double[] chances = new double[node.getCosts().length];
-            for(int i = 0; i < node.getCosts().length; i++)
+            for (int i = 0; i < node.getCosts().length; i++)
                 chances[i] = max - node.getCost(i);
             node.initChances(chances);
         };
     }
 
-    public static Bias polynomialBias(){
+    public static Bias polynomialBias() {
         return node -> {
             double max = Arrays.stream(node.getCosts()).max().orElse(1D);
             double[] chances = new double[node.getCosts().length];
-            for(int i = 0; i < node.getCosts().length; i++)
+            for (int i = 0; i < node.getCosts().length; i++)
                 chances[i] = Math.pow(max - node.getCost(i), 2);
             node.initChances(chances);
         };
     }
 
-    public static Bias noBias(){
+    public static Bias noBias() {
         return Node::initChances;
     }
 
 
     public static Bias get(String bias) {
-        switch(bias.toLowerCase()){
-            case "none": return noBias();
-            case "linear": return linearBias();
-            default: return polynomialBias();
+        switch (bias.toLowerCase()) {
+            case "none":
+                return noBias();
+            case "linear":
+                return linearBias();
+            default:
+                return polynomialBias();
         }
     }
 }
