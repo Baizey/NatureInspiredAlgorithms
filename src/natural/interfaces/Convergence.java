@@ -2,7 +2,7 @@ package natural.interfaces;
 
 import natural.AbstractPopulation;
 
-public interface ConvergenceInterface {
+public interface Convergence {
 
     void merge(AbstractPopulation[] islands);
 

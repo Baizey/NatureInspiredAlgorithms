@@ -27,7 +27,8 @@ public class Ant extends AbstractIndividual<Edge[]> {
         dna[insertionPoint++] = edge;
     }
 
-    public void copyFrom(Ant other) {
+    public void copy(AbstractIndividual individual) {
+        Ant other = (Ant) individual;
         fitness = other.fitness;
         insertionPoint = other.insertionPoint;
         if (other.length > length)

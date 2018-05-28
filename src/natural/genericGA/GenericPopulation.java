@@ -1,27 +1,25 @@
-package natural.GA;
+package natural.genericGA;
 
 import natural.AbstractPopulation;
+import natural.genericGA.binaryGA.PreCalcData;
 import natural.interfaces.*;
-import natural.interfaces.Crossover;
-import natural.interfaces.Mutation;
-import natural.interfaces.Selection;
 
 import java.util.Arrays;
 import java.util.concurrent.CountDownLatch;
 
-@SuppressWarnings({"WeakerAccess", "unused"})
-public class Population extends AbstractPopulation {
+public class GenericPopulation<T> extends AbstractPopulation {
     private final int popSize, startFrom;
     private final boolean elitism;
-    private Individual[] nextGen, currGen;
+    private GenericIndividual[] nextGen, currGen;
     private final Selection selection;
-    private final GeneticAlgorithmFitness fitness;
+    private final Fitness fitness;
     private final Crossover crossover;
     private final Mutation mutator;
     private final PreCalc preCalculations;
+    private final int geneSize;
     private PreCalcData preCalcData = null;
 
-    public Population(Population other) {
+    public GenericPopulation(GenericPopulation<T> other) {
         super(other.maxThreads, other.popSize);
         this.popSize = other.popSize;
         this.elitism = other.elitism;
@@ -32,74 +30,77 @@ public class Population extends AbstractPopulation {
         this.crossover = other.crossover;
         this.mutator = other.mutator;
         this.preCalculations = other.preCalculations;
-        this.currGen = new Individual[popSize];
-        this.nextGen = new Individual[popSize];
+        this.currGen = new GenericIndividual[popSize];
+        this.nextGen = new GenericIndividual[popSize];
 
-        int geneSize = other.getBest().getLength();
+        geneSize = other.getBest().getLength();
         for (int i = 0; i < popSize; i++) {
-            currGen[i] = new Individual(geneSize, false);
-            nextGen[i] = new Individual(geneSize, false);
-        }
-        for(int i = 0; i < popSize; i++) {
-            currGen[i].copyDnaFrom(other.currGen[i]);
-            currGen[i].setFitness(other.currGen[i].getFitness());
+            currGen[i] = other.currGen[i].clone(false);
+            nextGen[i] = other.nextGen[i].clone(false);
         }
 
-
-        if(other.preCalcData != null) {
+        if (other.preCalcData != null) {
             long[] longs = other.preCalcData.longs == null ? null
                     : Arrays.copyOf(other.preCalcData.longs, other.preCalcData.longs.length);
             double[] doubles = other.preCalcData.doubles == null ? null
                     : Arrays.copyOf(other.preCalcData.doubles, other.preCalcData.doubles.length);
-            preCalcData = new PreCalcData(longs, doubles);
+            String[] strings = other.preCalcData.strings == null ? null
+                    : Arrays.copyOf(other.preCalcData.strings, other.preCalcData.strings.length);
+            preCalcData = new PreCalcData(longs, doubles, strings);
         }
     }
 
-    public void copyPopulationDnaFrom(Population other){
-        for(int i = 0; i < popSize; i++)
-            currGen[i].copyDnaFrom(other.currGen[i]);
+    @Override
+    public void copyPopulation(AbstractPopulation other) {
+        GenericPopulation pops = (GenericPopulation) other;
+        for (int i = 0; i < popSize; i++)
+            currGen[i].copy(pops.currGen[i]);
     }
 
-    public Population(
+    public GenericPopulation(
             int popSize, int geneSize,
             boolean elitism,
             boolean generate,
             Mutation mutationInterface,
-            GeneticAlgorithmFitness fitnessInterface,
+            Fitness fitnessInterface,
             Crossover crossoverInterface,
             Selection selectionInterface,
-            PreCalc preCalculations
+            PreCalc preCalculations,
+            GenericIndividual<T> prototype
     ) {
         this(popSize,
-            geneSize,
-            elitism,
-            generate,
-            Runtime.getRuntime().availableProcessors(),
-            mutationInterface,
-            fitnessInterface,
-            crossoverInterface,
-            selectionInterface,
-            preCalculations);
+                geneSize,
+                elitism,
+                generate,
+                Runtime.getRuntime().availableProcessors(),
+                mutationInterface,
+                fitnessInterface,
+                crossoverInterface,
+                selectionInterface,
+                preCalculations,
+                prototype);
     }
 
-    public Population(
+    public GenericPopulation(
             int popSize, int geneSize,
             boolean elitism,
             boolean generate,
             int maxThreads,
             Mutation mutationInterface,
-            GeneticAlgorithmFitness fitnessInterface,
+            Fitness fitnessInterface,
             Crossover crossoverInterface,
             Selection selectionInterface,
-            PreCalc preCalculations
+            PreCalc preCalculations,
+            GenericIndividual<T> individualPrototype
     ) {
         super(Math.min(popSize, maxThreads) - (elitism ? 1 : 0), popSize - (elitism ? 1 : 0));
+        this.geneSize = geneSize;
         this.preCalculations = preCalculations;
-        this.currGen = new Individual[popSize];
-        this.nextGen = new Individual[popSize];
-            for (int i = 0; i < popSize; i++) {
-                currGen[i] = new Individual(geneSize, generate);
-                nextGen[i] = new Individual(geneSize, false);
+        this.currGen = new GenericIndividual[popSize];
+        this.nextGen = new GenericIndividual[popSize];
+        for (int i = 0; i < popSize; i++) {
+            currGen[i] = individualPrototype.clone(generate);
+            nextGen[i] = individualPrototype.clone(false);
         }
 
         this.popSize = popSize;
@@ -110,7 +111,7 @@ public class Population extends AbstractPopulation {
         this.crossover = crossoverInterface;
         this.selection = selectionInterface;
 
-        for(Individual individual : currGen)
+        for (GenericIndividual individual : currGen)
             fitness.calc(individual);
         findBestFitness();
     }
@@ -122,10 +123,8 @@ public class Population extends AbstractPopulation {
         preCalcData = preCalculations.calc(currGen, preCalcData);
 
         // Move over current best pop if elitism is true
-        if (elitism) {
-            nextGen[0].setFitness(currGen[0]);
-            nextGen[0].copyDnaFrom(currGen[0]);
-        }
+        if (elitism)
+            nextGen[0].copy(currGen[0]);
 
         for (int i = startFrom; i < popSize; i++) {
             crossover.crossover(preCalcData,
@@ -135,7 +134,8 @@ public class Population extends AbstractPopulation {
             mutator.mutate(preCalcData, nextGen[i]);
             fitness.calc(nextGen[i]);
         }
-        Individual[] temp = currGen;
+
+        var temp = currGen;
         currGen = nextGen;
         nextGen = temp;
         findBestFitness();
@@ -146,15 +146,14 @@ public class Population extends AbstractPopulation {
     public void evolveParallel() throws InterruptedException {
         generation++;
         preCalcData = preCalculations.calc(currGen, preCalcData);
-        if (elitism) {
-            nextGen[0].setFitness(currGen[0]);
-            nextGen[0].copyDnaFrom(currGen[0]);
-        }
-        CountDownLatch counter = new CountDownLatch(maxThreads);
-        for(int i = startFrom; i < popSize; i += threadWork) {
-            int min = i, max = Math.min(popSize, i + threadWork);
+        if (elitism)
+            nextGen[0].copy(currGen[0]);
+        var counter = new CountDownLatch(maxThreads);
+        for (int i = startFrom; i < popSize; i += threadWork) {
+            int min = i,
+                max = Math.min(popSize, i + threadWork);
             pool.submit(() -> {
-                for(int k = min; k < max; k++) {
+                for (int k = min; k < max; k++) {
                     crossover.crossover(preCalcData,
                             selection.select(preCalcData, currGen),
                             selection.select(preCalcData, currGen),
@@ -166,36 +165,36 @@ public class Population extends AbstractPopulation {
             });
         }
         counter.await();
-        Individual[] temp = currGen;
+        var temp = currGen;
         currGen = nextGen;
         nextGen = temp;
         findBestFitness();
     }
 
 
-    void findBestFitness() {
+    private void findBestFitness() {
         // Always ensure the #1 pop is placed at index 0
         int best = 0;
         for (int i = 1; i < popSize; i++)
             if (currGen[i].getFitness() > currGen[best].getFitness())
                 best = i;
         if (best != 0) {
-            Individual temp = currGen[0];
+            GenericIndividual temp = currGen[0];
             currGen[0] = currGen[best];
             currGen[best] = temp;
         }
     }
 
-    public Individual[] getPopulation() {
+    public GenericIndividual[] getPopulation() {
         return currGen;
     }
 
-    public Individual getBest() {
+    public GenericIndividual getBest() {
         return currGen[0];
     }
 
-    public Dna getBestDna() {
-        return currGen[0].getDna();
+    public T getBestDna() {
+        return (T) currGen[0].getDna();
     }
 
     @Override
@@ -211,7 +210,7 @@ public class Population extends AbstractPopulation {
         return crossover;
     }
 
-    public Individual[] getNextGen() {
+    public GenericIndividual[] getNextGen() {
         return nextGen;
     }
 
@@ -219,7 +218,11 @@ public class Population extends AbstractPopulation {
         return mutator;
     }
 
-    public GeneticAlgorithmFitness getFitness() {
+    public Fitness getFitness() {
         return fitness;
+    }
+
+    public int getGeneSize() {
+        return geneSize;
     }
 }

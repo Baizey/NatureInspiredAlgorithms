@@ -1,6 +1,5 @@
 package natural;
 
-@SuppressWarnings("ALL")
 public abstract class AbstractIndividual <T> {
     private static final long UNSET_FITNESS = Long.MIN_VALUE;
     protected T dna;
@@ -19,12 +18,12 @@ public abstract class AbstractIndividual <T> {
         this.fitness = fitness;
     }
 
-    public void resetFitness() {
-        fitness = UNSET_FITNESS;
+    public void setFitness(int fitness) {
+        this.fitness = fitness;
     }
 
-    public boolean needsFitnessCalculation() {
-        return fitness == UNSET_FITNESS;
+    public void resetFitness() {
+        fitness = UNSET_FITNESS;
     }
 
     public long getFitness() {
@@ -38,4 +37,6 @@ public abstract class AbstractIndividual <T> {
     public T getDna(){
         return dna;
     }
+
+    public abstract void copy(AbstractIndividual individual);
 }

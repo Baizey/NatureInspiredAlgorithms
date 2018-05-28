@@ -1,4 +1,4 @@
-package natural.GA;
+package natural.genericGA.binaryGA;
 
 import java.util.Random;
 
@@ -15,7 +15,7 @@ public class Selection {
             long min = Math.abs(preCalc.longs[0]);
             long sum = preCalc.longs[1] + 1;
             double pick = Math.abs(random.nextLong()) % sum;
-            for (Individual individual : individuals) {
+            for (var individual : individuals) {
                 pick -= individual.getFitness() + min;
                 if (pick <= 0) return individual;
             }

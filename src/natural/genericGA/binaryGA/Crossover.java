@@ -1,4 +1,4 @@
-package natural.GA;
+package natural.genericGA.binaryGA;
 
 import java.util.Random;
 
@@ -10,22 +10,22 @@ public class Crossover {
         return (preCalc, male, female, baby) -> {
             int geneSize = baby.getLength();
             int split = geneSize / 2;
-            baby.getDna().copyFrom(male.getDna(), 0, split);
-            baby.getDna().copyFrom(female.getDna(), split, geneSize);
+            ((BinaryIndividual) baby).getDna().copyFrom(((BinaryIndividual) male).getDna(), 0, split);
+            ((BinaryIndividual) baby).getDna().copyFrom(((BinaryIndividual) female).getDna(), split, geneSize);
         };
     }
 
     public static natural.interfaces.Crossover halfAndHalfRandom() {
         return (preCalc, male, female, baby) -> {
             if (random.nextDouble() >= 0.5) {
-                Individual temp = male;
+                BinaryIndividual temp = (BinaryIndividual) male;
                 male = female;
                 female = temp;
             }
             int geneSize = baby.getLength();
             int split = geneSize / 2;
-            baby.getDna().copyFrom(male.getDna(), 0, split);
-            baby.getDna().copyFrom(female.getDna(), split, geneSize);
+            ((BinaryIndividual) baby).getDna().copyFrom(((BinaryIndividual) male).getDna(), 0, split);
+            ((BinaryIndividual) baby).getDna().copyFrom(((BinaryIndividual) female).getDna(), split, geneSize);
         };
     }
 
@@ -36,13 +36,13 @@ public class Crossover {
                     totalFitness = maleFitness + femaleFitness;
             int geneSize = baby.getLength();
             int split = (int) (geneSize * (maleFitness / totalFitness));
-            baby.getDna().copyFrom(male.getDna(), 0, split);
-            baby.getDna().copyFrom(female.getDna(), split, geneSize);
+            ((BinaryIndividual) baby).getDna().copyFrom(((BinaryIndividual) male).getDna(), 0, split);
+            ((BinaryIndividual) baby).getDna().copyFrom(((BinaryIndividual) female).getDna(), split, geneSize);
         };
     }
 
     public static natural.interfaces.Crossover none() {
-        return (preCalc, male, female, baby) -> baby.getDna().copyFrom(male.getDna());
+        return (preCalc, male, female, baby) -> ((BinaryIndividual) baby).getDna().copyFrom(((BinaryIndividual) male).getDna());
     }
 
     public static natural.interfaces.Crossover get(String crossoverChoice) {

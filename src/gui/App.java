@@ -28,11 +28,11 @@ import natural.ACO.Edge;
 import natural.ACO.Node;
 import natural.ACO.NodeBias;
 import natural.AbstractPopulation;
-import natural.GA.*;
 import natural.benchmark.GraphingData;
 import natural.factory.ColonyFactory;
 import natural.factory.IslandFactory;
 import natural.factory.PopulationFactory;
+import natural.genericGA.binaryGA.*;
 import natural.interfaces.Action;
 import natural.islands.Islands;
 
@@ -301,7 +301,7 @@ public class App extends Application {
                                 initialPopulation.set(PopulationFactory.leadingOnes(genes, getSelected(OMBiasOption).equalsIgnoreCase("random")));
                             break;
                         case "SS":
-                            initialPopulation.set(new Population(
+                            initialPopulation.set(new BinaryPopulation(
                                     pops, numArrayChoice.length, true,
                                     getSelected(SSBiasOption).equalsIgnoreCase("random"),
                                     useParallel ? choosenThreads : 1,
@@ -339,7 +339,7 @@ public class App extends Application {
             if (useIslands) {
                 int islandConvergingPoint = islandConverging.getNumberAsInt();
                 if (algorithm.abbrivation.equalsIgnoreCase("GA"))
-                    work = IslandFactory.islandsOfPopulations((Population) initialPopulation.get(), choosenThreads, islandConvergingPoint);
+                    work = IslandFactory.islandsOfPopulations((BinaryPopulation) initialPopulation.get(), choosenThreads, islandConvergingPoint);
                 else
                     work = IslandFactory.islandsOfTSPColonies(
                             choosenThreads, islandConvergingPoint,
@@ -366,7 +366,7 @@ public class App extends Application {
                     var best = new Wrap<>(-1L);
                     // Action to do between each generation
                     Action action = () -> {
-                            if (!version.isSame(myVersion))
+                        if (!version.isSame(myVersion))
                             throw new InterruptedException("Halting...");
                         if (initialPopulation.get().getBestFitness() != best.get()) {
                             best.set(initialPopulation.get().getBestFitness());
@@ -405,15 +405,15 @@ public class App extends Application {
                     case "GA":
                         switch (problem.abbrivation) {
                             case "OM":
-                                updateOMGraph((Population) initialPopulation.get());
+                                updateOMGraph((BinaryPopulation) initialPopulation.get());
                                 break;
                             case "SS":
-                                updateSSGraph((Population) initialPopulation.get(), numArrayChoice);
+                                updateSSGraph((BinaryPopulation) initialPopulation.get(), numArrayChoice);
                                 break;
                         }
                         break;
                     case "ACO":
-                        updateTSPGraph((Colony) initialPopulation.get(), useCircle.get());
+                        updateTSPGraph((Colony) initialPopulation.get());
                         break;
                 }
                 if (useUiLock)
@@ -439,9 +439,9 @@ public class App extends Application {
         });
 
         if(algorithm.abbrivation.equalsIgnoreCase("p"))
-            options.getChildren().addAll(benchButton);
+            options.getChildren().addAll(UICreate.field(benchButton));
         else
-            options.getChildren().addAll(runButton, abortButton);
+            options.getChildren().addAll(UICreate.field(runButton), UICreate.field(abortButton));
     }
 
     private String getSelected(ComboBox<String> box) {
@@ -498,7 +498,7 @@ public class App extends Application {
         graph.endUpdate();
     }
 
-    private void updateTSPGraph(Colony colony, boolean circle) {
+    private void updateTSPGraph(Colony colony) {
         Model model = graph.getModel();
         Edge[] path = colony.getEdges();
         graph.beginUpdate();
@@ -512,7 +512,7 @@ public class App extends Application {
         graph.endUpdate();
     }
 
-    private void updateSSGraph(Population population, int[] nums) {
+    private void updateSSGraph(BinaryPopulation population, int[] nums) {
         updateOMGraph(
                 getPos(population.getBestDna().toArray()),
                 population.getBestDna().cardinality(),
@@ -527,7 +527,7 @@ public class App extends Application {
         content.setBottom(new Label(String.valueOf(sum)));
     }
 
-    private void updateOMGraph(Population population) {
+    private void updateOMGraph(BinaryPopulation population) {
         updateOMGraph(
                 getPos(population.getBestDna().toArray()),
                 population.getBestDna().cardinality(),

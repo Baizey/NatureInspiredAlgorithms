@@ -3,22 +3,25 @@ package natural.islands;
 import lsm.helpers.IO.write.text.console.Note;
 import natural.AbstractIndividual;
 import natural.AbstractPopulation;
-import natural.interfaces.ConvergenceInterface;
-import natural.interfaces.EvolutionStepInterface;
+import natural.interfaces.Convergence;
+import natural.interfaces.EvolutionStep;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * evolve and evolveParallel are the same for Islands
+ */
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class Islands extends AbstractPopulation {
 
     private final AbstractPopulation[] islands;
-    private final ConvergenceInterface convergence;
-    private final EvolutionStepInterface evolutionStep;
+    private final Convergence convergence;
+    private final EvolutionStep evolutionStep;
 
     public Islands(
-            ConvergenceInterface convergence,
-            EvolutionStepInterface evolutionStep,
+            Convergence convergence,
+            EvolutionStep evolutionStep,
             AbstractPopulation... populations
     ) {
         super(populations.length, populations.length);
@@ -31,16 +34,24 @@ public class Islands extends AbstractPopulation {
     public void evolve() throws Exception { evolveParallel(); }
 
     @Override
+    public void copyPopulation(AbstractPopulation other) {
+        Islands islands = (Islands) other;
+        for (int i = 0; i < this.islands.length; i++)
+            this.islands[i].copyPopulation((islands).islands[i]);
+    }
+
+    @Override
     public void evolveParallel() throws Exception {
         CountDownLatch counter = new CountDownLatch(islands.length);
-        Note.writenl(islands.length);
         for (AbstractPopulation island : islands)
             pool.submit(() -> {
                 evolutionStep.evolve(island);
                 counter.countDown();
                 return null;
             });
+        Note.writenl("Waiting");
         counter.await(100, TimeUnit.MINUTES);
+        Note.writenl("Done");
         convergence.merge(islands);
     }
 

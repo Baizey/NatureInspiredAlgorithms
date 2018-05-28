@@ -2,7 +2,7 @@ package natural.factory;
 
 import natural.ACO.Colony;
 import natural.AbstractPopulation;
-import natural.GA.Population;
+import natural.genericGA.binaryGA.BinaryPopulation;
 import natural.interfaces.AntMutation;
 import natural.interfaces.Bias;
 import natural.islands.Convergence;
@@ -31,11 +31,11 @@ public class IslandFactory {
         );
     }
 
-    public static Islands islandsOfPopulations(Population originalPopulation, int populations, int convergencePoint) {
+    public static Islands islandsOfPopulations(BinaryPopulation originalPopulation, int populations, int convergencePoint) {
         return new Islands(
                 Convergence.keepBestAfterPopulationX(convergencePoint),
                 AbstractPopulation::evolve,
-                IntStream.generate(() -> 0).limit(populations).mapToObj(i -> new Population(originalPopulation)).toArray(Population[]::new)
+                IntStream.generate(() -> 0).limit(populations).mapToObj(i -> new BinaryPopulation(originalPopulation)).toArray(BinaryPopulation[]::new)
         );
     }
 

@@ -135,7 +135,9 @@ public abstract class AbstractPopulation {
         }
     }
 
-    public abstract void evolveParallel() throws InterruptedException, Exception;
+    public abstract void copyPopulation(AbstractPopulation other);
+
+    public abstract void evolveParallel() throws Exception;
 
     public abstract long getBestFitness();
 

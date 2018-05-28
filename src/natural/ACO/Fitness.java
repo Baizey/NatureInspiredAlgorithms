@@ -1,13 +1,12 @@
 package natural.ACO;
 
-import natural.interfaces.AntColonyFitness;
-
 public class Fitness {
 
-    public static AntColonyFitness oneMax() {
-        return (ant, node) -> {
+    public static natural.interfaces.Fitness oneMax() {
+        return (individual) -> {
             int fitness = 0;
-            Node at = node;
+            Ant ant = (Ant) individual;
+            Node at = ant.getFirstNode();
             for (int i = 0; i < ant.getInsertionCount(); i++) {
                 if (at.getName(ant.getChoiceId(i)).charAt(0) == '1') fitness++;
                 at = at.getTarget(ant.getChoiceId(i));
@@ -16,13 +15,14 @@ public class Fitness {
         };
     }
 
-    public static AntColonyFitness mostNodesTraversed() {
-        return (ant, node) -> ant.setFitness(ant.getInsertionCount());
+    public static natural.interfaces.Fitness mostNodesTraversed() {
+        return (ant) -> ant.setFitness(((Ant)ant).getInsertionCount());
     }
 
-    public static AntColonyFitness lowestCostAllNodesPath() {
-        return (ant, node) -> {
-            if (ant.getInsertionCount() < node.getEdges().length) {
+    public static natural.interfaces.Fitness lowestCostAllNodesPath() {
+        return (individual) -> {
+            Ant ant = (Ant) individual;
+            if (ant.getInsertionCount() < ant.getFirstNode().getEdges().length) {
                 ant.setFitness(ant.getInsertionCount());
                 return;
             }

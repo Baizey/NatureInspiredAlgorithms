@@ -1,4 +1,4 @@
-package natural.GA;
+package natural.genericGA.binaryGA;
 
 import java.util.stream.IntStream;
 
@@ -152,7 +152,7 @@ public class Dna {
     public int leadingOnes() {
         var leading = 0;
         for (var word : words)
-            if (word == MASK)
+            if (word == -1L)
                 leading += 64;
             else for (var i = 0; i < maskes.length; i++)
                 if ((word & maskes[i]) == 0L)
@@ -164,7 +164,7 @@ public class Dna {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < length - 1; i++)
-            sb.append(longToString(words[i], 64));
+            sb.append(longToString(words[i], 64)).append(" ");
         int lastLength = bits % 64;
         if (lastLength == 0 && bits != 0) lastLength = 64;
         return sb.append(longToString(words[length - 1], lastLength)).toString();

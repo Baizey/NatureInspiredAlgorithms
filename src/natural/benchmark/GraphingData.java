@@ -8,7 +8,6 @@ import javafx.scene.chart.XYChart;
 import javafx.stage.Stage;
 import lsm.helpers.IO.read.text.TextReader;
 import lsm.helpers.IO.write.text.TextWriter;
-import lsm.helpers.IO.write.text.console.Note;
 import lsm.helpers.Time;
 import lsm.helpers.utils.Wrap;
 import natural.ACO.Ant;
@@ -206,7 +205,6 @@ public class GraphingData extends Application {
                 generations += counter.count(population);
             }
             writer.write(i + " " + ((double) generations / times) + "\n");
-            Note.write(i).write(" -> ");
             Time.reset();
             writer.flush();
         }

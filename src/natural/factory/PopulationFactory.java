@@ -1,46 +1,45 @@
 package natural.factory;
 
-import natural.GA.Population;
-import natural.GA.Crossover;
-import natural.GA.Fitness;
-import natural.interfaces.GeneticAlgorithmFitness;
-import natural.GA.Mutation;
-import natural.GA.PreCalcs;
-import natural.GA.Selection;
+import natural.genericGA.binaryGA.*;
+
+import java.util.Random;
 
 public class PopulationFactory {
 
+    private static final Random random = new Random();
 
-    public static Population leadingOnes(int geneSize) {
+    public static BinaryPopulation leadingOnes(int geneSize) {
         return leadingOnes(geneSize, false);
     }
-    public static Population leadingOnes(int geneSize, boolean randomBias) {
-        return new Population(
+
+    public static BinaryPopulation leadingOnes(int geneSize, boolean randomBias) {
+        return new BinaryPopulation(
                 2, geneSize, true, randomBias,
-                Mutation.flipRandomExact(),
+                Mutation.onePlusOne(),
                 Fitness.leadingOnes(),
                 Crossover.none(),
                 Selection.best(),
-                PreCalcs.exactPrePreCalculatedSkipChance()
+                PreCalcs.none()
         );
     }
 
-    public static Population oneMax(int geneSize) {
+    public static BinaryPopulation oneMax(int geneSize) {
         return oneMax(geneSize, false);
     }
-    public static Population oneMax(int geneSize, boolean randomBias) {
-        return new Population(
+
+    public static BinaryPopulation oneMax(int geneSize, boolean randomBias) {
+        return new BinaryPopulation(
                 2, geneSize, true, randomBias,
-                Mutation.flipRandomExact(),
+                Mutation.onePlusOne(),
                 Fitness.oneMax(),
                 Crossover.none(),
                 Selection.best(),
-                PreCalcs.exactPrePreCalculatedSkipChance()
+                PreCalcs.none()
         );
     }
 
-    public static Population normalPopulation(int geneSize, GeneticAlgorithmFitness fitnessFunction) {
-        return new Population(
+    public static BinaryPopulation normalPopulation(int geneSize, natural.interfaces.Fitness fitnessFunction) {
+        return new BinaryPopulation(
                 100, geneSize, true, true,
                 Mutation.flipOne(0.05D),
                 fitnessFunction,

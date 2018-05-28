@@ -1,10 +1,10 @@
 package natural.interfaces;
 
-import natural.GA.Individual;
-import natural.GA.PreCalcData;
+import natural.genericGA.binaryGA.PreCalcData;
+import natural.genericGA.GenericIndividual;
 
 @SuppressWarnings("unused")
 public interface Crossover {
-    void crossover(PreCalcData preCalc, Individual male, Individual female, Individual baby);
+    void crossover(PreCalcData preCalc, GenericIndividual male, GenericIndividual female, GenericIndividual baby);
 }
 

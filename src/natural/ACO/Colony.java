@@ -2,10 +2,8 @@ package natural.ACO;
 
 import natural.AbstractIndividual;
 import natural.AbstractPopulation;
-import natural.interfaces.AntColonyFitness;
-import natural.interfaces.AntMutation;
-import natural.interfaces.StartingPoint;
-import natural.interfaces.Visitation;
+import natural.interfaces.*;
+import natural.interfaces.Fitness;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -13,45 +11,26 @@ import java.util.concurrent.TimeUnit;
 public class Colony extends AbstractPopulation {
     private final Node[] graph;
     private final Visitation visitation;
-    private final AntColonyFitness fitness;
+    private final Fitness fitness;
     private final Ant best;
     private Ant bestFromGeneration;
     private final Ant curr;
     private final int generationSize;
+    private final PhermonePlacer pheromone;
     private final StartingPoint start;
-    private AntMutation mutation;
-    private final double weightAltering;
-
-    public Colony(int generationSize, double weightAltering, Node[] graph, Visitation visitation, AntColonyFitness fitness) {
-        super(generationSize);
-        this.weightAltering = weightAltering;
-        this.visitation = visitation;
-        this.fitness = fitness;
-        this.generationSize = generationSize;
-        this.graph = graph;
-        this.start = Starts.first();
-        this.best = new Ant(8);
-        this.bestFromGeneration = new Ant(8);
-        this.curr = new Ant(8);
+    private final AntMutation mutation;
+    
+    public Colony(int generationSize, Node[] graph, Visitation visitation, Fitness fitness, AntMutation mutation, PhermonePlacer pheromone) {
+        this(Runtime.getRuntime().availableProcessors(), generationSize, graph, visitation, fitness, mutation, Starts.first(), pheromone);
     }
 
-    public Colony(int maxThreads, int generationSize, double weightAltering, Node[] graph, Visitation visitation, AntColonyFitness fitness, AntMutation mutation) {
-        super(maxThreads, generationSize);
-        this.weightAltering = weightAltering;
-        this.visitation = visitation;
-        this.mutation = mutation;
-        this.fitness = fitness;
-        this.generationSize = generationSize;
-        this.graph = graph;
-        this.start = Starts.first();
-        this.best = new Ant(8);
-        this.bestFromGeneration = new Ant(8);
-        this.curr = new Ant(8);
+    public Colony(int maxThreads, int generationSize, Node[] graph, Visitation visitation, Fitness fitness, AntMutation mutation, PhermonePlacer pheromone) {
+        this(maxThreads, generationSize, graph, visitation, fitness, mutation, Starts.first(), pheromone);
     }
 
-    public Colony(int maxThreads, int generationSize, double weightAltering, Node[] graph, Visitation visitation, AntColonyFitness fitness, AntMutation mutation, StartingPoint start) {
+    public Colony(int maxThreads, int generationSize, Node[] graph, Visitation visitation, Fitness fitness, AntMutation mutation, StartingPoint start, PhermonePlacer pheromone) {
         super(maxThreads, generationSize);
-        this.weightAltering = weightAltering;
+        this.pheromone = pheromone;
         this.visitation = visitation;
         this.mutation = mutation;
         this.fitness = fitness;
@@ -63,7 +42,9 @@ public class Colony extends AbstractPopulation {
         this.curr = new Ant(8);
     }
 
-    public void copyGraphProgression(Colony colony) {
+    @Override
+    public void copyPopulation(AbstractPopulation other) {
+        var colony = (Colony) other;
         for (int i = 0; i < graph.length; i++)
             graph[i].setChances(colony.graph[i]);
     }
@@ -84,9 +65,9 @@ public class Colony extends AbstractPopulation {
                 at = at.getEdge(pick).target;
             }
             mutation.mutate(curr);
-            fitness.calc(curr, start);
+            fitness.calc(curr);
             if (curr.getFitness() > bestFromGeneration.getFitness())
-                bestFromGeneration.copyFrom(curr);
+                bestFromGeneration.copy(curr);
         }
         promoteBestRoute();
         Node.nextUsagePoint = usage;
@@ -115,9 +96,9 @@ public class Colony extends AbstractPopulation {
                         at = at.getEdge(pick).target;
                     }
                     mutation.mutate(curr);
-                    fitness.calc(curr, start);
+                    fitness.calc(curr);
                     if (curr.getFitness() > bestFromGeneration.getFitness())
-                        bestFromGeneration.copyFrom(curr);
+                        bestFromGeneration.copy(curr);
                 }
                 updateBestFromGen(bestFromGeneration);
                 lock.countDown();
@@ -125,22 +106,21 @@ public class Colony extends AbstractPopulation {
         }
         lock.await(1000, TimeUnit.MINUTES);
         Node.nextUsagePoint += generationSize;
-        promoteBestRoute();
+        pheromone.alter(bestFromGeneration);
+        if (bestFromGeneration.getFitness() > best.getFitness())
+            best.copy(bestFromGeneration);
     }
 
     private synchronized void updateBestFromGen(Ant ant) {
         if(ant.getFitness() > bestFromGeneration.getFitness())
-            bestFromGeneration.copyFrom(ant);
+            bestFromGeneration.copy(ant);
     }
 
     private void promoteBestRoute() {
-
         for(int i = 0; i < bestFromGeneration.getInsertionCount(); i++) {
             Edge edge = bestFromGeneration.getEdge(i);
-            edge.source.movePercentageTo(weightAltering, edge.target.getId());
+            pheromone.alter(bestFromGeneration);
         }
-        if (bestFromGeneration.getFitness() > best.getFitness())
-            best.copyFrom(bestFromGeneration);
     }
 
     @Override

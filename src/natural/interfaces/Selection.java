@@ -1,10 +1,10 @@
 package natural.interfaces;
 
-import natural.GA.Individual;
-import natural.GA.PreCalcData;
+import natural.genericGA.binaryGA.PreCalcData;
+import natural.genericGA.GenericIndividual;
 
 public interface Selection {
 
-    Individual select(PreCalcData preCalc, Individual[] individuals);
+    GenericIndividual select(PreCalcData preCalc, GenericIndividual[] individuals);
 
 }
