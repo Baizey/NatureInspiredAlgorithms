@@ -69,8 +69,10 @@ public class Colony extends AbstractPopulation {
             if (curr.getFitness() > bestFromGeneration.getFitness())
                 bestFromGeneration.copy(curr);
         }
-        promoteBestRoute();
         Node.nextUsagePoint = usage;
+        pheromone.alter(bestFromGeneration);
+        if (bestFromGeneration.getFitness() > best.getFitness())
+            best.copy(bestFromGeneration);
     }
 
     @Override
