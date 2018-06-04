@@ -13,11 +13,8 @@ class MouseGestures {
 
         @Override
         public void handle(MouseEvent event) {
-
             Node node = (Node) event.getSource();
-
             double scale = graph.getScale();
-
             dragContext.x = node.getBoundsInParent().getMinX() * scale - event.getScreenX();
             dragContext.y = node.getBoundsInParent().getMinY() * scale - event.getScreenY();
 

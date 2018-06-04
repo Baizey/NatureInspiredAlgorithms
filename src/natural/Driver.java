@@ -12,5 +12,4 @@ public class Driver {
         GraphingData.generate(filename, 10, 1);
         GraphingData.launchDisplay(filename);
     }
-
 }

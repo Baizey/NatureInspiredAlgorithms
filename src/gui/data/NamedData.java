@@ -2,7 +2,7 @@ package gui.data;
 
 public abstract class NamedData {
 
-    public final String abbrivation;
+    public final String abbreviation;
     public final String name;
 
     public NamedData(String name){
@@ -12,10 +12,10 @@ public abstract class NamedData {
         for(char c : name.toCharArray())
             if(c >= 'A' && c <= 'Z')
                 sb.append(c);
-        this.abbrivation = sb.toString();
+        this.abbreviation = sb.toString();
     }
 
     public String toString(){
-        return abbrivation;
+        return abbreviation;
     }
 }

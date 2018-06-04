@@ -1,7 +1,8 @@
 package natural.interfaces;
 
-import natural.genericGA.binaryGA.PreCalcData;
-import natural.genericGA.GenericIndividual;
+import natural.AbstractIndividual;
+
+import java.util.HashMap;
 
 /**
  * Used to handle calculations that are not done for each individual
@@ -11,5 +12,5 @@ import natural.genericGA.GenericIndividual;
  * PreCalcData previousData: pre calculated data from previous generation (or null if first generation)
  */
 public interface PreCalc {
-    PreCalcData calc(GenericIndividual[] population, PreCalcData previousData);
+    HashMap<String, Object> calc(AbstractIndividual[] population, HashMap<String, Object> previousData);
 }

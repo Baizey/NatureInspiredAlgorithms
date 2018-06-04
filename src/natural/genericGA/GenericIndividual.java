@@ -2,7 +2,7 @@ package natural.genericGA;
 
 import natural.AbstractIndividual;
 
-public abstract class GenericIndividual<T> extends AbstractIndividual<T> {
+public abstract class GenericIndividual<SolutionType> extends AbstractIndividual<SolutionType> {
 
     public GenericIndividual(int length, boolean generate) {
         super(length);
@@ -14,10 +14,10 @@ public abstract class GenericIndividual<T> extends AbstractIndividual<T> {
 
     @Override
     public String toString() {
-        return String.valueOf(dna);
+        return String.valueOf(solution);
     }
 
     public abstract void generateDna(boolean generate);
 
-    public abstract GenericIndividual<T> clone(boolean generate);
+    public abstract GenericIndividual<SolutionType> clone(boolean generate);
 }

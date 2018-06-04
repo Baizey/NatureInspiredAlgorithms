@@ -3,14 +3,13 @@ package natural.factory;
 import natural.ACO.Colony;
 import natural.AbstractPopulation;
 import natural.genericGA.binaryGA.BinaryPopulation;
-import natural.interfaces.AntMutation;
 import natural.interfaces.Bias;
+import natural.interfaces.Mutator;
 import natural.islands.Convergence;
 import natural.islands.Islands;
 
 import java.util.stream.IntStream;
 
-@SuppressWarnings("unused")
 public class IslandFactory {
 
     public static Islands islandsOfTSPColonies(
@@ -19,21 +18,23 @@ public class IslandFactory {
             boolean circle,
             double[][] graph,
             int generationSize,
+            double minPheromone,
+            double maxPheromone,
             double percentChange,
             int maxThreads,
             Bias bias,
-            AntMutation mutation
+            Mutator mutation
         ) {
         return new Islands(
-                Convergence.keepBestAfterColonyX(convergencePoint),
+                Convergence.keepBestAfterX(convergencePoint),
                 pop -> pop.evolve(5),
-                IntStream.generate(() -> 0).limit(colonies).mapToObj(i -> ColonyFactory.travelingSalesman(graph, generationSize, percentChange, maxThreads, bias, mutation)).toArray(Colony[]::new)
+                IntStream.generate(() -> 0).limit(colonies).mapToObj(i -> ColonyFactory.travelingSalesman(graph, generationSize, minPheromone, maxPheromone, percentChange, maxThreads, bias, mutation)).toArray(Colony[]::new)
         );
     }
 
     public static Islands islandsOfPopulations(BinaryPopulation originalPopulation, int populations, int convergencePoint) {
         return new Islands(
-                Convergence.keepBestAfterPopulationX(convergencePoint),
+                Convergence.keepBestAfterX(convergencePoint),
                 AbstractPopulation::evolve,
                 IntStream.generate(() -> 0).limit(populations).mapToObj(i -> new BinaryPopulation(originalPopulation)).toArray(BinaryPopulation[]::new)
         );

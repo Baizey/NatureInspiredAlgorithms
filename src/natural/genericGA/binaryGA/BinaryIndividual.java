@@ -6,10 +6,10 @@ import natural.genericGA.GenericIndividual;
 @SuppressWarnings("WeakerAccess")
 public class BinaryIndividual extends GenericIndividual<Dna> {
     /**
-     * Default BinaryIndividual has all dna set at 0
+     * Default BinaryIndividual has all solution set at 0
      * Generated has each gene 50/50 as 1 or 0
      *
-     * @param length   number of dna in an individual
+     * @param length   number of solution in an individual
      * @param generate if we use default individual or random
      */
     BinaryIndividual(int length, boolean generate) {
@@ -17,16 +17,16 @@ public class BinaryIndividual extends GenericIndividual<Dna> {
     }
 
     public void copy(AbstractIndividual individual) {
-        dna.copyFrom(((BinaryIndividual) individual).getDna());
+        solution.copyFrom(((BinaryIndividual) individual).getSolution());
         fitness = individual.getFitness();
     }
 
     @Override
     public void generateDna(boolean generate) {
-        dna = new Dna(length);
+        solution = new Dna(length);
         if (generate)
             for (int i = 0; i < length; i++)
-                if (Math.random() >= 0.5) dna.set(i, true);
+                if (Math.random() >= 0.5) solution.set(i, true);
     }
 
     @Override
@@ -41,7 +41,7 @@ public class BinaryIndividual extends GenericIndividual<Dna> {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < length; i++)
-            sb.append(dna.get(i) ? '1' : '0');
+            sb.append(solution.get(i) ? '1' : '0');
         return sb.toString();
     }
 }

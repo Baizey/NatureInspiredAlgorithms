@@ -4,29 +4,29 @@ import natural.genericGA.GenericPopulation;
 import natural.interfaces.Crossover;
 import natural.interfaces.*;
 import natural.interfaces.Fitness;
-import natural.interfaces.Mutation;
-import natural.interfaces.Selection;
+import natural.interfaces.Mutator;
+import natural.interfaces.Selector;
 
 @SuppressWarnings({"WeakerAccess", "unused"})
-public class BinaryPopulation extends GenericPopulation<Dna> {
+public class BinaryPopulation extends GenericPopulation {
 
-    public BinaryPopulation(GenericPopulation<Dna> other) {
+    public BinaryPopulation(GenericPopulation other) {
         super(other);
     }
 
     public BinaryPopulation(int popSize, int geneSize,
                             boolean elitism, boolean generate,
-                            Mutation mutation,
+                            Mutator mutation,
                             Fitness fitness,
                             Crossover crossover,
-                            Selection selection,
+                            Selector selector,
                             PreCalc pre) {
         super(popSize, geneSize,
                 elitism, generate,
                 mutation,
                 fitness,
                 crossover,
-                selection,
+                selector,
                 pre,
                 new BinaryIndividual(geneSize, generate));
     }
@@ -34,11 +34,11 @@ public class BinaryPopulation extends GenericPopulation<Dna> {
     public BinaryPopulation(int popSize, int geneSize,
                             boolean elitism, boolean generate,
                             int maxThreads,
-                            Mutation mutationInterface,
+                            Mutator mutationInterface,
                             Fitness fitness,
                             Crossover crossoverInterface,
-                            Selection selectionInterface,
+                            Selector selectorInterface,
                             PreCalc preCalculations) {
-        super(popSize, geneSize, elitism, generate, maxThreads, mutationInterface, fitness, crossoverInterface, selectionInterface, preCalculations, new BinaryIndividual(geneSize, generate));
+        super(popSize, geneSize, elitism, generate, maxThreads, mutationInterface, fitness, crossoverInterface, selectorInterface, preCalculations, new BinaryIndividual(geneSize, generate));
     }
 }

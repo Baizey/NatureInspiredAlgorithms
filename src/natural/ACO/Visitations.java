@@ -5,22 +5,22 @@ import natural.interfaces.Visitation;
 public class Visitations {
 
     public static Visitation none(){
-        return (id, ant, node, pick, threadId) -> {};
+        return (memory, id, ant, node, pick, threadId) -> {};
     }
 
     public static Visitation addCurrentNode(){
-        return (id, ant, node, pick, threadId) -> node.lastUsage[threadId] = id;
+        return (memory, id, ant, node, pick, threadId) -> node.lastUsage[threadId] = id;
     }
 
     public static Visitation addCurrentAndEdgeNodes(){
-        return (id, ant, node, pick, threadId) -> {
+        return (memory, id, ant, node, pick, threadId) -> {
             node.lastUsage[threadId] = id;
             for(Edge edge : node.getEdges()) edge.target.lastUsage[threadId] = id;
         };
     }
 
     public static Visitation addCurrentNodesAfterX(final int x){
-        return (id, ant, node, pick, threadId) -> {
+        return (memory, id, ant, node, pick, threadId) -> {
             if(ant.getInsertionCount() > x)
                 node.lastUsage[threadId] = id;
         };

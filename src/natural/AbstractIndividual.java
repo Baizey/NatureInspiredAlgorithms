@@ -1,8 +1,8 @@
 package natural;
 
-public abstract class AbstractIndividual <T> {
-    private static final long UNSET_FITNESS = Long.MIN_VALUE;
-    protected T dna;
+public abstract class AbstractIndividual <SolutionType> {
+    public static final long UNSET_FITNESS = Long.MIN_VALUE;
+    protected SolutionType solution;
     protected long fitness = UNSET_FITNESS;
     protected int length;
 
@@ -34,8 +34,8 @@ public abstract class AbstractIndividual <T> {
         return length;
     }
 
-    public T getDna(){
-        return dna;
+    public SolutionType getSolution(){
+        return solution;
     }
 
     public abstract void copy(AbstractIndividual individual);

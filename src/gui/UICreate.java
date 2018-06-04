@@ -9,14 +9,14 @@ import javafx.scene.layout.HBox;
 
 class UICreate {
     private static final int
-            fieldWidth = 100,
+            fieldWidth = 150,
             labelWidth = 115;
 
     private static Label getLabel(String text) {
         return new Label(text + ": ");
     }
 
-    private static HBox field(String name, Node field) {
+    static HBox field(String name, Node field) {
         var label = getLabel(name);
         label.setMinWidth(labelWidth);
         label.setMaxWidth(labelWidth);

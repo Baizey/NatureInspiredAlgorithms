@@ -4,6 +4,6 @@ import natural.AbstractPopulation;
 
 public interface Convergence {
 
-    void merge(AbstractPopulation[] islands);
+    void converge(AbstractPopulation[] islands);
 
 }

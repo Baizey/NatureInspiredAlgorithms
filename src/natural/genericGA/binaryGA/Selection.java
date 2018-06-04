@@ -1,19 +1,21 @@
 package natural.genericGA.binaryGA;
 
+import natural.interfaces.Selector;
+
 import java.util.Random;
 
 public class Selection {
 
     private static final Random random = new Random();
 
-    public static natural.interfaces.Selection random(){
+    public static Selector random() {
         return (preCalc, individuals) -> individuals[(int) (Math.random() * individuals.length)];
     }
 
-    public static natural.interfaces.Selection stochasticUniversalSampling(){
+    public static Selector stochasticUniversalSampling() {
         return (preCalc, individuals) -> {
-            long min = Math.abs(preCalc.longs[0]);
-            long sum = preCalc.longs[1] + 1;
+            long min = Math.abs((Long) preCalc.getOrDefault("min", 0L));
+            long sum = (Long) preCalc.getOrDefault("sum", 0L) + 1L;
             double pick = Math.abs(random.nextLong()) % sum;
             for (var individual : individuals) {
                 pick -= individual.getFitness() + min;
@@ -23,15 +25,18 @@ public class Selection {
         };
     }
 
-    public static natural.interfaces.Selection best() {
+    public static Selector best() {
         return (preCalc, individuals) -> individuals[0];
     }
 
-    public static natural.interfaces.Selection get(String selectionChoice) {
-        switch(selectionChoice.toLowerCase()) {
-            case "stochastic": return stochasticUniversalSampling();
-            case "random": return random();
-            default: return best();
+    public static Selector get(String selectionChoice) {
+        switch (selectionChoice.toLowerCase()) {
+            case "stochastic":
+                return stochasticUniversalSampling();
+            case "random":
+                return random();
+            default:
+                return best();
         }
     }
 }

@@ -19,11 +19,10 @@ public class Model {
     List<Edge> addedEdges;
     List<Edge> removedEdges;
 
-    Map<String, Cell> cellMap; // <id,cell>
+    Map<String, Cell> cellMap;
 
     public Model() {
         graphParent = new Cell("_ROOT_", 0, 0, 0);
-        // clear model, create lists
         clear();
     }
 
@@ -36,12 +35,7 @@ public class Model {
         addedEdges = new ArrayList<>();
         removedEdges = new ArrayList<>();
 
-        cellMap = new HashMap<>(); // <id, cell>
-    }
-
-    public void clearAddedLists() {
-        addedCells.clear();
-        addedEdges.clear();
+        cellMap = new HashMap<>();
     }
 
     public List<Cell> getAddedCells() {
@@ -68,25 +62,6 @@ public class Model {
         return allEdges;
     }
 
-    public void addCell(String id, CellType type, double x, double y) {
-        switch (type) {
-            case RECTANGLE:
-                RectangleCell rectangleCell = new RectangleCell(id, x, y);
-                addCell(rectangleCell);
-                break;
-            case TRIANGLE:
-                TriangleCell triangleCell = new TriangleCell(id, x, y);
-                addCell(triangleCell);
-                break;
-            case CIRCLE:
-                CircleCell circleCel1 = new CircleCell(id, x, y);
-                addCell(circleCel1);
-                break;
-            default:
-                throw new UnsupportedOperationException("Unsupported type: " + type);
-        }
-    }
-
     public void addCell(Cell cell) {
         addedCells.add(cell);
         cellMap.put(cell.getCellId(), cell);
@@ -101,37 +76,24 @@ public class Model {
         addedEdges.add(new Edge(cellMap.get(sourceId), cellMap.get(targetId)));
     }
 
-    /**
-     * Attach all cells which don't have a parent to graphParent
-     *
-     * @param cellList
-     */
     public void attachOrphansToGraphParent(List<Cell> cellList) {
         for (Cell cell : cellList)
             if (cell.getCellParents().size() == 0)
                 graphParent.addCellChild(cell);
     }
 
-    /**
-     * Remove the graphParent reference if it is set
-     *
-     * @param cellList
-     */
     public void disconnectFromGraphParent(List<Cell> cellList) {
         for (Cell cell : cellList)
             graphParent.removeCellChild(cell);
     }
 
     public void merge() {
-
-        // cells
         allCells.addAll(addedCells);
         allCells.removeAll(removedCells);
 
         addedCells.clear();
         removedCells.clear();
 
-        // edges
         allEdges.addAll(addedEdges);
         allEdges.removeAll(removedEdges);
 

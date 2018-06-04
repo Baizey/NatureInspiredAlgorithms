@@ -7,8 +7,8 @@ import java.util.Random;
 public class Node {
 
     private static final Random random = new Random();
-    static int nextUsagePoint = 1;
-    public int[] lastUsage;
+    static long nextUsagePoint = 1;
+    public long[] lastUsage;
     private static int NEXTID = 0;
 
     private Edge[] edges = new Edge[0];
@@ -19,7 +19,7 @@ public class Node {
 
     public Node(String name, int maxThreads) {
         this.name = name;
-        this.lastUsage = new int[maxThreads];
+        this.lastUsage = new long[maxThreads];
     }
 
     public void setMaxEdges(int n){
@@ -65,11 +65,11 @@ public class Node {
         edges[id].chance += taking;
     }
 
-    public int getRandom(int currUsage) {
+    public int getRandom(long currUsage) {
         return getRandom(currUsage, 0);
     }
 
-    public int getRandom(int currUsage, int thread) {
+    public int getRandom(long currUsage, int thread) {
         double pick = 0D;
         for (int i = 0; i < edges.length; i++)
             if (edges[i].target.lastUsage[thread] != currUsage)

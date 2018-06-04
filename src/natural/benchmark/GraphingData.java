@@ -11,7 +11,7 @@ import lsm.helpers.IO.write.text.TextWriter;
 import lsm.helpers.Time;
 import lsm.helpers.utils.Wrap;
 import natural.ACO.Ant;
-import natural.ACO.Mutation;
+import natural.ACO.AntColonyMutations;
 import natural.ACO.NodeBias;
 import natural.AbstractPopulation;
 import natural.factory.ColonyFactory;
@@ -140,7 +140,7 @@ public class GraphingData extends Application {
                             double[][] points = new double[Math.max(i, 2)][];
                             for (int j = 0; j < points.length; j++)
                                 points[j] = new double[]{random.nextInt(1000), random.nextInt(1000)};
-                            return ColonyFactory.travelingSalesman(points, 1000, 0.01, Runtime.getRuntime().availableProcessors(), NodeBias.linearBias(), useCircle.get() ? Mutation.twoOptCircle() : Mutation.twoOpt());
+                            return ColonyFactory.travelingSalesman(points, 1000, 0D, 1D, 0.01, Runtime.getRuntime().availableProcessors(), NodeBias.linearBias(), useCircle.get() ? AntColonyMutations.twoOptCircle() : AntColonyMutations.twoOpt());
                         },
                         (at, pop) -> pop.evolveUntilNoProgressParallel(1000),
                         (pop) -> (int) Arrays.stream(((Ant) pop.getBest()).getEdges()).mapToDouble(i -> i.cost).sum(),
@@ -223,6 +223,6 @@ interface Evolution {
 }
 
 interface Counter {
-    int count(AbstractPopulation population);
+    long count(AbstractPopulation population);
 }
 

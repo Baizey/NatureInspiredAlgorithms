@@ -1,31 +1,22 @@
 package natural.ACO;
 
-import natural.interfaces.AntMutation;
+import natural.interfaces.Mutator;
 
 import java.util.Random;
 
-public class Mutation {
+public class AntColonyMutations {
     private static final Random random = new Random();
 
-    private static void reverseNodes(Node[] nodes, int start, int end) {
-        int half = (end - start) / 2;
-        for (int i = 0; i < half; i++) {
-            Node t = nodes[i];
-            nodes[start + i] = nodes[end - i];
-            nodes[end - i] = t;
-        }
-
-    }
-
-    public static AntMutation twoOptCircle() {
-        return ant -> {
+    public static Mutator twoOptCircle() {
+        return (memory, individual) -> {
+            Ant ant = (Ant) individual;
             ant.add(ant.getLastNode().getEdge(ant.getFirstNode()));
             twoOpt(ant);
         };
     }
 
-    public static AntMutation twoOpt() {
-        return Mutation::twoOpt;
+    public static Mutator twoOpt() {
+        return ((memory, individual) -> twoOpt((Ant) individual));
     }
 
     private static void twoOpt(Ant ant) {
@@ -48,22 +39,25 @@ public class Mutation {
         ant.setEdge(p2, d);
     }
 
-    public static AntMutation noneCircle() {
-        return ant -> ant.add(ant.getLastNode().getEdge(ant.getFirstNode()));
-    }
-
-    public static AntMutation none() {
-        return ant -> {
+    public static Mutator noneCircle() {
+        return (memory, individual) -> {
+            Ant ant = (Ant) individual;
+            ant.add(ant.getLastNode().getEdge(ant.getFirstNode()));
         };
     }
 
-    public static AntMutation get(String name, boolean useCircle) {
+    public static Mutator none() {
+        return (memory, ant) -> {
+        };
+    }
+
+    public static Mutator get(String name, boolean useCircle) {
         switch (name.toLowerCase()) {
             case "2-opt":
                 if (useCircle) return twoOptCircle();
                 return twoOpt();
             default:
-                if(useCircle) return noneCircle();
+                if (useCircle) return noneCircle();
                 return none();
         }
     }

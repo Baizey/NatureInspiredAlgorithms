@@ -1,5 +1,7 @@
 package natural.factory;
 
+import natural.FitnessFunctions;
+import natural.PreCalcs;
 import natural.genericGA.binaryGA.*;
 
 import java.util.Random;
@@ -15,8 +17,8 @@ public class PopulationFactory {
     public static BinaryPopulation leadingOnes(int geneSize, boolean randomBias) {
         return new BinaryPopulation(
                 2, geneSize, true, randomBias,
-                Mutation.onePlusOne(),
-                Fitness.leadingOnes(),
+                BinaryMutation.onePlusOne(),
+                FitnessFunctions.leadingOnes(),
                 Crossover.none(),
                 Selection.best(),
                 PreCalcs.none()
@@ -30,8 +32,8 @@ public class PopulationFactory {
     public static BinaryPopulation oneMax(int geneSize, boolean randomBias) {
         return new BinaryPopulation(
                 2, geneSize, true, randomBias,
-                Mutation.onePlusOne(),
-                Fitness.oneMax(),
+                BinaryMutation.onePlusOne(),
+                FitnessFunctions.oneMax(),
                 Crossover.none(),
                 Selection.best(),
                 PreCalcs.none()
@@ -41,11 +43,11 @@ public class PopulationFactory {
     public static BinaryPopulation normalPopulation(int geneSize, natural.interfaces.Fitness fitnessFunction) {
         return new BinaryPopulation(
                 100, geneSize, true, true,
-                Mutation.flipOne(0.05D),
+                BinaryMutation.flipOne(0.05D),
                 fitnessFunction,
                 Crossover.halfAndHalf(),
                 Selection.stochasticUniversalSampling(),
-                PreCalcs.minAndSum() // Used at Selection
+                PreCalcs.minAndSum() // Used at Selector
         );
     }
 

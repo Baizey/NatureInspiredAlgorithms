@@ -1,10 +1,11 @@
 package natural.interfaces;
 
-import natural.genericGA.binaryGA.PreCalcData;
 import natural.genericGA.GenericIndividual;
+
+import java.util.HashMap;
 
 @SuppressWarnings("unused")
 public interface Crossover {
-    void crossover(PreCalcData preCalc, GenericIndividual male, GenericIndividual female, GenericIndividual baby);
+    void crossover(HashMap<String, Object> memory, GenericIndividual male, GenericIndividual female, GenericIndividual baby);
 }
 

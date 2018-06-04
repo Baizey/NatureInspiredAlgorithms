@@ -1,20 +1,26 @@
 package natural.factory;
 
 import natural.ACO.Colony;
-import natural.ACO.Fitness;
 import natural.ACO.Pheromones;
 import natural.ACO.Visitations;
-import natural.interfaces.AntMutation;
+import natural.FitnessFunctions;
 import natural.interfaces.Bias;
+import natural.interfaces.Mutator;
 
 @SuppressWarnings({"WeakerAccess", "unused"})
 public class ColonyFactory {
-    public static Colony travelingSalesman(double[][] points, int generationSize, double percentChange, int maxThreads, Bias bias, AntMutation mutation) {
+    public static Colony travelingSalesman(
+            double[][] points,
+            int generationSize,
+            double minPheromone, double maxPheromone, double percentChange,
+            int maxThreads,
+            Bias bias,
+            Mutator mutation) {
         return new Colony(maxThreads, generationSize,
                 GraphFactory.travelingSalesMan(maxThreads, points, bias),
                 Visitations.addCurrentNode(),
-                Fitness.lowestCostAllNodesPath(),
+                FitnessFunctions.lowestCostAllNodesPath(),
                 mutation,
-                Pheromones.percentChange(percentChange));
+                Pheromones.MMAS(minPheromone, maxPheromone, percentChange));
     }
 }

@@ -6,11 +6,11 @@ import java.util.Arrays;
 
 public class Ant extends AbstractIndividual<Edge[]> {
 
-    private int insertionPoint = 0;
+    protected int insertionPoint = 0;
 
     public Ant(int estimatedMaxLength) {
         super(estimatedMaxLength);
-        this.dna = new Edge[length];
+        this.solution = new Edge[length];
     }
 
     public void resetInsertion() {
@@ -21,10 +21,10 @@ public class Ant extends AbstractIndividual<Edge[]> {
         if (insertionPoint >= length) {
             length *= 2;
             Edge[] dna = new Edge[length];
-            System.arraycopy(this.dna, 0, dna, 0, insertionPoint);
-            this.dna = dna;
+            System.arraycopy(this.solution, 0, dna, 0, insertionPoint);
+            this.solution = dna;
         }
-        dna[insertionPoint++] = edge;
+        solution[insertionPoint++] = edge;
     }
 
     public void copy(AbstractIndividual individual) {
@@ -33,31 +33,31 @@ public class Ant extends AbstractIndividual<Edge[]> {
         insertionPoint = other.insertionPoint;
         if (other.length > length)
             length = other.length;
-        dna = Arrays.copyOf(other.dna, length);
+        solution = Arrays.copyOf(other.solution, length);
     }
 
     public Edge[] getUsedDna() {
-        return Arrays.copyOf(dna, insertionPoint);
+        return Arrays.copyOf(solution, insertionPoint);
     }
 
     public int getChoiceId(int index) {
-        return dna[index].target.getId();
+        return solution[index].target.getId();
     }
 
     public Node getFirstNode(){
-        return dna[0].source;
+        return solution[0].source;
     }
 
     public Node getLastNode(){
-        return dna[insertionPoint - 1].target;
+        return solution[insertionPoint - 1].target;
     }
 
     public Node[] getNodes(){
-        return Arrays.stream(dna).map(e -> e.source).toArray(Node[]::new);
+        return Arrays.stream(solution).map(e -> e.source).toArray(Node[]::new);
     }
 
     public Edge[] getEdges(){
-        return Arrays.copyOf(dna, insertionPoint);
+        return Arrays.copyOf(solution, insertionPoint);
     }
 
     public int getInsertionCount() {
@@ -65,10 +65,10 @@ public class Ant extends AbstractIndividual<Edge[]> {
     }
 
     public Edge getEdge(int i) {
-        return dna[i];
+        return solution[i];
     }
 
     public void setEdge(int i, Edge edge) {
-        dna[i] = edge;
+        solution[i] = edge;
     }
 }
