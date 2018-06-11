@@ -107,6 +107,10 @@ public class GraphingData extends Application {
             case "LO":
                 displayLO();
                 break;
+            case "SS":
+                displaySS();
+                //displayData(files, "Set size", "Generations");
+                break;
             case "TS":
                 if(files[0].substring(0, 4).equalsIgnoreCase("tspc"))
                     displayTSPC();
@@ -141,6 +145,9 @@ public class GraphingData extends Application {
             case "TS":
                 generate(filename, times, 1);
                 break;
+            case "SS":
+                generate(filename, times, 100);
+                break;
             default:
                 generate(filename, times, 1);
         }
@@ -160,6 +167,12 @@ public class GraphingData extends Application {
             case "LO":
                 generate(genes -> PopulationFactory.leadingOnes(genes, true),
                         (at, pop) -> pop.evolveUntilGoal(at),
+                        AbstractPopulation::getGeneration,
+                        step, step, step * 100, times);
+                break;
+            case "SS":
+                generate(genes -> PopulationFactory.subsetSum(genes, genes * genes / 2, true),
+                        (genes, pop) -> pop.evolveUntilGoal(IntStream.range(1, pop.getBest().getLength() + 1).sum()),
                         AbstractPopulation::getGeneration,
                         step, step, step * 100, times);
                 break;
@@ -259,6 +272,26 @@ public class GraphingData extends Application {
                         new Line("Data", points -> Arrays.stream(points[0]).toArray(double[][]::new)),
                 });
     }
+    public static void displaySS() throws Exception {
+        GraphingData.init(
+                files, "Genes", "Generations",
+                new Line[]{
+                        new Line("+10%", points -> Arrays.stream(points[0]).map(point -> new double[]{
+                                point[0],
+                                Math.E * point[0] * Math.log(point[0]) * 1.1D
+                        }).toArray(double[][]::new)),
+                        new Line("Expected", points -> Arrays.stream(points[0]).map(point -> new double[]{
+                                point[0],
+                                Math.E * point[0] * Math.log(point[0]) * 1.0D
+                        }).toArray(double[][]::new)),
+                        new Line("-10%", points -> Arrays.stream(points[0]).map(point -> new double[]{
+                                point[0],
+                                Math.E * point[0] * Math.log(point[0]) * 0.9D
+                        }).toArray(double[][]::new)),
+                        new Line("Data", points -> Arrays.stream(points[0]).toArray(double[][]::new)),
+                });
+    }
+
 
     private static void displayTSPC() throws Exception {
         GraphingData.init(

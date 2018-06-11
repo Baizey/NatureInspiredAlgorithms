@@ -145,7 +145,7 @@ public class App extends Application {
                     break;
                 case "subset sum":
                     filename = new String[]{"SSAvg"};
-                    context = "Expected: ?";
+                    context = "Expected: e * n * log(n)";
                     break;
                 case "tspc":
                     filename = new String[]{"TSPCAvg"};

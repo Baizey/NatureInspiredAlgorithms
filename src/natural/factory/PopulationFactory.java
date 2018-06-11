@@ -4,7 +4,9 @@ import natural.FitnessFunctions;
 import natural.PreCalcs;
 import natural.genericGA.binaryGA.*;
 
+import java.util.Arrays;
 import java.util.Random;
+import java.util.stream.IntStream;
 
 public class PopulationFactory {
 
@@ -34,6 +36,23 @@ public class PopulationFactory {
                 2, geneSize, true, randomBias,
                 BinaryMutation.onePlusOne(),
                 FitnessFunctions.oneMax(),
+                Crossover.none(),
+                Selection.best(),
+                PreCalcs.none()
+        );
+    }
+
+    public static BinaryPopulation subsetSum(int geneSize, int goal) {
+        return subsetSum(geneSize, goal, false);
+    }
+
+    public static BinaryPopulation subsetSum(int geneSize, int goal, boolean randomBias) {
+        int[] nums = IntStream.range(1, geneSize + 1).toArray();
+        int sum = Arrays.stream(nums).sum();
+        return new BinaryPopulation(
+                2, geneSize, true, randomBias,
+                BinaryMutation.onePlusOne(),
+                FitnessFunctions.subsetSum(sum, nums),
                 Crossover.none(),
                 Selection.best(),
                 PreCalcs.none()
