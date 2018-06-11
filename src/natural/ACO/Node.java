@@ -6,7 +6,7 @@ import java.util.Random;
 
 public class Node {
 
-    private static final Random random = new Random();
+    protected static final Random random = new Random();
     static long nextUsagePoint = 1;
     public long[] lastUsage;
     private static int NEXTID = 0;

@@ -10,9 +10,6 @@ public abstract class GenericIndividual<SolutionType> extends AbstractIndividual
     }
 
     @Override
-    public int getLength() { return length; }
-
-    @Override
     public String toString() {
         return String.valueOf(solution);
     }

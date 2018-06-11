@@ -1,7 +1,6 @@
 package natural.factory;
 
 import natural.ACO.Colony;
-import natural.AbstractPopulation;
 import natural.genericGA.binaryGA.BinaryPopulation;
 import natural.interfaces.Bias;
 import natural.interfaces.Mutator;
@@ -27,7 +26,7 @@ public class IslandFactory {
         ) {
         return new Islands(
                 Convergence.keepBestAfterX(convergencePoint),
-                pop -> pop.evolve(5),
+                (memory, pop) -> pop.evolve(5),
                 IntStream.generate(() -> 0).limit(colonies).mapToObj(i -> ColonyFactory.travelingSalesman(graph, generationSize, minPheromone, maxPheromone, percentChange, maxThreads, bias, mutation)).toArray(Colony[]::new)
         );
     }
@@ -35,7 +34,7 @@ public class IslandFactory {
     public static Islands islandsOfPopulations(BinaryPopulation originalPopulation, int populations, int convergencePoint) {
         return new Islands(
                 Convergence.keepBestAfterX(convergencePoint),
-                AbstractPopulation::evolve,
+                (memory, pop) -> pop.evolve(),
                 IntStream.generate(() -> 0).limit(populations).mapToObj(i -> new BinaryPopulation(originalPopulation)).toArray(BinaryPopulation[]::new)
         );
     }

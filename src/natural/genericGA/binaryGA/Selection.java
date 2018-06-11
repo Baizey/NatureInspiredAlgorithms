@@ -26,7 +26,13 @@ public class Selection {
     }
 
     public static Selector best() {
-        return (preCalc, individuals) -> individuals[0];
+        return (preCalc, individuals) -> {
+            var best = individuals[0];
+            for(var i = 1; i < individuals.length; i++)
+                if(individuals[i].getFitness() > best.getFitness())
+                    best = individuals[i];
+            return best;
+        };
     }
 
     public static Selector get(String selectionChoice) {

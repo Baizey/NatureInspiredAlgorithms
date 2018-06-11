@@ -128,30 +128,40 @@ public class App extends Application {
                 "LeadingOnes",
                 "Subset sum",
                 "TSPC",
-                "TSPP"));
+                "TSPP",
+                "TSPP parallel with rising generations",
+                "TSPP parallel with rising cities"));
         benchButton.setOnAction(event -> {
-            String filename = "";
+            String[] filename = new String[0];
             String context = "";
             switch (getSelected(benchmark).toLowerCase()) {
                 case "onemax":
-                    filename = "OMAvg";
+                    filename = new String[]{"OMAvg"};
                     context = "Expected: e * n * log(n)";
                     break;
                 case "leadingones":
-                    filename = "LOAvg";
+                    filename = new String[]{"LOAvg"};
                     context = "Expected: 0.86 * n^2";
                     break;
                 case "subset sum":
-                    filename = "SSAvg";
+                    filename = new String[]{"SSAvg"};
                     context = "Expected: ?";
                     break;
                 case "tspc":
-                    filename = "TSPC";
+                    filename = new String[]{"TSPCAvg"};
                     context = "Expected: Upper bound: (sqrt(2n) + 1.75) * 1000; Lower bound: (0.7078 * sqrt(n) + 0.551) * 1000";
                     break;
                 case "tspp":
-                    filename = "TSPP";
+                    filename = new String[]{"TSPPAvg"};
                     context = "Expected: Upper bound: (sqrt(2n + 2) + 1.75) * 1000; Lower bound: (0.7078 * sqrt(n + 1) + 0.551) * 1000";
+                    break;
+                case "tspp parallel with rising generations":
+                    filename = new String[]{"No Parallel", "Use Parallel"};
+                    context = "Always 50 points, but number of generations rise";
+                    break;
+                case "tspp parallel with rising cities":
+                    filename = new String[]{"No Parallel2", "Use Parallel2"};
+                    context = "Always 100 generations, but number of points rise";
                     break;
             }
             LineChart chart = null;
@@ -193,6 +203,7 @@ public class App extends Application {
         var mutation = new ComboBox<>(FXCollections.observableArrayList("none", "flip one", "flip two", "flip three", "(1 + 1)"));
         var oneMaxType = new ComboBox<>(FXCollections.observableArrayList(OneMax.name, LeadingOnes.name));
         var SSNums = new NumberTextField(100, 10, 1000000);
+        var SSNumRange = new ComboBox<>(FXCollections.observableArrayList("All valued 1", "1, 2,...,n"));
 
         // Ant colony optimization buttons
         var percentOption = new NumberTextField(0.05, 0, 1);
@@ -257,7 +268,8 @@ public class App extends Application {
                     case "SS":
                         options.getChildren().addAll(
                                 UICreate.field("Goal", goal),
-                                UICreate.field("Numbers", SSNums),
+                                UICreate.field("How many numbers", SSNums),
+                                UICreate.field("What range of numbers", SSNumRange),
                                 UICreate.field("Pop size", popSize),
                                 UICreate.field("Selector", selection),
                                 UICreate.field("Crossover", crossover),
@@ -317,7 +329,19 @@ public class App extends Application {
 
             // GA SS options
             final int goalChoice = goal.asInt();
-            int[] numArrayChoice = IntStream.range(1, SSNums.asInt() + 1).toArray();
+            var numArrayChoice = new Wrap<int[]>();
+            if  (algorithm.abbreviation.equalsIgnoreCase("ss"))
+                switch(getSelected(SSNumRange)) {
+                    case "All valued 1":
+                        numArrayChoice.set(IntStream.range(1, SSNums.asInt() + 1).map(i -> 1).toArray());
+                        break;
+                    case "1, 2,...,n":
+                    default:
+                        numArrayChoice.set(IntStream.range(1, SSNums.asInt() + 1).toArray());
+                        break;
+                }
+
+
             final String selectionChoice = getSelected(selection);
             final String crossoverChoice = getSelected(crossover);
             final String mutationChoice = getSelected(mutation);
@@ -338,11 +362,11 @@ public class App extends Application {
                             break;
                         case "SS":
                             initialPopulation.set(new BinaryPopulation(
-                                    pops, numArrayChoice.length, true,
+                                    pops, numArrayChoice.get().length, true,
                                     getSelected(GABias).equalsIgnoreCase("random"),
                                     useParallel ? choosenThreads : 1,
                                     BinaryMutation.get(mutationChoice),
-                                    FitnessFunctions.subsetSum(goalChoice, numArrayChoice),
+                                    FitnessFunctions.subsetSum(goalChoice, numArrayChoice.get()),
                                     Crossover.get(crossoverChoice),
                                     Selection.get(selectionChoice),
                                     PreCalcs.get(crossoverChoice, selectionChoice, mutationChoice))
@@ -465,7 +489,7 @@ public class App extends Application {
                                 updateOMGraph((BinaryPopulation) initialPopulation.get());
                                 break;
                             case "SS":
-                                updateSSGraph((BinaryPopulation) initialPopulation.get(), numArrayChoice);
+                                updateSSGraph((BinaryPopulation) initialPopulation.get(), numArrayChoice.get());
                                 break;
                         }
                         break;

@@ -1,5 +1,6 @@
 package natural.ACO;
 
+import lsm.helpers.IO.write.text.console.Note;
 import natural.interfaces.Mutator;
 
 import java.util.Random;

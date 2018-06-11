@@ -1,13 +1,13 @@
 package natural.ACO;
 
-import natural.interfaces.PhermonePlacer;
+import natural.interfaces.PheromonePlacer;
 
 import java.util.Arrays;
 
 public class Pheromones {
 
-    public static PhermonePlacer percentChange(double change) {
-        return (memory, ant) -> {
+    public static PheromonePlacer percentChange(double change) {
+        return (memory, graph, ant) -> {
             var route = ant.getSolution();
             for (int j = 0; j < ant.getInsertionCount(); j++) {
                 var edges = route[j].source.getEdges();
@@ -22,8 +22,8 @@ public class Pheromones {
         };
     }
 
-    public static PhermonePlacer MMAS(double min, double max, double change) {
-        return (memory, ant) -> {
+    public static PheromonePlacer MMAS(double min, double max, double change) {
+        return (memory, graph, ant) -> {
             var route = ant.getSolution();
             for (int j = 0; j < ant.getInsertionCount(); j++) {
                 var edges = route[j].source.getEdges();
@@ -49,7 +49,7 @@ public class Pheromones {
         };
     }
 
-    public PhermonePlacer get(String name, double min, double max, double change) {
+    public PheromonePlacer get(String name, double min, double max, double change) {
         return name.equalsIgnoreCase("MMAS") ? MMAS(min, max, change) : percentChange(change);
     }
 }

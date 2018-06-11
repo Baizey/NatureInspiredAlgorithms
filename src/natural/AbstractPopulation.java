@@ -10,12 +10,12 @@ import java.util.concurrent.Executors;
 @SuppressWarnings({"WeakerAccess", "unused"})
 public abstract class AbstractPopulation {
     protected long generation = 0;
-    protected final ExecutorService pool;
+    protected final ExecutorService threadPool;
     protected final int maxThreads;
     protected final int threadWork;
     protected HashMap<String, Object> memory = new HashMap<>();
     protected final PreCalc preCalc;
-    protected final int popSize;
+    protected int popSize;
 
     public AbstractPopulation(int popSize, PreCalc preCalc) {
         this(Runtime.getRuntime().availableProcessors(), popSize, preCalc);
@@ -32,7 +32,7 @@ public abstract class AbstractPopulation {
         // Often this error wont matter much either, as you'll usually have <30 threads and >200 population
         // Which at worst misplaces (threads - 1) individuals too little for one thread
         this.threadWork = popSize / maxThreads + Math.min(popSize % maxThreads, 1);
-        this.pool = Executors.newFixedThreadPool(maxThreads);
+        this.threadPool = Executors.newFixedThreadPool(maxThreads);
         this.preCalc = preCalc;
     }
 
@@ -172,8 +172,8 @@ public abstract class AbstractPopulation {
         return threadWork;
     }
 
-    public ExecutorService getPool() {
-        return pool;
+    public ExecutorService getThreadPool() {
+        return threadPool;
     }
 
     public int getPopulationSize(){

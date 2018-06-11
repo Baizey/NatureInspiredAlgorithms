@@ -6,7 +6,7 @@ public class Convergence {
 
     public static natural.interfaces.Convergence keepBestAfterX(int x) {
         var counter = new Wrap<>(0);
-        return (islands -> {
+        return (memory, islands) -> {
             counter.set(counter.get() + 1);
             if (counter.get() >= x) {
                 counter.set(0);
@@ -18,7 +18,7 @@ public class Convergence {
                     if (i != best)
                         islands[i].copyPopulation(islands[best]);
             }
-        });
+        };
     }
 
 }

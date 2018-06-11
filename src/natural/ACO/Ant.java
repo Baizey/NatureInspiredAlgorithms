@@ -71,4 +71,8 @@ public class Ant extends AbstractIndividual<Edge[]> {
     public void setEdge(int i, Edge edge) {
         solution[i] = edge;
     }
+
+    public Node getLastSource() {
+        return solution[insertionPoint - 1].source;
+    }
 }

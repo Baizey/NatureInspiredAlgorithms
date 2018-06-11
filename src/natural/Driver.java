@@ -6,10 +6,14 @@ import natural.benchmark.GraphingData;
 public class Driver {
 
     public static void main(String[] args) throws Exception {
-        String filename = "LO";
-        filename += "random";
-        //filename += "Avg";
-        GraphingData.generate(filename, 10, 1);
-        GraphingData.launchDisplay(filename);
+        String first =  "No Parallel";
+        String second = "Use Parallel";
+        String filename = "TSPC";
+        //filename += "random2";
+        filename += "Avg";
+        //GraphingData.generate(first, 5, 5);
+        //GraphingData.generate(second, 5, 5);
+        GraphingData.launchDisplay(new String[]{first, second});
+        //GraphingData.launchDisplay(new String[]{filename});
     }
 }

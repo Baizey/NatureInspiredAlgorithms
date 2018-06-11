@@ -1,7 +1,5 @@
 package natural.interfaces;
 
-import natural.AbstractIndividual;
-
 import java.util.HashMap;
 
 /**
@@ -11,6 +9,6 @@ import java.util.HashMap;
  * BinaryIndividual[] population: current generations population
  * PreCalcData previousData: pre calculated data from previous generation (or null if first generation)
  */
-public interface PreCalc {
-    HashMap<String, Object> calc(AbstractIndividual[] population, HashMap<String, Object> previousData);
+public interface PreCalc <T> {
+    HashMap<String, Object> calc(T information, HashMap<String, Object> previousData);
 }

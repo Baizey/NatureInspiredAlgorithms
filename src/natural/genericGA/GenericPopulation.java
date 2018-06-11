@@ -5,13 +5,13 @@ import natural.AbstractPopulation;
 import natural.interfaces.*;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.concurrent.CountDownLatch;
 
 public class GenericPopulation extends AbstractPopulation {
-    private final int popSize, startFrom;
-    private final boolean elitism;
+    private final int startFrom;
+    private final boolean useElitism;
     private GenericIndividual[] nextGen, currGen;
+    private GenericIndividual bestIndividual;
     private final Selector selector;
     private final Fitness fitness;
     private final Crossover crossover;
@@ -21,7 +21,7 @@ public class GenericPopulation extends AbstractPopulation {
     public GenericPopulation(GenericPopulation other) {
         super(other.maxThreads, other.popSize, other.preCalc);
         this.popSize = other.popSize;
-        this.elitism = other.elitism;
+        this.useElitism = other.useElitism;
         this.generation = other.generation;
         this.startFrom = other.startFrom;
         this.selector = other.selector;
@@ -36,8 +36,6 @@ public class GenericPopulation extends AbstractPopulation {
             currGen[i] = other.currGen[i].clone(false);
             nextGen[i] = other.nextGen[i].clone(false);
         }
-
-        this.memory = new HashMap<>();
         this.memory.putAll(other.memory);
     }
 
@@ -50,18 +48,18 @@ public class GenericPopulation extends AbstractPopulation {
 
     public GenericPopulation(
             int popSize, int geneSize,
-            boolean elitism,
+            boolean useElitism,
             boolean generate,
             Mutator mutationInterface,
             Fitness fitnessInterface,
             Crossover crossoverInterface,
             Selector selectorInterface,
-            PreCalc preCalculations,
+            PreCalc<AbstractIndividual[]> preCalculations,
             GenericIndividual prototype
     ) {
         this(popSize,
                 geneSize,
-                elitism,
+                useElitism,
                 generate,
                 Runtime.getRuntime().availableProcessors(),
                 mutationInterface,
@@ -74,17 +72,17 @@ public class GenericPopulation extends AbstractPopulation {
 
     public GenericPopulation(
             int popSize, int geneSize,
-            boolean elitism,
+            boolean useElitism,
             boolean generate,
             int maxThreads,
             Mutator mutationInterface,
             Fitness fitnessInterface,
             Crossover crossoverInterface,
             Selector selectorInterface,
-            PreCalc preCalc,
+            PreCalc<AbstractIndividual[]> preCalc,
             GenericIndividual individualPrototype
     ) {
-        super(Math.min(popSize, maxThreads) - (elitism ? 1 : 0), popSize - (elitism ? 1 : 0), preCalc);
+        super(Math.min(popSize, maxThreads) - (useElitism ? 1 : 0), popSize - (useElitism ? 1 : 0), preCalc);
         this.geneSize = geneSize;
         this.currGen = new GenericIndividual[popSize];
         this.nextGen = new GenericIndividual[popSize];
@@ -94,8 +92,8 @@ public class GenericPopulation extends AbstractPopulation {
         }
 
         this.popSize = popSize;
-        this.elitism = elitism;
-        this.startFrom = elitism ? 1 : 0;
+        this.useElitism = useElitism;
+        this.startFrom = useElitism ? 1 : 0;
         this.mutator = mutationInterface;
         this.fitness = fitnessInterface;
         this.crossover = crossoverInterface;
@@ -113,9 +111,9 @@ public class GenericPopulation extends AbstractPopulation {
         // Do calculations that may be needed multiple times
         memory = preCalc.calc(currGen, memory);
 
-        // Move over current best pop if elitism is true
-        if (elitism)
-            nextGen[0].copy(currGen[0]);
+        // Move over current best pop if useElitism is true
+        if (useElitism)
+            nextGen[0].copy(bestIndividual);
 
         for (int i = startFrom; i < popSize; i++) {
             crossover.crossover(memory,
@@ -137,13 +135,13 @@ public class GenericPopulation extends AbstractPopulation {
     public void evolveParallel() throws InterruptedException {
         generation++;
         memory = preCalc.calc(currGen, memory);
-        if (elitism)
-            nextGen[0].copy(currGen[0]);
-        var counter = new CountDownLatch(maxThreads);
+        if (useElitism)
+            nextGen[0].copy(bestIndividual);
+        var lock = new CountDownLatch(maxThreads);
         for (int i = startFrom; i < popSize; i += threadWork) {
             int min = i,
                 max = Math.min(popSize, i + threadWork);
-            pool.submit(() -> {
+            threadPool.submit(() -> {
                 for (int k = min; k < max; k++) {
                     crossover.crossover(memory,
                             selector.select(memory, currGen),
@@ -152,10 +150,12 @@ public class GenericPopulation extends AbstractPopulation {
                     mutator.mutate(memory, nextGen[k]);
                     fitness.calc(memory, nextGen[k]);
                 }
-                counter.countDown();
+                lock.countDown();
             });
         }
-        counter.await();
+        // Avoid unexpected awakening that Java has
+        while(lock.getCount() > 0)
+            lock.await();
         var temp = currGen;
         currGen = nextGen;
         nextGen = temp;
@@ -164,16 +164,10 @@ public class GenericPopulation extends AbstractPopulation {
 
 
     private void findBestFitness() {
-        // Always ensure the #1 pop is placed at index 0
-        int best = 0;
+        bestIndividual = currGen[0];
         for (int i = 1; i < popSize; i++)
-            if (currGen[i].getFitness() > currGen[best].getFitness())
-                best = i;
-        if (best != 0) {
-            GenericIndividual temp = currGen[0];
-            currGen[0] = currGen[best];
-            currGen[best] = temp;
-        }
+            if (currGen[i].getFitness() > bestIndividual.getFitness())
+                bestIndividual = currGen[i];
     }
 
     @Override
@@ -185,16 +179,16 @@ public class GenericPopulation extends AbstractPopulation {
     public AbstractIndividual getIndividual(int index) { return currGen[index]; }
 
     public AbstractIndividual getBest() {
-        return currGen[0];
+        return bestIndividual;
     }
 
     public Object getBestDna() {
-        return currGen[0].getSolution();
+        return getBest().getSolution();
     }
 
     @Override
     public long getBestFitness() {
-        return currGen[0].getFitness();
+        return getBest().getFitness();
     }
 
     @Override

@@ -6,7 +6,6 @@ import natural.PreCalcs;
 import natural.interfaces.*;
 
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 
 public class Colony extends AbstractPopulation {
     private double meanFitness = 0D;
@@ -17,21 +16,28 @@ public class Colony extends AbstractPopulation {
     protected Ant bestFromGeneration;
     protected final Ant curr;
     protected final int generationSize;
-    protected final PhermonePlacer pheromone;
+    protected final PheromonePlacer pheromone;
     protected final StartingPoint start;
     protected final Mutator mutator;
     
-    public Colony(int generationSize, Node[] graph, Visitation visitation, Fitness fitness, Mutator mutator, PhermonePlacer pheromone) {
-        this(Runtime.getRuntime().availableProcessors(), generationSize, graph, visitation, fitness, mutator, Starts.first(), pheromone, PreCalcs.none());
+    public Colony(int generationSize, Node[] graph, Visitation visitation, Fitness fitness, Mutator mutator, PheromonePlacer pheromone) {
+        this(Runtime.getRuntime().availableProcessors(), generationSize, graph, visitation, fitness, mutator, Starts.first(), pheromone, PreCalcs.<Colony>none());
     }
 
-    public Colony(int maxThreads, int generationSize, Node[] graph, Visitation visitation, Fitness fitness, Mutator mutator, PhermonePlacer pheromone) {
-        this(maxThreads, generationSize, graph, visitation, fitness, mutator, Starts.first(), pheromone, PreCalcs.none());
+    public Colony(int maxThreads, int generationSize, Node[] graph, Visitation visitation, Fitness fitness, Mutator mutator, PheromonePlacer pheromone) {
+        this(maxThreads, generationSize, graph, visitation, fitness, mutator, Starts.first(), pheromone, PreCalcs.<Colony>none());
     }
 
     public Colony(
-            int maxThreads, int generationSize, Node[] graph, Visitation visitation, Fitness fitness, Mutator mutator, StartingPoint start, PhermonePlacer pheromone,
-            PreCalc preCalc
+            int maxThreads,
+            int generationSize,
+            Node[] graph,
+            Visitation visitation,
+            Fitness fitness, Mutator
+            mutator,
+            StartingPoint start,
+            PheromonePlacer pheromone,
+            PreCalc<Colony> preCalc
     ) {
         super(maxThreads, generationSize, preCalc);
         this.pheromone = pheromone;
@@ -71,10 +77,11 @@ public class Colony extends AbstractPopulation {
 
     @Override
     public void evolve() {
-        double meanFitness = 0D;
+        double localMeanFitness = 0D;
         generation++;
         bestFromGeneration.resetFitness();
-        Node start = this.start.getNode(graph);
+        memory = preCalc.calc(this, memory);
+        Node start = this.start.getNode(memory, graph);
         long usage = Node.nextUsagePoint;
         for (int i = 0; i < generationSize; i++, usage++) {
             curr.resetInsertion();
@@ -82,20 +89,20 @@ public class Colony extends AbstractPopulation {
             int pick;
             while ((pick = at.getRandom(usage)) != -1) {
                 curr.add(at.getEdge(pick));
-                visitation.handleVisitation(memory, usage, curr, at, pick, 0);
+                visitation.handleVisitation(memory, usage, curr, 0);
                 at = at.getEdge(pick).target;
             }
             mutator.mutate(memory, curr);
             fitness.calc(memory, curr);
-            meanFitness += curr.getFitness();
+            localMeanFitness += curr.getFitness();
             if (curr.getFitness() > bestFromGeneration.getFitness())
                 bestFromGeneration.copy(curr);
         }
         Node.nextUsagePoint = usage;
-        pheromone.alter(memory, bestFromGeneration);
+        pheromone.alter(memory, graph, bestFromGeneration);
         if (bestFromGeneration.getFitness() > best.getFitness())
             best.copy(bestFromGeneration);
-        this.meanFitness = meanFitness / generationSize;
+        this.meanFitness = localMeanFitness / generationSize;
     }
 
     @Override
@@ -103,13 +110,13 @@ public class Colony extends AbstractPopulation {
         double meanFitness = 0D;
         generation++;
         CountDownLatch lock = new CountDownLatch(maxThreads);
-        Node start = this.start.getNode(graph);
+        Node start = this.start.getNode(memory, graph);
         for (int i = 0, j = 0; i < generationSize; i += threadWork, j++) {
             // Secure info for the thread to have as final anchor points
             final int min = i, max = Math.min(generationSize, i + threadWork);
             final int threadId = j;
             final long myUsage = Node.nextUsagePoint + min;
-            pool.submit(() -> {
+            threadPool.submit(() -> {
                 Ant bestFromGeneration = new Ant(8);
                 Ant curr = new Ant(8);
                 for (int k = min, q = 0; k < max; k++, q++) {
@@ -118,7 +125,7 @@ public class Colony extends AbstractPopulation {
                     int pick;
                     while ((pick = at.getRandom(myUsage + q, threadId)) != -1) {
                         curr.add(at.getEdge(pick));
-                        visitation.handleVisitation(memory, myUsage + q, curr, at, pick, threadId);
+                        visitation.handleVisitation(memory, myUsage + q, curr, threadId);
                         at = at.getEdge(pick).target;
                     }
                     mutator.mutate(memory, curr);
@@ -130,9 +137,13 @@ public class Colony extends AbstractPopulation {
                 lock.countDown();
             });
         }
-        lock.await(1000, TimeUnit.MINUTES);
+
+        // Avoid unexpected awakening that Java has
+        while(lock.getCount() > 0)
+            lock.await();
+
         Node.nextUsagePoint += generationSize;
-        pheromone.alter(memory, bestFromGeneration);
+        pheromone.alter(memory, graph, bestFromGeneration);
         if (bestFromGeneration.getFitness() > best.getFitness())
             best.copy(bestFromGeneration);
         this.meanFitness = meanFitness / generationSize;
