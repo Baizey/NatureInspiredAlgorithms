@@ -24,7 +24,7 @@ import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import lsm.helpers.IO.read.text.TextReader;
-import lsm.helpers.utils.Wrap;
+import lsm.datastructures.wrap.Wrap;
 import natural.ACO.*;
 import natural.AbstractPopulation;
 import natural.FitnessFunctions;
