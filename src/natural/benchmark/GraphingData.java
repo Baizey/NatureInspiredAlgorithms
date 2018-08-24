@@ -8,8 +8,8 @@ import javafx.scene.chart.XYChart;
 import javafx.stage.Stage;
 import lsm.helpers.IO.read.text.TextReader;
 import lsm.helpers.IO.write.text.TextWriter;
-import lsm.helpers.Time;
-import lsm.helpers.utils.Wrap;
+import lsm.datastructures.time.Time;
+import lsm.datastructures.wrap.Wrap;
 import natural.ACO.Ant;
 import natural.ACO.AntColonyMutations;
 import natural.ACO.NodeBias;
@@ -334,7 +334,7 @@ public class GraphingData extends Application {
     }
 
     private static void generate(PopulationCreator creator, Evolution evolution, Counter counter, int start, int step, int max, int times) throws Exception {
-        var writer = TextWriter.getWriter(files[0], "txt", true);
+        var writer = TextWriter.getWriter(files[0]+ ".txt", true);
         Time.init("Program " + start);
         for (var i = start; i <= max; i += step) {
             var generations = 0D;

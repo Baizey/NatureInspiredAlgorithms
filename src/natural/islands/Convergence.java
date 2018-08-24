@@ -1,6 +1,6 @@
 package natural.islands;
 
-import lsm.helpers.utils.Wrap;
+import lsm.datastructures.wrap.Wrap;
 
 public class Convergence {
 
